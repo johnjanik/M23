@@ -96,6 +96,29 @@ facts["im(1+g1) weights"] = dict(Counter(v.bit_count() for v in elts))
 check("im(1+g1) on G0 is the [8,4,4] code on the 8 transpositions: weights {0:1, 8:14, 16:1}",
       facts["im(1+g1) weights"] == {0: 1, 8: 14, 16: 1})
 
+# restriction of the g1-fixed even codewords to the heptad Fix(g1): the simplex code
+from m23golay.f2 import kernel  # noqa: E402
+fix_g1 = fixed_points(m23.G1)
+fixmask = sum(1 << i for i in fix_g1)
+restr = set()
+kb = []
+for mcombo in kernel([v ^ act_mask(v, m23.G1) for v in basis]):
+    v = 0
+    for i in range(11):
+        if mcombo >> i & 1:
+            v ^= basis[i]
+    kb.append(v)
+for m in range(1 << len(kb)):
+    v = 0
+    for i in range(len(kb)):
+        if m >> i & 1:
+            v ^= kb[i]
+    restr.add(v & fixmask)
+lines = [frozenset(i for i in fix_g1 if not (x >> i & 1)) for x in restr if x]
+check("G0^{g1} restricted to Fix(g1) is the simplex code [7,3,4]; complements of its words are the lines of a Fano plane",
+      len(restr) == 8 and all(x.bit_count() == 4 for x in restr if x) and len(set(lines)) == 7
+      and all(sum(1 for l in lines if a in l and b in l) == 1 for a, b in itertools.combinations(sorted(fix_g1), 2)))
+
 # --- class table ---------------------------------------------------------------
 system = list(S)
 duads = [frozenset(x) for x in itertools.combinations(range(23), 2)]
