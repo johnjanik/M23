@@ -1,0 +1,550 @@
+\documentclass[11pt]{amsart}
+\usepackage[margin=1.15in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb,amsthm,mathtools,mathrsfs}
+\usepackage{booktabs,array,longtable}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\usepackage{microtype}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{maintheorem}{Theorem}
+\renewcommand{\themaintheorem}{\Alph{maintheorem}}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\Qbar}{\overline{\QQ}}
+\newcommand{\kbar}{\overline{k}}
+\newcommand{\Gal}{\operatorname{Gal}}
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\End}{\operatorname{End}}
+\newcommand{\Jac}{\operatorname{Jac}}
+\newcommand{\Frob}{\operatorname{Frob}}
+\newcommand{\Fix}{\operatorname{Fix}}
+\newcommand{\Stab}{\operatorname{Stab}}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Ni}{\operatorname{Ni}}
+\newcommand{\rev}{\mathrm{rev}}
+\newcommand{\M}{M_{23}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\GQ}{G_{\QQ}}
+\newcommand{\HJ}{HJLPPZ26}
+
+\title[The Golay code and the arithmetic of the $M_{23}$ cover]{The Golay code and the arithmetic\\ of the Mathieu $M_{23}$ cover}
+\author{John A. Janik}
+\date{14 November 2026 (draft)}
+\subjclass[2020]{Primary 12F12; Secondary 11G30, 14H30, 14H40, 20B25, 94B05, 11R32}
+\keywords{Inverse Galois problem, Mathieu group, Golay code, Steiner system, Jacobian, Lagrangian subgroup, arithmetically equivalent fields, real structure}
+
+\begin{document}
+
+\begin{abstract}
+Huang, Jackson, Lee, Poonen, Pries and Zhang recently realized the Mathieu group $\M$ as a Galois group over $\QQ$, through a genus $4$ curve $X$ with a degree $23$ map to $\PP^1$ branched over $\{0,\pm\sqrt{-23}\}$. The $23$ sheets of any $\M$-cover carry a Steiner system $S(4,7,23)$, equivalently a perfect binary Golay code. We ask what this structure says about the arithmetic of the cover, and obtain four kinds of answers.
+(1) Because the Golay code is perfect and contains its dual, the even Golay code cuts out a Galois-stable Lagrangian subgroup $W$ of $\Jac(X)[2]$, for every degree $23$ cover of $\PP^1$ with monodromy in $\M$. For the curve of Huang et al.\ we show that Galois acts on $W\simeq\FF_2^4$ through the full group $\GL_4(\FF_2)\simeq A_8$, although $\End(\Jac X_{\Qbar})=\ZZ$; equivalently, the fifteen lifts of the $\M$-cover to covers with group $2^{11}{:}\M$ and the same inertia classes are conjugate over $\QQ$.
+(2) A prime at which Frobenius is a $23$-cycle orders the roots of an $\M$-polynomial so that they carry one of exactly two explicit Steiner systems. This yields a certified $p$-adic labelling, with which we compute the first non-symmetric invariants $J_5$ of the published polynomials, their degree $253$ heptad resolvents, and $J_5$ of the regular family as an explicit rational function of degree $4$ in $t$.
+(3) The duad and heptad stabilizers are Gassmann equivalent, which produces explicit arithmetically equivalent non-isomorphic number fields of degree $253$, and two genus $46$ curves over $\QQ$ with isogenous Jacobians, one of which has a rational point above the rational branch point while the other has none there.
+(4) The real roots of an $\M$-polynomial form a block. Among the three real points of the Hurwitz scheme found by the author, the rational one is the only cover whose real locus is disconnected.
+All statements are verified by an independent implementation.
+\end{abstract}
+
+\maketitle
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+\section{Introduction}
+
+\subsection{Context}
+The Mathieu group $\M$ was the last sporadic simple group not known to be a Galois group over $\QQ$. Huang, Jackson, Lee, Poonen, Pries and Zhang \cite{HJLPPZ26} settled the question by constructing a regular $\M$-extension of $\QQ(t)$: the Galois closure $Y\to\PP^1$ of a degree $23$ map $t\colon X\to\PP^1_\QQ$ from a curve of genus $4$, branched over $S=\{0,\sqrt{-23},-\sqrt{-23}\}$ with local monodromy in the classes $(2A,23A,23B)$. The Nielsen class has seven elements; the Hurwitz scheme is $\cH\simeq\operatorname{Spec}\QQ\sqcup\operatorname{Spec}L$ for a sextic field $L$, and the rational point is $X$ \cite[\S3.7]{HJLPPZ26}. In \cite{Janik26} the author showed that complex conjugation fixes exactly three of the seven covers, by finite group theory, so that the rational cover was one of three candidates listable in advance.
+
+The group $\M$ is the automorphism group of the Steiner system $S(4,7,23)$, and of the perfect binary Golay code of length $23$. In \cite{HJLPPZ26} this structure enters once, in the certification of the monodromy group (the two orbits of $\M$ on $5$-subsets separate it from $A_{23}$). The present paper starts from the opposite question:
+
+\begin{quote}
+\emph{The fibres of $t\colon X\to\PP^1$, and the roots of every $\M$-polynomial, carry a Steiner system and a Golay code. What does that structure say about the arithmetic of the cover and of its specializations?}
+\end{quote}
+
+\subsection{Results}
+Let $\cG\subset\FF_2^{23}$ be the Golay code and $\cG_0=\cG^\perp$ its even subcode, of dimension $11$. For a degree $23$ cover $\pi\colon X\to\PP^1$ with monodromy group contained in $\M$, these are sub-local systems of $\pi_*\FF_2$ away from the branch locus; let $j$ be the inclusion of the complement of the branch locus.
+
+\begin{maintheorem}[The Golay Lagrangian; Theorem~\ref{thm:lagrangian}]\label{thmA}
+Let $k$ be a field of characteristic $0$ and $\pi\colon X\to\PP^1_k$ a degree $23$ cover of smooth projective geometrically connected curves whose monodromy group is contained in $\M$. Then
+\[
+W_\cG:=H^1(\PP^1_{\kbar},j_*\cG_0)\subset H^1(X_{\kbar},\FF_2)=\Jac(X)[2]
+\]
+is a $\Gal(\kbar/k)$-stable subgroup of order $2^{g}$, $g$ the genus of $X$, which is maximal isotropic for the Weil pairing. Consequently $\Jac(X)$ is isogenous over $k$, by an isogeny with kernel $W_\cG\simeq(\ZZ/2)^g$, to a principally polarized abelian variety; the Frobenius polynomials of $X$ factor modulo $2$ as $Q\cdot Q^{\rev}$; and when the geometric monodromy group is $\M$, the nonzero elements of $W_\cG$ correspond to the lifts of the Galois closure $Y\to\PP^1$ to covers $\widetilde Y\to\PP^1$ with group $2^{11}{:}\M$, unramified over $Y$, whose inertia generators are conjugate to the trivial lifts.
+\end{maintheorem}
+
+The proof uses only two properties of the Golay code: it contains its dual with $\cG=\cG^\perp\oplus\langle\one\rangle$, and it is \emph{perfect}. Perfectness gives unique coset leaders, hence exactness of invariants under every subgroup of $\M$ (Lemma~\ref{lem:leaders}), hence exactness of $j_*$ at every branch point, whatever the ramification.
+
+\begin{maintheorem}[The curve of Huang et al.; Theorem~\ref{thm:image}]\label{thmB}
+Let $X/\QQ$ be the genus $4$ curve of \cite{HJLPPZ26} and $W=W_\cG\simeq\FF_2^4$.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item The representation $\rho_W\colon\GQ\to\GL(W)\simeq\GL_4(\FF_2)\simeq A_8$ is surjective. Its kernel field is an $A_8$-extension of $\QQ$ unramified outside $\{2,3,5,23\}$.
+\item Complex conjugation acts on $W$ as a transvection.
+\item $\End(\Jac(X)_{\Qbar})=\ZZ$.
+\item The triple $(g_1,g_2,g_3)$ of \cite{HJLPPZ26} has exactly $15$ lifts, up to conjugacy, to generating triples of $2^{11}{:}\M$ in the classes of $(g_i,0)$; the corresponding covers form a single $\GQ$-orbit, with field of moduli of degree $15$.
+\end{enumerate}
+\end{maintheorem}
+
+Thus the mod $2$ representation of $\Jac(X)$ is reducible for a reason that is invisible in the endomorphism ring and is explained by the Golay code. There is a similar, more elementary phenomenon at the prime $23$: the two totally ramified points give a $\GQ$-stable subgroup of order $23$ (Proposition~\ref{prop:23}).
+
+\begin{maintheorem}[Steiner labelling; Lemma~\ref{lem:twocodes}, Proposition~\ref{prop:labelling}, Table~\ref{tab:invariants}]\label{thmC}
+Let $f\in\ZZ[x]$ be monic of degree $23$ with Galois group $\M$, and $p$ a prime with $f$ irreducible modulo $p$. Index the roots by $\ZZ/23$ in Frobenius order. Then the Steiner system on the roots is one of the two systems $\cS^{+},\cS^{-}$ of heptads of the two cyclic Golay codes, and a single $p$-adic computation with an explicit precision bound decides which. For the polynomials $f_1,f_2$ of \cite[Examples 1.2, 3.17]{HJLPPZ26} the first non-symmetric invariants are
+\[
+J_5(f_1)=524492,\qquad J_5(f_2)=61916 ,
+\]
+and the degree $253$ heptad resolvents are computed exactly. For the regular family, $J_5$ of the $23$ roots of $F(t,V)$ equals $n(t)/c_{23}(t)$, where $c_{23}$ is the leading coefficient of $F$ and $n\in\ZZ[t]$ is an explicit quartic (Proposition~\ref{prop:family}).
+\end{maintheorem}
+
+Here $J_5$ is the sum of the $5313$ squarefree monomials supported on $5$-subsets of heptads; it generates the field of $\M$-invariant rational functions over the symmetric ones, so $J_5(f)$ is the one coordinate of an $\M$-polynomial that is not a universal polynomial in its coefficients (Section~\ref{sec:invariants}).
+
+\begin{maintheorem}[Duads and heptads; Section~\ref{sec:gassmann}]\label{thmD}
+The stabilizers $L_3(4){:}2_2$ of a duad and $2^4{:}A_7$ of a heptad are Gassmann equivalent and not conjugate in $\M$, and $253$ is the smallest index at which this happens. Consequently, for every $\M$-polynomial $f$ the duad field and the heptad field are arithmetically equivalent, non-isomorphic number fields of degree $253$; and the quotients $Y/L_3(4){:}2_2$ and $Y/2^4{:}A_7$ of the cover of \cite{HJLPPZ26} are curves of genus $46$ over $\QQ$ with isogenous Jacobians and equal zeta functions at all primes of good reduction, although the second has a rational point above $t=0$ and the first has none there.
+\end{maintheorem}
+
+\begin{maintheorem}[Real structure; Section~\ref{sec:real}]\label{thmE}
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item If $f\in\QQ[x]$ has Galois group $\M$ and is not totally real, it has exactly seven real roots, and they form a heptad.
+\item For each of the three real covers of \cite{Janik26}, complex conjugation fixes exactly $3$ of the $7$ unramified points above $t=0$ and $4$ of the $8$ ramified ones.
+\item The real locus $X(\RR)$ has two connected components for the rational cover and one for each of the two real covers defined over $L$. Accordingly $\dim_{\FF_2}\Jac(X)(\RR)[2]$ is $5,4,4$ and $\dim W_\cG^{\,c}$ is $3,2,2$.
+\end{enumerate}
+\end{maintheorem}
+
+Part (iii) is a combinatorial distinction between the rational point of $\cH$ and the two other real points. It does not explain the rationality: real invariants at two real places of $L$ place no constraint on the $\GQ$-orbit structure. It does sharpen the picture of \cite{Janik26}: the three candidates were not alike.
+
+\subsection{Status of the statements}
+Theorem~\ref{thmA} is a theorem with a complete proof. The group-theoretic assertions in Theorems~\ref{thmB}(ii),(iv), \ref{thmD} and \ref{thmE} are finite computations in $\M$, carried out in pure Python from the two published generators and cross-checked against the tables of \cite{HJLPPZ26} and \cite{Janik26}. The arithmetic assertions (surjectivity of $\rho_W$, $\End=\ZZ$, the values of $J_5$, the resolvents) rest on exact computations: point counts on the published equation $F(T,V)=0$, validated by two different fibrations and by the Weil conditions, and $p$-adic computations with explicit bounds, validated at independent primes. Section~\ref{sec:computations} describes the certificates. We take from \cite{HJLPPZ26} the equation $F$, the polynomials $f_1,f_2$, and the theorems that their Galois groups are $\M$.
+
+What is \emph{not} done here: we do not construct a new regular $\M$-extension of $\QQ(t)$, and we do not explain why $\cH$ has a rational point. The paper grew out of the question whether Golay invariants can produce $\M$-polynomials; Section~\ref{sec:invariants} records the precise sense in which they cannot (a covariant restricted to a fibre is a Tschirnhaus transformation) and what they give instead.
+
+\subsection{Related work}
+The second version of \cite{HJLPPZ26} cites a preprint of Le~Lay \cite{LeLay26} on a minimal-degree projection of $X$, the arithmetic of the fibre above $t=0$ and the finite Hurwitz scheme. We have not had access to it. Our only statements about that fibre are Proposition~\ref{prop:fibre0} and Theorem~\ref{thmE}(ii), and they may overlap with it. For hyperelliptic curves $y^2=f(x)$ the $2$-torsion is the heart of the permutation module on the roots of $f$, and the reducibility of that module for the Mathieu groups in degrees $23$ and $24$ is the reason they are excluded from Zarhin's theorems on such Jacobians \cite{Zarhin00,Zarhin02}; Theorem~\ref{thmA} is the analogue for the cover itself rather than for a hyperelliptic curve built from a polynomial. Gassmann equivalence of the two index $253$ subgroups is classical \cite{ATLAS}; the explicit fields are new because no $\M$-extension of $\QQ$ was known before \cite{HJLPPZ26}. General methods for identifying Frobenius classes, which subsume Proposition~\ref{prop:labelling}, are in \cite{DD13}.
+
+\subsection{Conventions}
+Permutations act on the right, as in \cite{HJLPPZ26}: $x^{gh}=(x^g)^h$. The generators $g_1,g_2,g_3$ are those printed in \cite[\S3.1]{HJLPPZ26}, with $g_1g_2g_3=1$, and $23A$, $23B$ denote the classes of $g_2$, $g_3$. A \emph{heptad} is a block of $S(4,7,23)$, a \emph{duad} a $2$-subset. For a polynomial $Q$ of degree $d$, $Q^{\rev}(x)=x^dQ(1/x)$.
+
+\section{Golay codes, Steiner systems and \texorpdfstring{$\M$}{M23}}\label{sec:golay}
+
+\subsection{The two cyclic codes}
+Over $\FF_2$,
+\begin{align*}
+z^{23}-1&=(z-1)\,g_+(z)\,g_-(z),\\
+g_+(z)&=z^{11}+z^9+z^7+z^6+z^5+z+1,\qquad g_-(z)=z^{11}+z^{10}+z^6+z^5+z^4+z^2+1 .
+\end{align*}
+Let $\cG^{\pm}\subset\FF_2[z]/(z^{23}-1)=\FF_2^{\ZZ/23}$ be the cyclic code generated by $g_\pm$. Each is a perfect $[23,12,7]$ code with weight distribution $1,253,506,1288,1288,506,253,1$ in weights $0,7,8,11,12,15,16,23$; the supports of its $253$ words of weight $7$ form a Steiner system $\cS^{\pm}=S(4,7,23)$ on $\ZZ/23$, invariant under the shift $i\mapsto i+1$ and under $i\mapsto ai$ for $a$ a square modulo $23$. The map $i\mapsto-i$ exchanges $\cS^+$ and $\cS^-$. In a Steiner system $S(4,7,23)$ a point lies in $77$ blocks, a pair in $21$, a triple in $5$, and two distinct blocks meet in $1$ or $3$ points. By Witt \cite{Witt38a,Witt38b} the system is unique up to isomorphism and its automorphism group is $\M$, of order $10\,200\,960$, which is $4$-transitive on the $23$ points and equal to its normalizer in $S_{23}$.
+
+\begin{lemma}[Two cyclic codes]\label{lem:twocodes}
+A $23$-cycle $\sigma\in\Sym(\Omega)$, $|\Omega|=23$, preserves exactly two Steiner systems $S(4,7,23)$ on $\Omega$. If $\Omega=\ZZ/23$ and $\sigma$ is the shift, they are $\cS^+$ and $\cS^-$.
+\end{lemma}
+\begin{proof}
+By uniqueness of the system and $N_{S_{23}}(\M)=\M$, the Steiner systems on $\Omega$ form a single $S_{23}$-orbit of size $23!/|\M|$. The elements of order $23$ in $\M$ are self-centralizing, so there are $2|\M|/23$ of them, in two classes; each is a $23$-cycle. There are $22!$ cycles of length $23$ in $S_{23}$, all conjugate. Counting pairs (system, $23$-cycle preserving it) in two ways, each $23$-cycle preserves $\frac{23!}{|\M|}\cdot\frac{2|\M|}{23}\cdot\frac1{22!}=2$ systems. The systems $\cS^+\ne\cS^-$ are both shift invariant.
+\end{proof}
+
+\begin{definition}\label{def:sign}
+Let $\cS$ be a Steiner system $S(4,7,23)$ on a set $\Omega$ and $\sigma\in\Aut(\cS)$ of order $23$. Choose $x_0\in\Omega$ and label $\sigma^i(x_0)$ by $i\in\ZZ/23$. The transported system is $\cS^{\varepsilon}$ for a unique sign $\varepsilon=\varepsilon(\sigma)\in\{+,-\}$, independent of $x_0$.
+\end{definition}
+
+The sign depends only on $\sigma$ as a bijection of $\Omega$, so it is defined for a Frobenius element acting on the roots of a polynomial without any choice of convention. It is a class function on the elements of order $23$ of $\Aut(\cS)$, and $\varepsilon(\sigma^k)=\left(\frac{k}{23}\right)\varepsilon(\sigma)$. Thus the two classes of elements of order $23$ are $\{\varepsilon=+\}$ and $\{\varepsilon=-\}$. For the generators of \cite{HJLPPZ26} one finds $\varepsilon(g_2)=-$ and $\varepsilon(g_3)=+$: in our normalization $23A=23^-$ and $23B=23^+$. The sign is also read off from the degree $770$ characters of $\M$, the only ones that are irrational on elements of order $23$, and from the Brauer character of $\cG_0$.
+
+\subsection{Classes}
+Table~\ref{tab:classes} lists the twelve cycle types of elements of $\M$ on $23$ points, with class sizes obtained by enumerating the group. There is one class of involutions, $2A$; the fixed points of an involution form a heptad, and each heptad is the fixed set of exactly $15$ involutions, the nonidentity elements of its pointwise stabilizer $2^4$.
+
+\input{tables/classes.tex}
+
+\subsection{The mod $2$ modules}\label{ssec:modules}
+Fix a Steiner system $\cS$ on $\Omega$ with $\M=\Aut(\cS)$ and let $P=\FF_2^\Omega$ with the standard symmetric form $u\cdot v=\sum u_xv_x$. Let $\one$ be the all-ones vector, $P_0=\one^\perp$ the even-weight vectors, $\cG\subset P$ the span of the indicator vectors of heptads (the Golay code), and $\cG_0=\cG\cap P_0$. Since $23$ is odd, $P=\langle\one\rangle\oplus P_0$ and $\cG=\langle\one\rangle\oplus\cG_0$ as $\M$-modules. The following are classical \cite{MS77}:
+\begin{equation}\label{eq:dual}
+\cG^\perp=\cG_0,\qquad \dim\cG_0=11,
+\end{equation}
+and every coset of $\cG$ in $P$ contains a unique vector of weight at most $3$. The last property is perfectness: $2^{12}(1+23+253+1771)=2^{23}$. The form restricted to $P_0$ is alternating and nondegenerate, and by \eqref{eq:dual} $\cG_0$ is a Lagrangian subspace of $P_0$, stable under $\M$. Put $\cQ=P_0/\cG_0\simeq P/\cG$; the form identifies $\cQ$ with the dual $\cG_0^\vee$. The module $\cG_0$ is irreducible \cite{James73}: its nonzero vectors form three orbits (weights $8$, $12$, $16$), each of which spans.
+
+\begin{lemma}[Coset leaders]\label{lem:leaders}
+For every subgroup $H\le\M$ the sequence $0\to\cG_0^{H}\to P_0^{H}\to\cQ^{H}\to0$ is exact.
+\end{lemma}
+\begin{proof}
+Only surjectivity needs proof. Let $q\in\cQ^H$, viewed as an $H$-stable coset $v+\cG$ in $P$. It contains a unique vector $\ell$ of weight at most $3$. For $h\in H$ the vector $\ell h$ has the same weight and lies in the same coset, so $\ell h=\ell$. Write $\ell=\ell_0+\epsilon\one$ with $\ell_0\in P_0$; then $\ell_0\in P_0^H$ and, as $\one\in\cG$, $\ell_0$ maps to $q$.
+\end{proof}
+
+\begin{corollary}\label{cor:fixed}
+If $g\in\M$ has $c(g)$ cycles on $\Omega$, then $\dim\cG_0^{\,g}=\dim\cQ^{\,g}=\tfrac12(c(g)-1)$.
+\end{corollary}
+\begin{proof}
+$\dim P_0^{\,g}=c(g)-1$, and $g$ has fixed spaces of equal dimension on a module and on its dual.
+\end{proof}
+
+\section{The seven covers}\label{sec:covers}
+
+We recall the setting of \cite{HJLPPZ26} and fix the dictionary between the three labellings of the Nielsen class in use.
+
+Let $\cH$ be the Hurwitz scheme of $\M$-covers of $\PP^1$ unramified outside $S=\{0,\pm\sqrt{-23}\}$ with local monodromy $(2A,23A,23B)$. Then $\cH(\CC)$ is the set $\Ni$ of triples $(g_1,g_2,g_3)$ in $2A\times23A\times23B$ with $g_1g_2g_3=1$ generating $\M$, up to simultaneous conjugation. Normalizing the second entry to be the published $g_2$, such triples correspond to the involutions $a$ with $(ag_2)^{-1}\in23B$ modulo conjugation by $\langle g_2\rangle=C(g_2)$. Among the $3795$ involutions exactly $161=7\cdot23$ qualify, so $|\Ni|=7$; generation is automatic since the only maximal subgroups of order divisible by $23$ are the groups $23{:}11$ of odd order. We number the classes $0,\dots,6$ by the lexicographic order of the normalized representative. Complex conjugation acts by $(g_1,g_2,g_3)\mapsto(g_1^{-1},g_3^{-1},g_2^{-1})$ \cite[\S3.1]{HJLPPZ26}.
+
+\input{tables/nielsen.tex}
+
+\begin{proposition}\label{prop:dictionary}
+Complex conjugation fixes exactly three classes and exchanges the other four in pairs. Table~\ref{tab:nielsen} gives the correspondence between our numbering, the seven triples of the data file of \cite{HJLPPZ26} and the seven orbits of \cite[Table~1]{Janik26}. The rational point of $\cH$ is our class $5$, the first triple of \cite{HJLPPZ26} and orbit $1$ of \cite{Janik26}. The other two real classes are orbits $0$ and $4$ of \cite{Janik26}.
+\end{proposition}
+
+By \cite[\S3.7]{HJLPPZ26}, $\cH\simeq\operatorname{Spec}\QQ\sqcup\operatorname{Spec}L$ with $L=\QQ[x]/(x^6-x^5-3x^4-3x^3+x^2+5x+4)$, a field of signature $(2,2)$ and discriminant $2^4\cdot11\cdot23^4$ whose Galois closure has group $S_6$. In the notation of \cite[\S6]{Janik26} the orbit partition is therefore $\{a\}\cup\{b,c,d,\bar d,e,\bar e\}$: the two remaining real covers are the two real places of $L$. This answers \cite[Question 6.2]{Janik26}.
+
+For the rational class let $t\colon X\to\PP^1_\QQ$ be the degree $23$ map, $Y\to\PP^1_\QQ$ its Galois closure, and $F(T,V)\in\ZZ[T,V]$ the equation of bidegree $(4,23)$ of \cite[\S3.4]{HJLPPZ26}, where $v$ is a function of degree $4$ on $X$. The closure $X_0$ of $F=0$ in $\PP^1\times\PP^1$ has $62$ nodes and no other singularity \cite[Prop.~3.10]{HJLPPZ26}. We write $b',c'$ for the points of $X$ above $\pm\sqrt{-23}$, and $D_7$, $D_8$ for the reduced divisors of unramified and ramified points above $0$, so that $t^*(0)=D_7+2D_8$.
+
+\begin{proposition}[The fibre above $0$]\label{prop:fibre0}
+The seven points of $D_7$ form a heptad of the Steiner system on the fibres of $t$. The decomposition group $C(g_1)$ of order $2688$ at $t=0$ has orbits of lengths $1,28,112,112$ on heptads and $8,21,112,112$ on duads. In particular it fixes exactly one heptad, namely $D_7$, and no duad.
+\end{proposition}
+\begin{proof}
+The points of $D_7$ are the fixed points of the inertia generator $g_1$, an involution. The decomposition group is the normalizer of inertia by \cite[proof of Prop.~3.26]{HJLPPZ26}. The orbit lengths are computed.
+\end{proof}
+
+This gives a reason for \cite[Prop.~3.26]{HJLPPZ26}, which states that among the quotients of $Y$ by maximal subgroups only $Y/2^4{:}A_7$ has a rational point above $t=0$, and exactly one: the rational point is the heptad of unramified points.
+
+\section{The Golay Lagrangian}\label{sec:lagrangian}
+
+\subsection{The general statement}
+Let $k$ be a field of characteristic $0$ with algebraic closure $\kbar$, and $\pi\colon X\to\PP^1_k$ a finite morphism of degree $23$ from a smooth projective geometrically connected curve of genus $g$. Let $U\subset\PP^1_k$ be the complement of the branch locus, $j\colon U\to\PP^1_k$ the inclusion, and $\cP=\pi_*\FF_2|_U$, a lisse sheaf of rank $23$ whose monodromy is the permutation representation of the monodromy group $G$ of $\pi$ (the Galois group of the Galois closure of $k(X)/k(t)$). Assume $G\le\M$ for some Steiner system on the generic fibre. The decomposition of Section~\ref{ssec:modules} gives sub-local systems, defined over $k$,
+\[
+\cG_0\subset\cP_0\subset\cP=\FF_2\oplus\cP_0,\qquad \cQ=\cP_0/\cG_0 .
+\]
+
+\begin{theorem}\label{thm:lagrangian}
+With these hypotheses:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item The sequence $0\to j_*\cG_0\to j_*\cP_0\to j_*\cQ\to0$ of sheaves on $\PP^1_k$ is exact.
+\item It induces a $\Gal(\kbar/k)$-equivariant exact sequence
+\[
+0\to H^1(\PP^1_{\kbar},j_*\cG_0)\to H^1(X_{\kbar},\FF_2)\to H^1(\PP^1_{\kbar},j_*\cQ)\to0 .
+\]
+\item The subspace $W_\cG=H^1(\PP^1_{\kbar},j_*\cG_0)$ has dimension $g$ and is isotropic for the cup product. Under $H^1(X_{\kbar},\FF_2)=H^1(X_{\kbar},\mu_2)=\Jac(X)[2]$ it is a Lagrangian subgroup for the Weil pairing, stable under $\Gal(\kbar/k)$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) Exactness holds on $U$. At a geometric point $b$ of the branch locus, the stalk of $j_*\mathcal L$ is $\mathcal L^{I_b}$, where $I_b\le G\le\M$ is the image of an inertia group. Lemma~\ref{lem:leaders} gives exactness of the stalks.
+
+(b) Since $X$ is normal, $\pi_*\FF_2=j_*\cP=\FF_2\oplus j_*\cP_0$, so $H^1(X_{\kbar},\FF_2)=H^1(\PP^1_{\kbar},j_*\cP_0)$. As $X$ is geometrically connected, the geometric monodromy group is transitive and contains an element $\sigma$ of order $23$; $\sigma-1$ is invertible on $P_0$, hence on $\cG_0$ and on $\cQ$. Therefore $H^0(\PP^1_{\kbar},j_*\cQ)=0$, and $H^2(\PP^1_{\kbar},j_*\cG_0)=H^2_c(U_{\kbar},\cG_0)$ is a twist of the coinvariants of $\cG_0$ and vanishes. The long exact sequence of (a) gives (b).
+
+(c) Let $r$ be the number of geometric branch points and $c_b$ the number of points of $X$ above $b$, which is the number of cycles of a generator $g_b$ of the cyclic group $I_b$. For a tamely ramified lisse sheaf $\mathcal L$ on $U$ without geometric invariants or coinvariants, the Euler--Poincar\'e formula gives $\dim H^1(\PP^1_{\kbar},j_*\mathcal L)=(r-2)\operatorname{rk}\mathcal L-\sum_b\dim\mathcal L^{I_b}$. By Corollary~\ref{cor:fixed} this number for $\cG_0$ is half of the number for $\cP_0$, which is $2g$. For isotropy, the cup product on $H^1(X_{\kbar},\FF_2)$ is induced by the pairing $\pi_*\FF_2\otimes\pi_*\FF_2\to\pi_*\FF_2\xrightarrow{\operatorname{tr}}\FF_2$, which on fibres is $u\cdot v$. It vanishes on $\cG_0\otimes\cG_0$ by \eqref{eq:dual}, so the cup product vanishes on $W_\cG\times W_\cG$. Finally the cup product on $H^1(X_{\kbar},\mu_2)$ is the Weil pairing on $\Jac(X)[2]$, and all sheaves and maps are defined over $k$.
+\end{proof}
+
+\begin{corollary}\label{cor:isogeny}
+$A=\Jac(X)/W_\cG$ is an abelian variety over $k$ carrying a principal polarization whose pullback to $\Jac(X)$ is twice the canonical one. In particular $\Jac(X)[2]$ is a reducible $\Gal(\kbar/k)$-module, an extension of $W_\cG^\vee$ by $W_\cG$.
+\end{corollary}
+\begin{proof}
+A polarization descends through an isogeny with kernel $K$ exactly when $K$ is isotropic for the associated pairing, and the descended polarization is principal when $K$ is maximal isotropic \cite[\S23]{Mumford}.
+\end{proof}
+
+\begin{corollary}\label{cor:Lpoly}
+Let $k$ be a number field and $\mathfrak p$ a prime of good reduction of $X$ with odd residue characteristic. Let $P_{\mathfrak p}(T)$ be the characteristic polynomial of Frobenius on $H^1$ and $Q_{\mathfrak p}(T)=\det(T-\Frob_{\mathfrak p}\mid W_\cG)$. Then $P_{\mathfrak p}\equiv Q_{\mathfrak p}\cdot Q_{\mathfrak p}^{\rev}\pmod 2$.
+\end{corollary}
+\begin{proof}
+$\Jac(X)[2]/W_\cG\simeq\operatorname{Hom}(W_\cG,\mu_2)$ by the Weil pairing, and $\mu_2$ is a trivial module.
+\end{proof}
+
+\begin{corollary}[Lifting]\label{cor:lifting}
+Assume the geometric monodromy group is $\M$, with monodromy representation $\rho\colon\pi_1(U_{\kbar})\to\M$ and Galois closure $Y\to\PP^1$. Then $W_\cG$ is in bijection with the $\cG_0$-conjugacy classes of homomorphisms $\tilde\rho\colon\pi_1(U_{\kbar})\to\cG_0\rtimes\M=2^{11}{:}\M$ lifting $\rho$ and sending each inertia generator to a $\cG_0$-conjugate of $(g_b,0)$. Every nonzero class is surjective, and corresponds to an unramified Galois cover $\widetilde Y\to Y$ with group $2^{11}$ such that $\widetilde Y\to\PP^1$ is Galois with group $2^{11}{:}\M$, with the same branch points and ramification indices as $Y\to\PP^1$.
+\end{corollary}
+\begin{proof}
+$H^1(U_{\kbar},\cG_0)=H^1(\pi_1(U_{\kbar}),\cG_0)$ classifies lifts up to $\cG_0$-conjugacy, and the subgroup $H^1(\PP^1_{\kbar},j_*\cG_0)$ consists of the classes whose restriction to each inertia group is trivial. The image of a lift meets $\cG_0$ in a submodule, hence in $0$ or $\cG_0$. In the first case the image is a complement to $\cG_0$; complements are classified by $H^1(\M,\cG_0)$, which vanishes because $H^0(\M,\cQ)=0$ and $H^1(\M,P_0)\subset H^1(\M,P)=H^1(M_{22},\FF_2)=0$. So a lift with non-surjective image is conjugate to the trivial lift.
+\end{proof}
+
+\begin{remark}\label{rem:hamming}
+The proof uses only that the monodromy group preserves a binary code $C$ of odd length with $C=C^\perp\oplus\langle\one\rangle$ that is perfect. Besides the Golay code this covers the Hamming code $[7,4,3]$: a degree $7$ cover of $\PP^1$ with monodromy in $\GL_3(\FF_2)$ has a rational Lagrangian in $\Jac[2]$, cut out by the simplex code. For three-point covers the parabolic cohomology can also be computed directly from a triple (Section~\ref{sec:computations}); for all seven triples of $\Ni$ one finds $\dim H^1(\PP^1,j_*\cG_0)=\dim H^1(\PP^1,j_*\cQ)=4$ and $\dim H^1(\PP^1,j_*\cP_0)=8$, as the theorem predicts.
+\end{remark}
+
+\begin{remark}\label{rem:orbifold}
+If one only asks that a lift preserve the orders of the inertia generators, one obtains the cohomology of the triangle group $\Delta(2,23,23)$ with coefficients in $\cG_0$, of dimension $7$ for each of our seven triples. The quotient by $W_\cG$ injects into $H^1(\langle g_1\rangle,\cG_0)\simeq\FF_2^3$. Every nonzero class again gives a cover $\widetilde Y\to Y$ that is unramified with group $2^{11}$ and Galois over $\PP^1$ with group $2^{11}{:}\M$; the classes outside $W_\cG$ are those for which the induced double cover of $X$ is ramified at points of $D_7$. Thus $2^{11}{:}\M$ is a quotient of $\Delta(2,23,23)$ in $7\cdot127$ ways up to conjugacy, of which $7\cdot15$ have the first generator in the class of $(g_1,0)$. The space $(1+g_1)\cG_0$ of dimension $4$ that parametrizes the latter is the extended Hamming code $[8,4,4]$ on the eight transpositions of $g_1$, that is, on the points of $D_8$.
+\end{remark}
+
+\subsection{The curve of Huang et al.}
+Now let $X/\QQ$ be the rational cover. Its Jacobian has good reduction outside $\{2,3,5,7,11,23\}$ by \cite{Beckmann89}, since the branch points stay distinct modulo primes other than $2$ and $23$.
+
+\input{tables/frobenius.tex}
+
+\begin{theorem}\label{thm:image}
+Let $W=W_\cG\subset\Jac(X)[2]$ and $\rho_W\colon\GQ\to\GL(W)\simeq\GL_4(\FF_2)$.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item For the primes $p$ of Table~\ref{tab:frobenius} the curve $X$ has good reduction, with the listed Frobenius polynomials, and $P_p\equiv Q_pQ_p^{\rev}\pmod2$ with $Q_p$ as listed (up to reversal).
+\item $\rho_W$ is surjective. The fixed field $K_W$ of its kernel is Galois over $\QQ$ with group $\GL_4(\FF_2)\simeq A_8$ and is unramified outside $\{2,3,5,23\}$.
+\item Complex conjugation acts on $W$ with a fixed space of dimension $3$.
+\item $\End(\Jac(X)_{\Qbar})=\ZZ$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(i) is a computation; see Section~\ref{sec:computations} for the method and its validation. At $p=7$ and $p=11$ the reduction of the plane model is nodal with $62$ nodes, so $X$ has good reduction there.
+
+(ii) By Corollary~\ref{cor:Lpoly}, $Q_{11}$ is one of the two irreducible quartics $x^4+x+1$, $x^4+x^3+1$, whose roots have order $15$, and $Q_7$ is $(x+1)(x^3+x+1)$ or its reverse, with roots of order $1$ and $7$. So the image of $\rho_W$ contains an element of order $15$ and has order divisible by $7$. The maximal subgroups of $A_8$ are $A_7$, two classes of $2^3{:}L_3(2)$, $S_6$, $2^4{:}(S_3\times S_3)$ and $(A_5\times3){:}2$ \cite{ATLAS}. An element of order $15$ in $A_8$ has cycle type $3\,5$, so among these only $(A_5\times3){:}2$, of order $360$, contains one, and $7\nmid360$. Hence the image is $A_8$. The field $K_W$ is contained in $\QQ(\Jac(X)[2])$, which is unramified outside $2$ and the primes of bad reduction; $7$ and $11$ are primes of good reduction by (i).
+
+(iii) is Theorem~\ref{thm:real}(iii) below.
+
+(iv) For $p=7$ and $p=11$ the polynomial $P_p$ is irreducible, with Galois group of order $384=2^4\cdot4!$, the hyperoctahedral group $2^4{:}S_4$. For such a polynomial no quotient of two distinct roots is a root of unity: the stabilizer of a root $\pi$ is transitive on the six roots other than $\pi$ and $p/\pi$, so such a relation would give $\pi^{2m}=p^m$ for some $m$ and a metabelian Galois group. Hence the characteristic polynomial of every power of Frobenius is irreducible, and by Tate's theorem the reduction $J_p$ is absolutely simple with $\End^0(J_{p,\overline{\FF}_p})=\QQ(\pi_p)$, a CM field of degree $8$. Its only proper subfields are $\QQ$ and the real quartic field $\QQ(\pi_p+p/\pi_p)$, because the only nontrivial blocks of $2^4{:}S_4$ on the eight roots are the four pairs $\{\pi,p/\pi\}$. The algebra $\End^0(\Jac(X)_{\Qbar})$ embeds in both $\QQ(\pi_7)$ and $\QQ(\pi_{11})$, so it is a field. The real quartic subfields have discriminants $6274745$ and $1058861381$, so no field other than $\QQ$ embeds in both.
+\end{proof}
+
+By Corollary~\ref{cor:lifting}, the fifteen nonzero elements of $W$ are the fifteen classes of generating triples $(\tilde g_1,\tilde g_2,\tilde g_3)$ of $2^{11}{:}\M$ lifting $(g_1,g_2,g_3)$ with $\tilde g_i$ conjugate to $(g_i,0)$. Since the centre of $2^{11}{:}\M$ is trivial, the corresponding covers $\widetilde Y_w\to\PP^1$ are defined over their fields of moduli. By (ii), $\GQ$ permutes them transitively: each is defined over a field $K_{15}$ of degree $15$, the fixed field of the stabilizer $2^3{:}L_3(2)$ of a nonzero vector, and none over $\QQ$. The curves $\widetilde Y_w$ have genus $1+2^{11}(g_Y-1)=4\,314\,562\,561$. The quotient of $\widetilde Y_w$ by the stabilizer of a point and of the corresponding coordinate functional is the \'etale double cover of $X$ attached to $w$, a curve of genus $7$ with a degree $46$ map to $\PP^1$ of ramification type $(1^{14}2^{16},23^2,23^2)$.
+
+\begin{remark}
+In the action of $A_8$ on $8$ letters, the transvections of $\GL_4(\FF_2)$ are the involutions of cycle type $2^4$. So the octic subfield $K_8$ of $K_W$ is a totally complex $A_8$-field unramified outside $\{2,3,5,23\}$, whose Frobenius cycle types at the primes of Table~\ref{tab:frobenius} are given in the last column. The two subfields of degree $15$ of $K_W$, for the actions on the points and on the hyperplanes of $\PP(W)$, are arithmetically equivalent. We have not determined $K_8$ explicitly (Question~\ref{q:A8}).
+\end{remark}
+
+\begin{proposition}[The prime $23$]\label{prop:23}
+The class $[b'-c']$ has order $23$ in $\Jac(X)(\QQ(\sqrt{-23}))$, and it generates a $\GQ$-stable subgroup on which $\GQ$ acts through the quadratic character $\chi$ of $\QQ(\sqrt{-23})$. Hence the quadratic twist of $\Jac(X)$ by $\chi$ has a rational point of order $23$, and $P_p(\chi(p))\equiv P_p(\chi(p)p)\equiv0\pmod{23}$ for the good primes $p\ne23$.
+\end{proposition}
+\begin{proof}
+There is a function $u$ with $\operatorname{div}(u)=23b'-23c'$ \cite[\S3.4]{HJLPPZ26}, and $b'-c'$ is not principal since $g>0$. The nontrivial automorphism of $\QQ(\sqrt{-23})$ exchanges $b'$ and $c'$.
+\end{proof}
+
+The congruences of Proposition~\ref{prop:23} hold for all primes of Table~\ref{tab:frobenius}, which is a further check of the point counts.
+
+\section{Steiner labelling of the roots}\label{sec:labelling}
+
+Let $f\in\ZZ[x]$ be monic of degree $23$ with roots $\alpha_1,\dots,\alpha_{23}$ and Galois group $\M$ in its natural action. The roots carry a unique Steiner system preserved by the Galois group. Since $\M$ is its own normalizer in $S_{23}$, any polynomial invariant $J\in\QQ[x_1,\dots,x_{23}]^{\M}$ has a well defined value $J(f)\in\ZZ$ on $f$: evaluate $J$ on the roots, labelled compatibly with the Steiner system. The problem is to find the labelling.
+
+\begin{proposition}\label{prop:labelling}
+Let $p$ be a prime such that $f$ is irreducible modulo $p$. Let $R=\ZZ_p[x]/(f)$, with Frobenius automorphism $\varphi$, and $\alpha_i=\varphi^i(x)$ for $i\in\ZZ/23$. Let $M$ be an upper bound for the absolute values of the complex roots of $f$. For $\epsilon=\pm$ put
+\[
+T_5^{\epsilon}=\sum_{H\in\cS^{\epsilon}}\Bigl(\sum_{i\in H}\alpha_i\Bigr)^{5}\in\ZZ_p .
+\]
+Then exactly one of the systems $\cS^+,\cS^-$ is preserved by $\Gal(f)$ acting on the $\alpha_i$; for that one, $T_5^\epsilon$ is a rational integer with $|T_5^\epsilon|\le253(7M)^5$. Consequently, if $N$ is such that $p^N>2\cdot253(7M)^5$ and the residue of $T_5^{-\epsilon}$ modulo $p^N$ of least absolute value exceeds that bound, then $\cS^{\epsilon}$ is the Steiner system of $f$ and $\varepsilon(\Frob_p)=\epsilon$.
+\end{proposition}
+\begin{proof}
+The ring $R$ is the ring of integers of the unramified extension of $\QQ_p$ of degree $23$, and $f$ splits in it with roots $\varphi^i(x)$. An embedding of the splitting field of $f$ identifies $\Gal(f)$ with a subgroup of $\Sym(\ZZ/23)$ isomorphic to $\M$ and containing the shift, the image of a Frobenius element. By Lemma~\ref{lem:twocodes} it is $\Aut(\cS^+)$ or $\Aut(\cS^-)$. Both $T_5^\pm$ are fixed by $\varphi$, hence lie in $\ZZ_p$. For the correct sign $T_5^\epsilon$ is fixed by $\Gal(f)$ and is an algebraic integer, so it is in $\ZZ$, and the bound is clear.
+\end{proof}
+
+The quantity $T_5$ is the cheapest invariant that is not symmetric: because heptads form a $4$-design, the power sums of the heptad sums of exponent at most $4$ are symmetric functions of the roots, while $T_5=120J_5+(\text{symmetric})$. Once the labelling is known, any invariant can be computed in $R/p^N$ with $N$ determined by an archimedean bound, and the result does not depend on $p$.
+
+\input{tables/invariants.tex}
+
+\begin{theorem}\label{thm:invariants}
+For the polynomials $f_1$ and $f_2$ of \cite[Examples 1.2 and 3.17]{HJLPPZ26}, the Steiner labelling at the smallest prime of irreducibility and the invariants $J_5$, $J_7$, $T_5$ are as in Table~\ref{tab:invariants}. The heptad resolvent
+\[
+R_f(Z)=\prod_{H}\Bigl(Z-\sum_{i\in H}\alpha_i\Bigr)\in\ZZ[Z],\qquad\deg R_f=253,
+\]
+is irreducible, and its coefficients are given in the accompanying data.
+\end{theorem}
+\begin{proof}
+Proposition~\ref{prop:labelling} applies at $p=29$ for both polynomials: the rejected candidate for $T_5$ has more than $40$ digits, against bounds of $14$ digits. The coefficients of $R_f$ are integers bounded by $(1+7M)^{253}$ and are computed modulo a larger power of $p$. Irreducibility follows from Lemma~\ref{lem:sums}; it is also visible from the factorizations modulo primes at which Frobenius has order $23$ and order $11$, which have all factors of degree $23$ and all of degree $11$ respectively.
+\end{proof}
+
+Every value in Table~\ref{tab:invariants} and every coefficient of $R_{f_1}$, $R_{f_2}$ was recomputed at a second prime ($p=73$ for $f_1$, $p=223$ for $f_2$) with identical results. This is a strong test, because at the second prime the Frobenius labelling is unrelated to the first.
+
+\begin{proposition}[The regular family]\label{prop:family}
+Write $F(T,V)=\sum_{j=0}^{23}c_j(T)V^j$ with $c_j\in\ZZ[T]$ of degree at most $4$, and let $v_1,\dots,v_{23}$ be the roots of $F(t,V)$ over $\QQ(t)$. Then
+\[
+J_5(v_1,\dots,v_{23})=\frac{n(t)}{c_{23}(t)},\qquad n=3\cdot23^3\,n_0,
+\]
+where
+\[
+\scriptstyle
+\begin{aligned}
+n_0(T)={}&2635504671500625282906995440063848235915923848759099081\,T^4\\
+&+ 1293466393170844216045777307035462195384664759781784236\,T^3\\
+&+ 66363067387201152863743819016936247025816882371746494374\,T^2\\
+&+ 29749727043061762883662073661736186511499634256191593100\,T\\
+&+ 132168578681577474207385903247131241115603051375922031961
+\end{aligned}
+\]
+\end{proposition}
+\begin{proof}
+The function $v$ has four simple poles on $X$, lying above the four roots of $c_{23}$, and at each of them exactly one of the $v_i$ has a pole, which is simple. A squarefree polynomial in the $v_i$ therefore has at most simple poles there, and it is regular at $t=\infty$, so $c_{23}(t)J_5(v)$ is a polynomial of degree at most $4$. For an integer $t$ the numbers $c_{23}(t)v_i$ are the roots of a monic integral polynomial with Galois group $\M$ \cite[Table~1]{HJLPPZ26}, to which Proposition~\ref{prop:labelling} applies. We computed $c_{23}(t)^5J_5(v)$ for the $26$ integers $t$ with $0<|t|\le13$, interpolated on $21$ of them and checked the remaining five.
+\end{proof}
+
+The same argument shows that every squarefree invariant has this form. Thus each coefficient $c_{23-k}$ of $F$, which is $\pm c_{23}$ times the sum of all products of $k$ roots, is canonically a sum of as many polynomials of degree at most $4$ as $\M$ has orbits on $k$-subsets ($1,1,1,1,1,2,3,4,\dots$): the Steiner system splits the coefficients of $F$ from $c_{18}$ on, and $n$ is the first new piece, with $-c_{18}=n+n'$ for the complementary orbit.
+
+\begin{lemma}\label{lem:sums}
+Let $f$ be an $\M$-polynomial over a field $k$ of characteristic $0$. The $253$ heptad sums are pairwise distinct, so $R_f$ is irreducible over $k$ with the same splitting field as $f$. The same holds for the $253$ duad sums.
+\end{lemma}
+\begin{proof}
+The $k$-linear map $k^{23}\to\overline k$, $c\mapsto\sum c_i\alpha_i$ is equivariant, and its kernel is a submodule of the permutation module, which is the sum of the trivial module and the irreducible augmentation module $V_0$ (by $2$-transitivity). The kernel does not contain $V_0$, as the roots are distinct. So it meets $V_0$ trivially, and the difference of the indicator vectors of two heptads, or of two duads, is a nonzero element of $V_0$. Transitivity on heptads and simplicity of $\M$ give the rest.
+\end{proof}
+
+\begin{remark}[Frobenius signs]
+With $T_5(f)$ known, the sign $\varepsilon(\Frob_p)$ at any further prime of irreducibility is obtained by a computation in $\FF_{p^{23}}$: compare $T_5^{\pm}$ with $T_5(f)$ modulo $p$. For $f_2$ the first such primes and signs are
+\[
+29^-,\ 137^+,\ 223^-,\ 283^-,\ 349^-,\ 353^+,\ 467^-,\ 523^+,\ 563^-,\ 587^-,\ 601^+,\ 733^-,\ 743^+,\ 853^+ .
+\]
+These signs are exactly the information about $\Frob_p$ that the factorization of $f$ modulo $p$ does not see, and they determine the traces of the two $770$-dimensional Artin representations at these primes.
+\end{remark}
+
+\section{Duads, heptads and arithmetic equivalence}\label{sec:gassmann}
+
+The group $\M$ has two classes of subgroups of index $253$: the stabilizer $L_3(4){:}2_2$ of a duad and the stabilizer $2^4{:}A_7$ of a heptad. Both actions have rank $3$, with subdegrees $1,42,210$ and $1,112,140$, so they are not equivalent.
+
+\begin{proposition}\label{prop:gassmann}
+Every element of $\M$ has the same cycle type on the $253$ duads as on the $253$ heptads (Table~\ref{tab:classes}). Hence $L_3(4){:}2_2$ and $2^4{:}A_7$ are Gassmann equivalent: they meet every conjugacy class of $\M$ in the same number of elements, and both permutation characters equal $1+22+230$. Among the $204$ classes of subgroups of $\M$, no two distinct classes of index smaller than $253$ are Gassmann equivalent.
+\end{proposition}
+\begin{proof}
+The cycle types are computed for class representatives. The last statement was checked with the table of marks of $\M$ in GAP \cite{GAP}, which contains $128$ Gassmann equivalent pairs of classes, the next indices being $3795$, $4048$ and $5313$.
+\end{proof}
+
+\begin{corollary}[Number fields]\label{cor:fields}
+Let $f\in\QQ[x]$ be an $\M$-polynomial with roots $\alpha_i$. The duad field $\QQ(\alpha_1+\alpha_2)$ and the heptad field $\QQ(\sum_{i\in H}\alpha_i)$ are arithmetically equivalent: they have the same Dedekind zeta function, hence the same discriminant, signature $(29,112)$ and decomposition types at all unramified primes. They are not isomorphic. No two non-isomorphic subfields of degree less than $253$ of the splitting field of $f$ are arithmetically equivalent.
+\end{corollary}
+\begin{proof}
+Gassmann's criterion \cite{Gassmann26,Perlis77}, together with Lemma~\ref{lem:sums}. The signature follows from the cycle type $1^{29}2^{112}$ of an involution.
+\end{proof}
+
+The duad resolvent is a symmetric resolvent: $\operatorname{Res}_x\bigl(f(x),f(z-x)\bigr)=2^{23}f(z/2)\,D_f(z)^2$. The heptad resolvent $R_f$ is not obtainable from the coefficients of $f$ by a universal formula and requires the Steiner labelling. For $f_1$ and $f_2$ we verified directly that $R_f$ and $D_f$ have the same factorization pattern modulo every prime $p<400$ not dividing the discriminants ($71$ and $72$ primes), and that the pattern is the one predicted by Table~\ref{tab:classes} from the factorization of $f$.
+
+\begin{corollary}[Curves]\label{cor:curves}
+For the cover $Y\to\PP^1_\QQ$ of \cite{HJLPPZ26} let $C_2=Y/L_3(4){:}2_2$ and $C_7=Y/2^4{:}A_7$, the curves parametrizing duads and heptads in the fibres of $t$. They are curves of genus $46$ over $\QQ$, not isomorphic as covers of $\PP^1$, with isogenous Jacobians over $\QQ$ and with the same number of points over every finite field of characteristic of good reduction. The curve $C_7$ has a rational point above $t=0$ and $C_2$ has none.
+\end{corollary}
+\begin{proof}
+The isomorphism of permutation modules $\QQ[\M/H]\simeq\QQ[\M/H']$ induces an isogeny between the Jacobians of the quotients \cite{KR89} and equality of zeta functions, and gives the same genus, which is $46$ by \cite[Table~2]{HJLPPZ26}. The last statement is Proposition~\ref{prop:fibre0}.
+\end{proof}
+
+The decomposition $1+22+230$ shows that $\Jac(C_2)$ and $\Jac(C_7)$ are isogenous to $\Jac(X)\times B$ with $B$ of dimension $42$. Corollary~\ref{cor:curves} is an example of the fact that Gassmann equivalence controls the unramified local behaviour but not the behaviour at branch points: above $t=0$ the residue fields of the points of $C_7$ have degrees $1,28,56,56$ over $\QQ$ and those of $C_2$ have degrees $8,21,56,56$. Whether $C_2$ has any rational point is left open in \cite[Table~2]{HJLPPZ26}.
+
+\begin{remark}
+The incidence relation between points and heptads is a correspondence between $X$ and $C_7$ of bidegree $(77,7)$. In terms of Section~\ref{sec:lagrangian}, $\cG_0$ is the kernel of the incidence map $P\to\FF_2^{253}$, $u\mapsto(u\cdot\one_H)_H$. So $W_\cG$ is, up to the invariants of the cokernel, the kernel of the map $\Jac(X)[2]\to\Jac(C_7)[2]$ induced by the correspondence: a class in $\Jac(X)[2]$ represented by a function $h$ with even divisor lies in $W_\cG$ when its heptad norm $\prod_{x\in H}h(x)$ is a square on $C_7$. The duad correspondence does not see $W_\cG$, since the kernel of $P\to\FF_2^{253}$ for duads is $\langle\one\rangle$.
+\end{remark}
+
+\section{Real structure}\label{sec:real}
+
+\begin{proposition}[The real heptad]\label{prop:realheptad}
+Let $f\in\RR[x]$ be a separable polynomial of degree $23$ whose roots carry a Steiner system $S(4,7,23)$ preserved by complex conjugation. Then either all roots are real, or exactly seven are, and these seven form a heptad. In particular an $\M$-polynomial over $\QQ$ that is not totally real has signature $(7,8)$ and the sum of its real roots is a root of its heptad resolvent.
+\end{proposition}
+\begin{proof}
+Complex conjugation is an element of order at most $2$ of $\Aut(\cS)\simeq\M$, and the fixed points of an involution form a heptad.
+\end{proof}
+
+By \cite[Prop.~3.18(b)]{HJLPPZ26} every specialization of the regular extension at a rational $t\ne0$ is of the second kind. For $f_1$ and $f_2$ the sum of the seven real roots is a root of $R_f$ to $380$ decimal digits, and it is not a root of the duad resolvent $D_f$.
+
+Now consider the three real classes of $\Ni$. A triple $(g_1,g_2,g_3)$ represents a real cover if and only if there is $c_0\in\M$ with
+\[
+c_0g_1c_0=g_1^{-1},\qquad c_0g_2c_0=g_3^{-1},\qquad c_0g_3c_0=g_2^{-1};
+\]
+then $c_0$ is unique, it is an involution commuting with $g_1$, and $g_1=c_0\cdot g_2c_0g_2^{-1}$ is a product of two commuting conjugate involutions. With a real base point $s_0\in(0,\sqrt{23})$, complex conjugation acts on the fibre above $s_0$ by $c_0$, and on the fibre above $-s_0$, identified by transport along the upper half circle, by $c_0g_1$.
+
+\begin{theorem}\label{thm:real}
+For each of the three real classes:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $|\Fix(c_0)\cap\Fix(g_1)|=3$. Hence the fibre above $0$ has $3$ real unramified points and $4$ real ramified points, two of which are limits of pairs of real points with $t>0$ and two with $t<0$.
+\item The number $r$ of connected components of $X(\RR)$ is $2$ for the rational class and $1$ for the two others.
+\item The fixed space of complex conjugation on $\Jac(X)[2]$ has dimension $g+r-1$, that is $5,4,4$; on $W_\cG$ it has dimension $3,2,2$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(i) is a computation of $c_0$. For (ii), the real points above $t>0$ are $A=\Fix(c_0)$ and above $t<0$ are $B=\Fix(c_0g_1)$, seven each. Following real points through $t=\infty$ gives the bijection $x\mapsto x^{g_3}$ from $A$ to $B$, because the path from $s_0$ to $-s_0$ through $\infty$ along the real axis followed by the return along the upper half circle is a simple loop around the branch point in the upper half plane. Its monodromy is $g_3$ or $g_2^{-1}=g_3g_1$ according to the orientation convention; both map $A$ to $B$ (for $x\in A$, $x^{g_3c_0g_1}=x^{c_0g_2^{-1}g_1}=x^{g_3}$), and the two resulting graphs are isomorphic by relabelling $B$ through $g_1$, so the count below does not depend on the convention. Through $t=0$, a point of $A\cap\Fix(g_1)$ continues to the same point of $B$, and the remaining points of $A$, and of $B$, are joined in pairs $\{x,x^{g_1}\}$ at real ramification points. The components of $X(\RR)$ are the cycles of the resulting graph on $A\sqcup B$, all of whose vertices have degree $2$. For (iii), complex conjugation acts on a cocycle $z$ of $\pi_1$ with values in a module by $z'(\gamma)=z(\kappa\gamma)\cdot c_0$, where $\kappa(\gamma_1)=\gamma_1^{-1}$, $\kappa(\gamma_2)=\gamma_3^{-1}$, $\kappa(\gamma_3)=\gamma_2^{-1}$; the induced involution on the parabolic classes is computed by linear algebra over $\FF_2$.
+\end{proof}
+
+Two checks support these computations. First, the dimension of $\Jac(X)(\RR)[2]$ is $g+r-1$ for a real curve with $r\ge1$ ovals \cite{GH81}; this relation between the outputs of (ii) and (iii), which are computed by unrelated procedures, holds for all three classes. Second, for the rational cover everything can be tested on the equation: $F(0,V)=c\,g_7g_8^2$ where $g_7$ has $3$ real roots and $g_8$ has $4$; $F(t,V)$ has $7$ real roots for real $t\neq0$; and following the real roots of $F(t,\cdot)$ around the circle $\PP^1(\RR)$, through the $12$ real nodes of the plane model (all with real branches) and the $2$ real poles of $v$, one finds $2$ ovals.
+
+\begin{remark}
+Theorem~\ref{thm:real}(ii) singles out the rational point of $\cH$ among the three real points by an invariant computable from the triple. We do not know whether this is a coincidence. It cannot by itself explain the rationality, for the reason given in \cite[\S6]{Janik26}: a real invariant constrains each real place separately. The Klein four-groups $\langle c_0,g_1\rangle$ are of the same type in the three cases by (i).
+\end{remark}
+
+\section{Invariants and covariants}\label{sec:invariants}
+
+\subsection{Invariants}
+Let $\M$ act on $\QQ[x_1,\dots,x_{23}]$ by permuting the variables according to a fixed Steiner system $\cS$. Put
+\[
+J_5=\sum_{S}\prod_{i\in S}x_i,\qquad J_7=\sum_{H\in\cS}\prod_{i\in H}x_i ,
+\]
+where $S$ runs over the $5313=253\binom75$ five-subsets contained in a heptad.
+
+\begin{proposition}\label{prop:J5}
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item The stabilizer of $J_5$ in $S_{23}$ is $\M$, and likewise for $J_7$. Hence $\QQ(x_1,\dots,x_{23})^{\M}=\QQ(e_1,\dots,e_{23})(J_5)$.
+\item Invariants of degree at most $4$ are symmetric. In degree $5$ the invariants are spanned by the symmetric ones and $J_5$.
+\item The dimensions of the homogeneous components of the invariant ring are given in Table~\ref{tab:molien}.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(i) A permutation fixing $J_5$ preserves the set of five-subsets contained in heptads. A $7$-set is a heptad if and only if all its five-subsets have this property: if they do, fix a four-subset $T$; each $T\cup\{i\}$ lies in a heptad, which must be the unique heptad through $T$. So the permutation preserves $\cS$. The field statement follows by Galois theory. (ii) holds because $\M$ is $4$-transitive and has two orbits on $5$-subsets. (iii) is the Molien series, computed from the class data of Table~\ref{tab:classes}.
+\end{proof}
+
+\input{tables/molien.tex}
+
+In geometric terms, $\mathbb A^{23}/\M\to\mathbb A^{23}/S_{23}$ is a finite map of degree $23!/|\M|\approx2.5\cdot10^{15}$, an $\M$-polynomial over $k$ is a $k$-point of the base that lifts, the lift is unique because $\M$ is self-normalizing, and $J_5(f)$ is the coordinate of the lift. The values in Table~\ref{tab:invariants} are the first instances of this coordinate for polynomials over $\QQ$.
+
+\subsection{Covariants and the Tschirnhaus obstruction}
+Let $D=(D_1,\dots,D_{23})$ be a polynomial map $\mathbb A^{23}\to\mathbb A^{23}$ over $\QQ$ commuting with $\M$; for instance the gradient $D_i=\partial J_7/\partial x_i$, a sum of $77$ monomials of degree $6$. For an $\M$-polynomial $f$ over $k$ with roots $\alpha_i$ and a parameter $u$, the polynomial $\prod_i\bigl(Y-\alpha_i-uD_i(\alpha)\bigr)$ has coefficients in $k[u]$ and Galois group $\M$ over $k(u)$. This was the starting point of this project: a way to produce equations from the code.
+
+\begin{proposition}\label{prop:tschirnhaus}
+For every $\M$-covariant $D$ and every $\M$-polynomial $f$ over $k$ there is a unique $P\in k[X]$ of degree at most $22$ with $D_i(\alpha)=P(\alpha_i)$ for all $i$. Thus the polynomials obtained from $f$ by covariants are Tschirnhaus transforms of $f$: they define the same degree $23$ field and the same Galois closure.
+\end{proposition}
+\begin{proof}
+$D_1(\alpha)$ is fixed by the point stabilizer $M_{22}$, so it lies in $k(\alpha_1)$, and equivariance propagates the relation to all $i$.
+\end{proof}
+
+So covariants do not produce new $\M$-extensions from old ones. What the code adds to the symmetric covariants is that $P$ is not a universal expression in the coefficients of $f$. For $f_2$ and $D=\nabla J_7$ we computed $P$ exactly: its coefficients have a common denominator of $125$ digits dividing $\operatorname{disc}(f_2)$ and numerators of up to $132$ digits. The same obstruction applies to the degree $253$ resolvents of Sections~\ref{sec:labelling} and~\ref{sec:gassmann}: they change the degree of the stem field but not the Galois closure. A regular $\M$-extension of $\QQ(t)$ independent of that of \cite{HJLPPZ26} would require a rational point on another Hurwitz space, or a rational curve in $\mathbb A^{23}/\M$ not coming from $X$; the invariant theory alone does not provide one.
+
+\section{Computations}\label{sec:computations}
+
+All computations are in the repository accompanying this paper. The group theory is in pure Python, starting from the two generators of \cite{HJLPPZ26}; the arithmetic uses FLINT \cite{FLINT} through \texttt{python-flint}. PARI/GP \cite{PARI} and GAP \cite{GAP} were used for cross-checks and for Proposition~\ref{prop:gassmann} and Theorem~\ref{thm:image}(iv). The data of \cite{HJLPPZ26} is read from the authors' repository and not redistributed.
+
+\subsection*{Group theory}
+A Schreier--Sims chain gives $|\langle g_1,g_2\rangle|=10\,200\,960$; the Steiner system is the orbit of $\Fix(g_1)$. All elements are enumerated to obtain the class sizes of Table~\ref{tab:classes}. The Nielsen class is enumerated as in Section~\ref{sec:covers}, with the sign of Definition~\ref{def:sign} separating $23A$ from $23B$. For a triple and a subquotient $M$ of $\FF_2^{23}$, cocycles are pairs $(c_1,c_2)\in M^2$, with $c_3=c_1g_2g_3+c_2g_3$; coboundaries are $(a(1+g_1),a(1+g_2))$; parabolic cocycles have $c_i\in M(1+g_i)$. The script \texttt{verify\_group\_theory.py} checks every group-theoretic statement of this paper in about ten seconds.
+
+\subsection*{Point counts}
+For a prime $p$ and $q=p^k$, $k\le4$, the number $\#X(\FF_q)$ is the sum over $v\in\PP^1(\FF_q)$ of the number of distinct roots of the quartic $F(\cdot,v)$, corrected at each $\FF_q$-rational node by the number of rational branches minus one. Every repeated root of a fibre is tested for being a singular point of the model. The counts were also computed with the degree $23$ fibration over $t$ for $p\le19$, with identical results. The identity $\operatorname{disc}_VF=2^{1652}3^{626}23^{228}131^{506}\,T^8(T^2+23)^{22}h_{62}(T)^2$ is verified over $\ZZ$, and for $p=7,11$ the script \texttt{verify\_curve\_model.py} checks that $h_{62}$ stays squarefree of degree $62$ and prime to $T(T^2+23)$ modulo $p$ and that the model has a node above each of its roots, so that the reduction has exactly $62$ nodes and $X$ has good reduction. From $N_1,\dots,N_4$ one obtains $P_p$; we require it to have integer coefficients and all roots of absolute value $\sqrt p$. At the primes marked with an asterisk in Table~\ref{tab:frobenius} the plane model acquires a non-nodal singularity modulo $p$ (two of its special points coalesce); there the singular point is counted as unibranch and the result is accepted only because it passes the same tests. The proof of Theorem~\ref{thm:image} uses only $p=7$ and $p=11$, where the reduction is nodal. The mod $23$ congruences of Proposition~\ref{prop:23} and the mod $2$ factorization of Corollary~\ref{cor:Lpoly} hold in every case.
+
+\subsection*{$p$-adic labelling}
+Arithmetic in $(\ZZ/p^N)[x]/(f)$; the Frobenius image of $x$ is obtained from $x^p$ by Newton iteration, and the other roots by composition. Bounds on the complex roots are Fujiwara's.
+
+\section{Questions}\label{sec:questions}
+
+\begin{question}\label{q:A8}
+Find a polynomial of degree $8$ (or $15$) for the $A_8$-field $K_W$ of Theorem~\ref{thm:image}. It is unramified outside $\{2,3,5,23\}$, totally complex in degree $8$, with the Frobenius data of Table~\ref{tab:frobenius}. Equivalently, compute the fifteen genus $7$ covers of degree $46$ and type $(1^{14}2^{16},23^2,23^2)$ with monodromy group $2^{11}{:}\M$ lying above $X$.
+\end{question}
+
+\begin{question}
+Is the principally polarized abelian fourfold $\Jac(X)/W_\cG$ a Jacobian?
+\end{question}
+
+\begin{question}
+The rational point of $\cH$ is the unique real point whose cover has disconnected real locus (Theorem~\ref{thm:real}). Is there a $p$-adic or global counterpart of this distinction, and does the Golay Lagrangian of the six conjugate covers over $L$ behave differently from that of $X$?
+\end{question}
+
+\begin{question}
+Do the curves $C_2$ and $C_7$ of Corollary~\ref{cor:curves} have rational points other than the one found in \cite{HJLPPZ26}? By \cite[Conjecture 3.23]{HJLPPZ26} they should not.
+\end{question}
+
+\begin{question}
+For which other passports of $\M$ (and for which covers with monodromy $M_{24}$, where perfectness fails and Lemma~\ref{lem:leaders} must be replaced by a count of defects) does the Golay code produce rational isogenies, and can the resulting constraints on fields of moduli be used to locate further rational points on Hurwitz spaces?
+\end{question}
+
+\appendix
+\section{Disclosure of AI use}
+The author and Claude, an AI model developed by Anthropic, worked together on this project. The AI system proposed and proved Theorem~\ref{thmA}, wrote the software, ran the computations, and drafted this manuscript; the starting point was a research note of the author on Golay invariants and the two papers \cite{HJLPPZ26,Janik26}. All mathematical claims rest on the proofs given here and on the scripts and logged outputs in the repository, and the author takes full responsibility for the content of the paper.
+
+\begin{thebibliography}{HJLPPZ26}
+\bibitem[ATLAS]{ATLAS} J. H. Conway, R. T. Curtis, S. P. Norton, R. A. Parker, R. A. Wilson, \emph{Atlas of finite groups}, Oxford Univ. Press, 1985.
+\bibitem[Bec89]{Beckmann89} S. Beckmann, \emph{Ramified primes in the field of moduli of branched coverings of curves}, J. Algebra \textbf{125} (1989), 236--255.
+\bibitem[DD13]{DD13} T. Dokchitser, V. Dokchitser, \emph{Identifying Frobenius elements in Galois groups}, Algebra Number Theory \textbf{7} (2013), 1325--1352.
+\bibitem[FLINT]{FLINT} The FLINT team, \emph{FLINT: Fast Library for Number Theory}, \url{https://flintlib.org}.
+\bibitem[GAP]{GAP} The GAP Group, \emph{GAP -- Groups, Algorithms, and Programming}, version 4.12, with the libraries CTblLib and TomLib, \url{https://www.gap-system.org}.
+\bibitem[Gas26]{Gassmann26} F. Gassmann, \emph{Bemerkungen zur vorstehenden Arbeit von Hurwitz}, Math. Z. \textbf{25} (1926), 661--675.
+\bibitem[GH81]{GH81} B. H. Gross, J. Harris, \emph{Real algebraic curves}, Ann. Sci. \'Ecole Norm. Sup. (4) \textbf{14} (1981), 157--182.
+\bibitem[HJLPPZ26]{HJLPPZ26} X. Huang, B. Jackson, K.-H. Lee, B. Poonen, R. Pries, S. Zhang, \emph{The Mathieu group $M_{23}$ is a Galois group over $\mathbb{Q}$}, arXiv:2608.08538v2 (2026); data at \url{https://github.com/shaowuz/m23isgalois}.
+\bibitem[Jam73]{James73} G. D. James, \emph{The modular characters of the Mathieu groups}, J. Algebra \textbf{27} (1973), 57--111.
+\bibitem[Jan26]{Janik26} J. A. Janik, \emph{Real structure and the Galois fixed point in the Nielsen class $(2,23A,23B)$ of $M_{23}$}, preprint, 7 October 2026.
+\bibitem[KR89]{KR89} E. Kani, M. Rosen, \emph{Idempotent relations and factors of Jacobians}, Math. Ann. \textbf{284} (1989), 307--327.
+\bibitem[LL26]{LeLay26} F. Le Lay, \emph{Minimal-degree projection, Fano-plane arithmetic, and the finite Hurwitz scheme of a regular Mathieu $M_{23}$-cover}, preprint, 2026 (cited from \cite{HJLPPZ26}).
+\bibitem[MS77]{MS77} F. J. MacWilliams, N. J. A. Sloane, \emph{The theory of error-correcting codes}, North-Holland, 1977.
+\bibitem[Mum70]{Mumford} D. Mumford, \emph{Abelian varieties}, Oxford Univ. Press, 1970.
+\bibitem[PARI]{PARI} The PARI Group, \emph{PARI/GP version 2.15}, Univ. Bordeaux, \url{https://pari.math.u-bordeaux.fr}.
+\bibitem[Per77]{Perlis77} R. Perlis, \emph{On the equation $\zeta_K(s)=\zeta_{K'}(s)$}, J. Number Theory \textbf{9} (1977), 342--360.
+\bibitem[Wit38a]{Witt38a} E. Witt, \emph{Die $5$-fach transitiven Gruppen von Mathieu}, Abh. Math. Sem. Univ. Hamburg \textbf{12} (1938), 256--264.
+\bibitem[Wit38b]{Witt38b} E. Witt, \emph{\"Uber Steinersche Systeme}, Abh. Math. Sem. Univ. Hamburg \textbf{12} (1938), 265--275.
+\bibitem[Zar00]{Zarhin00} Yu. G. Zarhin, \emph{Hyperelliptic Jacobians without complex multiplication}, Math. Res. Lett. \textbf{7} (2000), 123--132.
+\bibitem[Zar02]{Zarhin02} Yu. G. Zarhin, \emph{Very simple $2$-adic representations and hyperelliptic Jacobians}, Mosc. Math. J. \textbf{2} (2002), 403--431.
+\end{thebibliography}
+
+\end{document}

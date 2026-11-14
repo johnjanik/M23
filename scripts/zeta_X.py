@@ -6,7 +6,7 @@ P_p(T), a Weil-polynomial check, the factorisation of P_p mod 2 and the
 candidates Q with P_p = Q Q^rev (mod 2) (Golay Lagrangian), and the mod 23
 test P_p(chi(p)) = 0 for the 23-torsion point [b' - c'].
 
-Usage: zeta_X.py [max_prime] [processes]
+Usage: zeta_X.py [max_prime] [processes] [min_prime]   (existing results for other primes are kept)
 """
 import json
 import sys
@@ -30,12 +30,12 @@ def legendre(a, p):
 def work(p):
     note = "nodal reduction of the plane model"
     try:
-        counts = [curve.count_points(p, k, fibre="V") for k in (1, 2, 3, 4)]
+        counts = [curve.count_points(p, k, fibre="V", processes=PROCS) for k in (1, 2, 3, 4)]
     except curve.BadFibre:
         # a non-nodal singularity mod p: count it as unibranch and rely on the Weil test
         note = "non-nodal singularity mod p, counted as unibranch; validated by the Weil test only"
         try:
-            counts = [curve.count_points(p, k, fibre="V", strict=False) for k in (1, 2, 3, 4)]
+            counts = [curve.count_points(p, k, fibre="V", strict=False, processes=PROCS) for k in (1, 2, 3, 4)]
         except Exception as exc:
             return {"p": p, "status": "skipped", "reason": repr(exc)}
     try:
@@ -57,13 +57,18 @@ def work(p):
     }
 
 
+PROCS = 1
+
 if __name__ == "__main__":
+    # usage: zeta_X.py [max_prime] [processes] [min_prime]
     bound = int(sys.argv[1]) if len(sys.argv) > 1 else 50
-    procs = int(sys.argv[2]) if len(sys.argv) > 2 else 4
-    primes = [p for p in range(5, bound + 1) if is_prime(p) and p != 23]
-    results = []
-    with Pool(procs) as pool:
-        for r in pool.imap(work, primes):
-            results.append(r)
-            print(json.dumps(r), flush=True)
-            OUT.write_text(json.dumps(sorted(results, key=lambda r: r["p"]), indent=1) + "\n")
+    PROCS = int(sys.argv[2]) if len(sys.argv) > 2 else 4
+    start = int(sys.argv[3]) if len(sys.argv) > 3 else 5
+    primes = [p for p in range(start, bound + 1) if is_prime(p) and p != 23]
+    results = json.loads(OUT.read_text()) if OUT.exists() else []
+    results = [r for r in results if r["p"] not in primes]
+    for p in primes:                  # primes one at a time; each count uses PROCS processes
+        r = work(p)
+        results.append(r)
+        print(json.dumps(r), flush=True)
+        OUT.write_text(json.dumps(sorted(results, key=lambda r: r["p"]), indent=1) + "\n")

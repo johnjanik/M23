@@ -93,8 +93,68 @@ def _singular_point_branches(ctx, A, p, b, w):
     return 2 if disc.is_square() else 0
 
 
+def _count_chunk(args):
+    """Contribution of the base points with codes in [lo, hi) to #X(F_{p^k}).
+
+    Stateless: a base point is processed only if its code is the smallest in
+    its Frobenius orbit, and is then weighted by the orbit length.
+    """
+    p, k, coeffs, fibre, strict, lo, hi = args
+    if fibre == "T":
+        A = [list(row) for row in coeffs]                                   # A[i][j]: T^i V^j
+    else:
+        A = [[coeffs[i][j] for i in range(5)] for j in range(24)]          # A[j][i]: V^j T^i
+    nb, nw = len(A), len(A[0])
+    ctx = fq_default_ctx(p, k, var="a")
+    R = fq_default_poly_ctx(ctx)
+    cols = [R([A[i][j] % p for i in range(nb)]) for j in range(nw)]        # in the base variable
+    A_rev = [row[::-1] for row in A]                                        # W -> 1/W
+    total = node_count = 0
+
+    def fibre_count(cs, b, model, model_rev):
+        cnt, multiple = _projective_root_count(R, cs)
+        nodes = 0
+        for w, _mult in multiple:
+            br = (_singular_point_branches(ctx, model_rev, p, b, ctx(0)) if w is None
+                  else _singular_point_branches(ctx, model, p, b, w))
+            if br == -1:
+                if strict:
+                    raise BadFibre("singular point that is not a node")
+            elif br is not None:
+                cnt += br - 1
+                nodes += 1
+        return cnt, nodes
+
+    for n in range(lo, hi):
+        b = _element(ctx, p, k, n)
+        size, x, minimal = 1, b, True
+        for _ in range(k - 1):
+            x = x.frobenius()
+            c = _code(x, p, k)
+            if c == n:
+                break
+            if c < n:
+                minimal = False
+                break
+            size += 1
+        if not minimal:
+            continue
+        cnt, nodes = fibre_count([col.evaluate(b) for col in cols], b, A, A_rev)
+        total += size * cnt
+        node_count += size * nodes
+    if lo == 0:
+        # fibre over base = infinity: the chart 1/base at 0
+        A_inf = A[::-1]
+        A_inf_rev = [row[::-1] for row in A_inf]
+        lead = [ctx(A[nb - 1][j] % p) for j in range(nw)]
+        cnt, nodes = fibre_count(lead, ctx(0), A_inf, A_inf_rev)
+        total += cnt
+        node_count += nodes
+    return total, node_count
+
+
 def count_points(p: int, k: int, coeffs=None, fibre: str = "T", return_nodes: bool = False,
-                 strict: bool = True):
+                 strict: bool = True, processes: int = 1, chunk: int = 250_000):
     """#X(F_{p^k}) for an odd prime p at which the plane model stays nodal.
 
     fibre = "T": sum over t of the points in the fibre of the degree 23 map t.
@@ -109,67 +169,21 @@ def count_points(p: int, k: int, coeffs=None, fibre: str = "T", return_nodes: bo
     node and a ramification point, coalescing mod p) the count is refused when
     `strict`; otherwise such a point is counted once (as if unibranch), and
     the result must be validated by the Weil-polynomial test.
+
+    With processes > 1 the base points are split into chunks handled by
+    short-lived worker processes (this also bounds memory use).
     """
     coeffs = data.F() if coeffs is None else coeffs
-    if fibre == "T":
-        A = [list(row) for row in coeffs]                                   # A[i][j]: T^i V^j
-    else:
-        A = [[coeffs[i][j] for i in range(5)] for j in range(24)]          # A[j][i]: V^j T^i
-    nb, nw = len(A), len(A[0])
-    ctx = fq_default_ctx(p, k, var="a")
-    R = fq_default_poly_ctx(ctx)
-    cols = [R([A[i][j] % p for i in range(nb)]) for j in range(nw)]        # in the base variable
-    A_rev = [row[::-1] for row in A]                                        # W -> 1/W
     q = p**k
-    total = node_count = 0
-    seen = bytearray(q)
-
-    def fibre_count(cs, b):
-        cnt, multiple = _projective_root_count(R, cs)
-        nodes = 0
-        for w, _mult in multiple:
-            if w is None:
-                br = _singular_point_branches(ctx, A_rev, p, b, ctx(0))
-            else:
-                br = _singular_point_branches(ctx, A, p, b, w)
-            if br == -1:
-                if strict:
-                    raise BadFibre("singular point that is not a node")
-            elif br is not None:
-                cnt += br - 1
-                nodes += 1
-        return cnt, nodes
-
-    for n in range(q):
-        if seen[n]:
-            continue
-        b = _element(ctx, p, k, n)
-        orbit, x = {n}, b
-        for _ in range(k - 1):
-            x = x.frobenius()
-            orbit.add(_code(x, p, k))
-        for c in orbit:
-            seen[c] = 1
-        cnt, nodes = fibre_count([col.evaluate(b) for col in cols], b)
-        total += len(orbit) * cnt
-        node_count += len(orbit) * nodes
-    # fibre over base = infinity: leading coefficients in the base variable
-    lead = [ctx(A[nb - 1][j] % p) for j in range(nw)]
-    cnt, multiple = _projective_root_count(R, lead)
-    if multiple:
-        # a repeated root over infinity; examine it in the chart 1/base
-        A_inf = A[::-1]
-        A_inf_rev = [row[::-1] for row in A_inf]
-        for w, _mult in multiple:
-            br = (_singular_point_branches(ctx, A_inf_rev, p, ctx(0), ctx(0)) if w is None
-                  else _singular_point_branches(ctx, A_inf, p, ctx(0), w))
-            if br == -1:
-                if strict:
-                    raise BadFibre("singular point that is not a node")
-            elif br is not None:
-                cnt += br - 1
-                node_count += 1
-    total += cnt
+    jobs = [(p, k, coeffs, fibre, strict, lo, min(lo + chunk, q)) for lo in range(0, q, chunk)]
+    if processes > 1 and len(jobs) > 1:
+        from multiprocessing import Pool
+        with Pool(processes, maxtasksperchild=1) as pool:
+            parts = pool.map(_count_chunk, jobs, chunksize=1)
+    else:
+        parts = [_count_chunk(j) for j in jobs]
+    total = sum(t for t, _ in parts)
+    node_count = sum(nc for _, nc in parts)
     return (total, node_count) if return_nodes else total
 
 

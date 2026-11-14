@@ -26,18 +26,34 @@ from . import golay
 N23 = 23
 
 
+def _iroot_ceil(a: int, k: int) -> int:
+    """Smallest integer r >= 0 with r^k >= a (a >= 0)."""
+    if a <= 1:
+        return a
+    hi = 1 << ((a.bit_length() + k - 1) // k)
+    lo = 0
+    while hi - lo > 1:
+        mid = (lo + hi) // 2
+        if mid**k >= a:
+            hi = mid
+        else:
+            lo = mid
+    return hi
+
+
 def root_bound(f) -> Fraction:
-    """Fujiwara's bound on the absolute values of the roots of monic f (ascending coeffs)."""
+    """An upper bound for the absolute values of the roots of monic f (ascending
+    integer coefficients): Fujiwara's bound 2 max_k |a_{n-k}|^{1/k}, computed with
+    exact integer roots at 8 extra binary digits, so the result is rigorous."""
     n = len(f) - 1
     assert f[-1] == 1
-    best = 0.0
+    scale = 256
+    best = 0
     for k in range(1, n + 1):
         a = abs(f[n - k])
-        if k == n:
-            a = a / 2
         if a:
-            best = max(best, float(a) ** (1.0 / k))
-    return Fraction(2 * best * (1 + 1e-9)).limit_denominator(10**6) + Fraction(1, 10**6)
+            best = max(best, _iroot_ceil(a * scale**k, k))     # ceil(scale * a^(1/k))
+    return Fraction(2 * best, scale)
 
 
 def inert_primes(f, start: int = 3, count: int = 1, skip=()) -> list[int]:

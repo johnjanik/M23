@@ -588,5 +588,75 @@
    "x^4+x^3+x+1"
   ],
   "golay_split": true
+ },
+ {
+  "p": 67,
+  "status": "ok",
+  "model": "nodal reduction of the plane model",
+  "counts": [
+   80,
+   4460,
+   302192,
+   20163724
+  ],
+  "P": [
+   1,
+   12,
+   57,
+   584,
+   8759,
+   39128,
+   255873,
+   3609156,
+   20151121
+  ],
+  "chi_minus23": -1,
+  "P(chi) mod 23": 0,
+  "P(chi p) mod 23": 0,
+  "P mod 2": [
+   [
+    "x^4+x^3+x^2+x+1",
+    2
+   ]
+  ],
+  "Q candidates": [
+   "x^4+x^3+x^2+x+1"
+  ],
+  "golay_split": true
+ },
+ {
+  "p": 71,
+  "status": "ok",
+  "model": "nodal reduction of the plane model",
+  "counts": [
+   68,
+   5048,
+   358256,
+   25432076
+  ],
+  "P": [
+   1,
+   -4,
+   11,
+   92,
+   4679,
+   6532,
+   55451,
+   -1431644,
+   25411681
+  ],
+  "chi_minus23": 1,
+  "P(chi) mod 23": 0,
+  "P(chi p) mod 23": 0,
+  "P mod 2": [
+   [
+    "x^4+x^3+x^2+x+1",
+    2
+   ]
+  ],
+  "Q candidates": [
+   "x^4+x^3+x^2+x+1"
+  ],
+  "golay_split": true
  }
 ]
