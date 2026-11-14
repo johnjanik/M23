@@ -64,7 +64,7 @@ Huang, Jackson, Lee, Poonen, Pries and Zhang recently realized the Mathieu group
 (2) A prime at which Frobenius is a $23$-cycle orders the roots of an $\M$-polynomial so that they carry one of exactly two explicit Steiner systems. This yields a certified $p$-adic labelling, with which we compute the first non-symmetric invariants $J_5$ of the published polynomials, their degree $253$ heptad resolvents, and $J_5$ of the regular family as an explicit rational function of degree $4$ in $t$.
 (3) The duad and heptad stabilizers are Gassmann equivalent, which produces explicit arithmetically equivalent non-isomorphic number fields of degree $253$, and two genus $46$ curves over $\QQ$ with isogenous Jacobians, one of which has a rational point above the rational branch point while the other has none there.
 (4) The real roots of an $\M$-polynomial form a block. Among the three real points of the Hurwitz scheme found by the author, the rational one is the only cover whose real locus is disconnected.
-All statements are verified by an independent implementation.
+The group-theoretic and numerical statements are verified by scripts in an accompanying repository.
 \end{abstract}
 
 \maketitle
@@ -310,6 +310,11 @@ There is a function $u$ with $\operatorname{div}(u)=23b'-23c'$ \cite[\S3.4]{HJLP
 \end{proof}
 
 The congruences of Proposition~\ref{prop:23} hold for all primes of Table~\ref{tab:frobenius}, which is a further check of the point counts.
+
+\subsection{The six covers over \texorpdfstring{$L$}{L}}
+Theorem~\ref{thm:lagrangian} applies equally to the six conjugate covers, over $L$. We tested it on the model $\mathcal F(T,V)$ of \cite[\S3.7]{HJLPPZ26}, reduced at primes of $L$ of degree one (Table~\ref{tab:lcovers}). As a check of our point counts against the literature, the three primes of degree one above $53$ give $45$, $57$ and $52$ points over $\FF_{53}$; the values $45$ and $52$ are those of \cite[Prop.~3.14]{HJLPPZ26}. We have not determined the image of Galois in $\GL(W_\cG)$ for these covers.
+
+\input{tables/lcovers.tex}
 
 \section{Steiner labelling of the roots}\label{sec:labelling}
 

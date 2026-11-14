@@ -73,7 +73,8 @@ redistributed here). Then:
 | `python3 -m pytest -q` | regression tests | 1 s |
 | `python3 scripts/verify_group_theory.py` | all group-theoretic statements; writes `data/group_facts.json` | 10 s |
 | `python3 scripts/verify_curve_model.py 7 11` | discriminant identity over Z, 62 nodes mod p, both fibrations | 10 s |
-| `python3 scripts/zeta_X.py 79 4` | L-polynomials for p <= 79, mod 2 and mod 23 tests; writes `data/zeta_X.json` | about 1 h on 4 cores |
+| `python3 scripts/zeta_X.py 79 4` | L-polynomials for p <= 79, mod 2 and mod 23 tests; writes `data/zeta_X.json` | about 30 min on 4 cores |
+| `python3 scripts/zeta_L.py 43 2` | the same for the six covers over L at primes of degree one; reproduces the published counts 45 and 52 at 53; writes `data/zeta_L.json` | 15 min |
 | `python3 scripts/verify_resolvents.py` | Gassmann patterns, irreducibility, real heptad for f1, f2 | 5 s |
 | `python3 scripts/real_locus.py` | counts the ovals of X(R) from the equation | 15 s |
 | `python3 scripts/golay_invariant_family.py` | J5 of the regular family; writes `data/J5_family.json` | 2 min |

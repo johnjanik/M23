@@ -69,3 +69,33 @@ def F_small() -> list[list[int]]:
 def specialise(coeffs, q_num: int, q_den: int = 1) -> list[int]:
     """Integer coefficients (ascending in V) of q_den^4 F(q_num/q_den, V)."""
     return [sum(coeffs[i][j] * q_num**i * q_den**(4 - i) for i in range(5)) for j in range(24)]
+
+
+_CALF_TERM = re.compile(r"\(((?:\(-?\d+\)\*s\^\d\+?)+)\)\*T\^(\d+)\*V\^(\d+)")
+_CALF_COEF = re.compile(r"\((-?\d+)\)\*s\^(\d)")
+
+
+@lru_cache(maxsize=None)
+def calF() -> dict:
+    """calF[(i, j)] = coefficients in the power basis 1, s, ..., s^5 of L of the
+    coefficient of T^i V^j in the model of the covers defined over L."""
+    path = EXTERNAL / "polynomial_calF.m"
+    if not path.exists():
+        raise FileNotFoundError(f"{path} not found; run scripts/fetch_external.sh")
+    txt = path.read_text()
+    body = txt[txt.index("calF :="):txt.index("assert")]
+    out = {}
+    for inner, i, j in _CALF_TERM.findall(body):
+        cs = [0] * 6
+        for c, e in _CALF_COEF.findall(inner):
+            cs[int(e)] = int(c)
+        out[(int(i), int(j))] = cs
+    assert len(out) == 120
+    return out
+
+
+def calF_mod(p: int, s0: int) -> list[list[int]]:
+    """Reduction of calF at the degree one prime (p, s - s0) of L."""
+    cf = calF()
+    return [[sum(c * pow(s0, e, p) for e, c in enumerate(cf.get((i, j), [0] * 6))) % p
+             for j in range(24)] for i in range(5)]

@@ -51,3 +51,32 @@ def test_stored_invariants_agree():
     stored = json.loads((ROOT / "data" / "golay_resolvents.json").read_text())
     assert stored["f1"]["J5"] == 524492 and stored["f2"]["J5"] == 61916
     assert len(stored["f2"]["R253_heptad"]) == 254
+
+
+def _external_available():
+    return (data.EXTERNAL / "polynomial_F.m").exists()
+
+
+def test_point_counts_and_golay_splitting_at_7():
+    import pytest
+    if not _external_available():
+        pytest.skip("HJLPPZ data not fetched")
+    from m23golay import curve
+    counts = [curve.count_points(7, k, fibre="V") for k in (1, 2, 3, 4)]
+    assert counts == [11, 69, 383, 2433]
+    assert [curve.count_points(7, k, fibre="T") for k in (1, 2, 3)] == counts[:3]
+    P = curve.frobenius_polynomial(7, counts)
+    assert curve.is_weil_polynomial(7, P) and curve.golay_splitting(P)["splits"]
+
+
+def test_point_counts_match_published_values_at_53():
+    """[HJLPPZ26, Prop. 3.14]: 45 and 52 points over F_53 at two primes of L above 53."""
+    import pytest
+    if not (data.EXTERNAL / "polynomial_calF.m").exists():
+        pytest.skip("HJLPPZ data not fetched")
+    from flint import nmod_poly
+    from m23golay import curve
+    roots = [int(r) for r, _ in nmod_poly([c % 53 for c in data.L_POLY], 53).roots()]
+    counts = sorted(curve.count_points(53, 1, coeffs=data.calF_mod(53, s0), fibre="V", strict=False)
+                    for s0 in roots)
+    assert counts == [45, 52, 57]

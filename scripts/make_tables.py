@@ -115,6 +115,32 @@ $p$ & $(a_1,a_2,a_3,a_4)$ & $P_p \bmod 2$ & $Q_p$ & order & type in $A_8$\\
 \end{table}
 """)
 
+# --- covers over L ------------------------------------------------------------
+zl_path = DATA / "zeta_L.json"
+if zl_path.exists():
+    zl = json.loads(zl_path.read_text())
+    rows = []
+    for r in zl["results"]:
+        if r["status"] != "ok":
+            continue
+        assert r["golay_split"]
+        order, cyc = TYPES[frozenset(r["Q candidates"])]
+        a_ = r["P"][1:5]
+        rows.append(f"${r['p']}$ & ${r['s0']}$ & $({', '.join(str(x) for x in a_)})$ & {factored(r['P mod 2'])} & ${order}$\\\\")
+    (OUT / "lcovers.tex").write_text(r"""\begin{table}[ht]
+\centering\footnotesize
+\begin{tabular}{@{}rrllc@{}}
+\toprule
+$p$ & $s_0$ & $(a_1,a_2,a_3,a_4)$ & $P_{\mathfrak p} \bmod 2$ & order\\
+\midrule
+""" + "\n".join(rows) + r"""
+\bottomrule
+\end{tabular}
+\caption{Frobenius polynomials of the covers defined over $L=\QQ(s)$ at the primes $\mathfrak p=(p,s-s_0)$ of degree one, with the notation of Table~\ref{tab:frobenius}. In every case $P_{\mathfrak p}\equiv QQ^{\rev}\pmod 2$.}
+\label{tab:lcovers}
+\end{table}
+""")
+
 # --- invariants ----------------------------------------------------------------
 rows = []
 for name, label in (("f1", "f_1"), ("f2", "f_2")):
