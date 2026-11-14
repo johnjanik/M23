@@ -1,0 +1,523 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=1.05in,headheight=15pt]{geometry}
+\usepackage{fontspec}
+\setmainfont{Liberation Serif}
+\setsansfont{Liberation Sans}
+\setmonofont[Scale=0.81]{DejaVu Sans Mono}
+\usepackage{amsmath,amssymb,amsthm,mathtools,mathrsfs}
+\usepackage{microtype}
+\usepackage{booktabs,tabularx,array,longtable}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{needspace}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+
+\definecolor{ink}{HTML}{20354A}
+\definecolor{accent}{HTML}{225B79}
+\definecolor{muted}{HTML}{66717B}
+\definecolor{lightpanel}{HTML}{F3F6F8}
+\hypersetup{colorlinks=true,linkcolor=accent,urlcolor=accent,citecolor=accent,pdftitle={Golay Invariants and Arithmetic Realizations of M23},pdfauthor={Consolidated research note}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\sffamily\color{muted}MATHIEU GROUP \(M_{23}\)}
+\fancyhead[R]{\small\sffamily\color{muted}GOLAY INVARIANTS \& INVERSE GALOIS THEORY}
+\fancyfoot[C]{\small\sffamily\thepage}
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{0pt}
+\setcounter{tocdepth}{2}
+\setlist{itemsep=0.18em,topsep=0.25em}
+\captionsetup{font=small,labelfont=bf}
+\lstdefinestyle{compactpy}{language=Python,basicstyle=\ttfamily\scriptsize,keywordstyle=\color{accent}\bfseries,commentstyle=\color{muted},stringstyle=\color{ink},breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,frame=single,rulecolor=\color{muted!40},xleftmargin=0.5em,xrightmargin=0.5em,aboveskip=0.65em,belowskip=0.65em}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\Gal}{\operatorname{Gal}}
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\Stab}{\operatorname{Stab}}
+\newcommand{\Ni}{\operatorname{Ni}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\Res}{\operatorname{Res}}
+\newcommand{\tr}{\operatorname{Tr}}
+\newcommand{\genus}{\operatorname{genus}}
+\newcommand{\M}{M_{23}}
+\newcommand{\G}{\mathcal{G}_{23}}
+\newcommand{\HH}{\mathscr{H}}
+\newcommand{\B}{\mathcal{B}_5}
+\newcommand{\oct}{\mathcal{H}_7}
+
+\begin{document}
+\begin{titlepage}
+\vspace*{0.85in}
+{\sffamily\color{accent}\Large RESEARCH NOTE \hfill 14 NOVEMBER 2026}\par
+\vspace{0.55in}
+{\fontsize{27}{34}\selectfont\bfseries Golay-Code Invariants\\[0.04em] and the Construction of \(M_{23}\)-Polynomials}\par
+\vspace{0.3in}
+{\Large\color{muted}Connecting the 2026 inverse-Galois realization, real Nielsen-class structure, and explicit invariant theory}\par
+\vspace{0.55in}
+\noindent\color{accent}\rule{\linewidth}{1.4pt}\color{black}
+\vspace{0.36in}
+\begin{abstract}\noindent
+The perfect binary Golay code \([23,12,7]\) has automorphism group \(M_{23}\), the last sporadic simple group realized as a Galois group over \(\QQ\) in the 2026 work of Huang, Jackson, Lee, Poonen, Pries and Zhang. A complementary real-structure analysis by Janik isolates three complex-conjugation-fixed covers in the seven-element Nielsen class \((2,23A,23B)\). This note synthesizes those results, incorporates the six-plus-one arithmetic orbit decomposition proved in the first paper, and builds two concrete invariants from the Steiner system \(S(4,7,23)\): a degree-five polynomial with 5,313 monomials and a degree-seven heptad polynomial with 253 monomials. The gradient of the latter supplies a 23-component \(M_{23}\)-equivariant covariant and hence a rigorous family of code-derived degree-23 polynomials over \(\QQ(t,u)\). We distinguish such new defining equations from genuinely new regular \(M_{23}\)-covers, establish an irreducible degree-253 heptad resolvent, and formulate a computational program for invariant-guided Hurwitz-space constructions. No new independent regular cover is claimed.
+\end{abstract}
+\vfill
+\noindent\textbf{Source basis.} \cite{HJLPPZ26} (arXiv:2608.08538v2, 7 October 2026) and \cite{Janik26} (7 October 2026); computational data from the companion Golay invariant script included in Appendix~\ref{app:code}.\par
+\vspace{0.2in}
+\noindent\textbf{Status key.} We distinguish published theorems, elementary deductions proved here, computational checks, and proposed research tasks.\par
+\end{titlepage}
+
+\tableofcontents
+\clearpage
+
+\section{Question, scope, and summary}
+The inverse Galois problem asks whether a finite group \(G\) occurs as \(\Gal(K/\QQ)\) for some finite Galois extension \(K/\QQ\). For \(M_{23}\), the existence question is now settled: a regular \(M_{23}\)-extension of \(\QQ(t)\) exists \cite[Theorem 1.3]{HJLPPZ26}. The question pursued here is more constructive:
+\begin{quote}
+Can the invariant theory of the perfect Golay code \emph{produce} algebraic equations with Galois group \(M_{23}\), rather than merely certify the group of previously constructed equations? Can it ultimately produce a distinct regular cover over \(\QQ\)?
+\end{quote}
+
+Three conclusions are separated throughout:
+\begin{enumerate}[label=\textbf{\arabic*.}]
+\item \textbf{Yes, for code-derived equations.} A Golay heptad polynomial yields an explicit equivariant root transformation, and with any known regular realization it gives a family of degree-23 equations with full \(M_{23}\) Galois group (Theorem~\ref{thm:transform}).
+\item \textbf{No, not by root reparameterization alone.} Those equations describe the \emph{same} regular extension as the input. An alternative degree-253 heptad quotient changes the degree of the non-Galois cover but retains the same Galois closure.
+\item \textbf{Still a research program for independent covers.} To obtain a different regular \(M_{23}\)-extension by invariant theory, one needs an independent rational Hurwitz point or a suitable arithmetic specialization of the universal invariant field, not just a new expression in an existing set of roots.
+\end{enumerate}
+
+\section{The binary Golay code, heptads, and \(M_{23}\)}
+Let \(\G\subset\FF_2^{23}\) denote the perfect binary Golay code. It is the \([23,12,7]\) code obtained by puncturing the extended \([24,12,8]\) binary Golay code. Its automorphism group is
+\[
+\Aut(\G)\cong M_{23},\qquad |M_{23}|=10\,200\,960=2^7\cdot3^2\cdot5\cdot7\cdot11\cdot23.
+\]
+The extended code has automorphism group \(M_{24}\); the stabilizer of a coordinate of \(M_{24}\) is \(M_{23}\). The group \(M_{23}\) is 4-transitive in its natural 23-point action.
+
+The weight distribution of \(\G\) is
+\begin{center}
+\begin{tabular}{@{}rrrrrrrrr@{}}\toprule
+weight & 0 & 7 & 8 & 11 & 12 & 15 & 16 & 23\\\midrule
+count & 1 & 253 & 506 & 1288 & 1288 & 506 & 253 & 1\\\bottomrule
+\end{tabular}
+\end{center}
+A weight-seven word has a support of seven positions, called a \emph{heptad}. Let \(\oct\) be the family of 253 heptads. It forms the unique Steiner system \(S(4,7,23)\): every four-subset of \(\{1,\ldots,23\}\) lies in exactly one heptad. Double counting gives
+\[
+|\oct|=\frac{\binom{23}{4}}{\binom74}=253,\quad
+\#\{H\in\oct:i\in H\}=\frac{\binom{22}{3}}{\binom63}=77.
+\]
+The code is perfect because
+\[
+2^{12}\sum_{j=0}^3\binom{23}{j}=2^{23},
+\]
+so radius-three Hamming balls centered on the codewords partition \(\FF_2^{23}\).
+
+\section{What the two 2026 papers prove}
+\subsection{A regular \(M_{23}\)-realization}
+Huang, Jackson, Lee, Poonen, Pries and Zhang \cite{HJLPPZ26} construct a regular Galois extension \(E/\QQ(t)\) with
+\[
+\Gal(E/\QQ(t))\cong M_{23}.
+\]
+Their relevant geometric cover has branch locus
+\[
+S=\{0,\sqrt{-23},-\sqrt{-23}\},
+\]
+and inertia classes \((2,23A,23B)\). The degree-23 quotient by a point stabilizer \(M_{22}\) has genus four. Indeed, the involution has cycle type \(1^7 2^8\), and each order-23 element acts as a 23-cycle; Riemann--Hurwitz gives
+\[
+2g-2=-2(23)+8(2-1)+2(23-1)=6,\qquad g=4.
+\]
+The paper recovers a canonical genus-four curve numerically, descends a suitable cover to \(\QQ\), and produces a bidegree \((4,23)\) equation \(F(t,x)=0\). It then proves the geometric and arithmetic monodromy groups are \(M_{23}\). Its Appendix A uses the action on five-subsets to distinguish \(M_{23}\) from \(A_{23}\); this is a direct use of the Golay design, discussed in Section~\ref{sec:five}.
+
+\subsection{Seven Nielsen classes and three real points}
+Let \(\HH\) be the zero-dimensional Hurwitz scheme associated with the fixed three-point passport. Its geometric points correspond to the seven elements of the inner Nielsen class
+\[
+\Ni^{\mathrm{in}}(2,23A,23B),\qquad |\Ni^{\mathrm{in}}|=7.
+\]
+Janik \cite{Janik26} analyzes the action of complex conjugation on these seven covers by passing to braid orbits. With its stated conventions, the real involution is induced by
+\[
+(g_1,g_2,g_3)\longmapsto(g_3^{-1},g_2^{-1},g_1^{-1}),
+\]
+and acts on the seven orbit labels as \((2\;6)(3\;5)\), fixing \(\{0,1,4\}\). (The tuple form depends on the geometric-basis and permutation conventions; the induced number of fixed covers is invariant.) Thus
+\[
+\#\HH(\mathbb R)=3.
+\]
+The parity argument is elementary: complex conjugation is an involution of an odd set and hence has an odd number of fixed points. It guarantees a real point, not a rational point \cite[\S\S3--5]{Janik26}.
+
+\subsection{The full arithmetic orbit structure: one plus six}
+The second paper presents the remaining arithmetic orbit partition as a question. The first paper's revised Section 3.7 supplies the answer \cite[\S3.7, Proposition 3.14]{HJLPPZ26}:
+\begin{equation}\label{eq:etale}
+\HH\simeq \Spec\QQ\;\sqcup\;\Spec L,
+\qquad
+L=\QQ[z]/\bigl(z^6-z^5-3z^4-3z^3+z^2+5z+4\bigr).
+\end{equation}
+Here \(L\) is a degree-six field with signature \((2,2)\), whose Galois closure has group \(S_6\). The authors certify that a second geometric cover is defined over \(L\) but not over \(\QQ\), including a point-count obstruction at primes above 53. Since \(\deg\HH=7\), this leaves exactly one rational point and one six-element arithmetic orbit.
+
+\begin{proposition}[Consequences for this fixed passport]
+The fixed passport \((2,23A,23B)\) has exactly one rational cover and three real covers. The other two complex-conjugation-fixed covers belong to the single arithmetic orbit of size six and do not descend to \(\QQ\) as points of \(\HH\).
+\end{proposition}
+\begin{proof}
+The decomposition \eqref{eq:etale} has exactly one \(\QQ\)-point, and its real points consist of the rational embedding and the two real embeddings of \(L\). This matches Janik's three fixed Nielsen orbits.
+\end{proof}
+This rules out finding a second inequivalent rational cover \emph{within the same fixed three-point passport}. It does not rule out another passport, a different branch locus, or another construction of a regular \(M_{23}\)-extension.
+
+\section{The first exceptional invariant occurs in degree five}\label{sec:five}
+Let \(x=(x_1,\ldots,x_{23})\) be independent variables over \(\QQ\), and define
+\[
+\B=\left\{S\subseteq[23]: |S|=5,\quad S\subseteq H\text{ for some }H\in\oct\right\}.
+\]
+No five-subset belongs to two distinct heptads, because any two heptads share at most three coordinates. Hence
+\[
+|\B|=253\binom75=5\,313.
+\]
+Define the squarefree invariant
+\begin{equation}\label{eq:J5}
+\boxed{\displaystyle J_5(x)=\sum_{S\in\B}\prod_{i\in S}x_i.}
+\end{equation}
+It contains 5,313 monomials, as opposed to \(\binom{23}{5}=33\,649\) possible squarefree degree-five monomials.
+
+\begin{proposition}\label{prop:stabilizer}
+The stabilizer of \(J_5\) in \(S_{23}\) is exactly \(M_{23}\).
+\end{proposition}
+\begin{proof}
+Every automorphism of the Steiner system permutes the monomials of \(J_5\), so \(M_{23}\) fixes \(J_5\). Conversely, equality of squarefree polynomials implies any permutation fixing \(J_5\) preserves \(\B\). A seven-subset \(H\) is a heptad if and only if all its five-subsets lie in \(\B\): fixing any four-subset \(T\subset H\), each \(T\cup\{i\}\), for \(i\in H\setminus T\), belongs to a heptad, necessarily the unique heptad containing \(T\). Thus all elements of \(H\) lie in that one heptad. Consequently the permutation preserves \(\oct\), so it belongs to \(\Aut(S(4,7,23))=M_{23}\).
+\end{proof}
+
+Because \(M_{23}\) is 4-transitive, its orbits on monomials of total degree at most four agree with those of \(S_{23}\): an exponent pattern of degree at most four involves at most four distinct indices. Therefore all \(M_{23}\)-invariants of degree at most four are symmetric polynomials. Proposition~\ref{prop:stabilizer} shows that degree five is the first total degree with a non-symmetric \(M_{23}\)-invariant.
+
+This mirrors a key step in \cite[Appendix A, Lemma A.5]{HJLPPZ26}: \(M_{23}\) has two orbits on five-subsets, while \(A_{23}\) has one. Their virtual character \(\eta=\chi_5-\chi_4\) detects this difference arithmetically over a finite field. The present proposal repurposes the same distinction to define polynomial invariants rather than merely test monodromy.
+
+\section{The heptad polynomial and an equivariant covariant}
+The more economical invariant is
+\begin{equation}\label{eq:J7}
+\boxed{\displaystyle J_7(x)=\sum_{H\in\oct}\prod_{i\in H}x_i.}
+\end{equation}
+It has 253 degree-seven monomials. Its stabilizer in \(S_{23}\) is also precisely \(M_{23}\), directly because the support of \(J_7\) is the set of heptads.
+
+For \(1\le i\le23\), define
+\begin{equation}\label{eq:D}
+D_i(x)=\frac{\partial J_7}{\partial x_i}
+=\sum_{\substack{H\in\oct\\i\in H}}\prod_{j\in H\setminus\{i\}}x_j.
+\end{equation}
+Each \(D_i\) is a sum of exactly 77 degree-six monomials. Set \(D(x)=(D_1(x),\ldots,D_{23}(x))\).
+
+\begin{lemma}[Gradient equivariance]\label{lem:equiv}
+For every \(g\in M_{23}\), with \(g\) acting by coordinate permutation,
+\[
+D(gx)=gD(x).
+\]
+\end{lemma}
+\begin{proof}
+Since \(J_7(gx)=J_7(x)\) and the coordinate action is by permutation matrices, the chain rule yields the asserted equivariance. Equivalently, the heptads containing \(i\) are carried bijectively to those containing \(g(i)\).
+\end{proof}
+The significance is that \(D\) produces a \emph{new 23-component root-like object}, rather than just a scalar invariant.
+
+\section{A rigorous Golay-derived degree-23 polynomial family}
+Let \(k=\QQ(t)\) and let \(f(t,X)\in k[X]\) be monic, separable and irreducible of degree 23, with regular splitting field \(E/k\) and Galois group identified with the natural \(M_{23}\)-permutation action. Label its roots \(\alpha_1,\ldots,\alpha_{23}\) compatibly with \(\oct\). This compatible labeling must be supplied explicitly in any implementation; an arbitrary root ordering will not work.
+
+For an indeterminate \(u\), set
+\begin{equation}\label{eq:beta}
+\beta_i(t,u)=\alpha_i(t)+uD_i(\alpha_1(t),\ldots,\alpha_{23}(t))
+\end{equation}
+and define
+\begin{equation}\label{eq:newpoly}
+\boxed{\displaystyle F_{\mathrm{Golay}}(t,u,Y)=\prod_{i=1}^{23}(Y-\beta_i(t,u)).}
+\end{equation}
+
+\begin{theorem}[Code-derived polynomial family]\label{thm:transform}
+The polynomial \(F_{\mathrm{Golay}}\) lies in \(\QQ(t)[u,Y]\) and has Galois group \(M_{23}\) over \(\QQ(t,u)\). For all but finitely many constants \(c\in\QQ\), the specialization \(F_{\mathrm{Golay}}(t,c,Y)\) is separable of degree 23 and has the same splitting field \(E\) over \(\QQ(t)\).
+\end{theorem}
+\begin{proof}
+For \(\sigma\in\Gal(E/k)\), equivariance (Lemma~\ref{lem:equiv}) implies \(\sigma(\beta_i)=\beta_{\sigma(i)}\). The elementary symmetric functions in the \(\beta_i\) are therefore fixed by the Galois group and belong to \(k[u]\).
+
+For distinct \(i,j\), the difference
+\[
+\beta_i-\beta_j=(\alpha_i-\alpha_j)+u(D_i(\alpha)-D_j(\alpha))
+\]
+is a nonzero polynomial in \(u\), because its constant coefficient \(\alpha_i-\alpha_j\) is nonzero. Hence the 23 transformed roots are pairwise distinct over \(E(u)\). The faithful permutation action on these roots identifies their splitting field over \(k(u)\) with \(E(u)\), yielding Galois group \(M_{23}\). All possible collisions under \(u=c\) lie among the finitely many zeros of the product of these nonzero linear polynomials; outside that finite set, the same faithful-action argument applies over \(k\).
+\end{proof}
+
+\begin{remark}[What is and is not new]
+This theorem builds new \emph{defining equations}, using the code, from an existing regular extension. It does not independently prove a previously unknown regular extension exists, nor does it produce a distinct point of the fixed three-point Hurwitz scheme.
+\end{remark}
+
+\section{The Tschirnhaus obstruction and an exact resultant formula}
+Let \(M_{22}=\Stab_{M_{23}}(1)\). Since \(D_1(\alpha)\) is fixed by \(M_{22}\),
+\[
+D_1(\alpha)\in E^{M_{22}}=k(\alpha_1).
+\]
+As \(k(\alpha_1)/k\) has degree 23, there is a unique representative \(P(t,X)\in k[X]\) of degree at most 22 with
+\[
+P(t,\alpha_1)=D_1(\alpha).
+\]
+Equivariance then ensures \(P(t,\alpha_i)=D_i(\alpha)\) for every \(i\). Therefore
+\begin{equation}\label{eq:resultant}
+\boxed{F_{\mathrm{Golay}}(t,u,Y)
+=\Res_X\bigl(f(t,X),Y-X-uP(t,X)\bigr).}
+\end{equation}
+For generic \(u\), \(k(\beta_1)=k(\alpha_1)\), since the index of the stabilizer of \(\beta_1\) equals 23. Equation~\eqref{eq:resultant} is thus a code-defined \emph{Tschirnhaus transformation}, not an independent degree-23 covering. This is a principled obstruction to attempts that only reparameterize existing roots.
+
+\section{An irreducible heptad resolvent and a second quotient cover}
+The heptad incidence structure also gives a different natural permutation action of \(M_{23}\), on the 253 heptads. Let
+\[
+s_H=\sum_{i\in H}\alpha_i,\qquad
+R_{253}(t,Z)=\prod_{H\in\oct}(Z-s_H).
+\]
+Galois invariance shows \(R_{253}\in k[Z]\). In this natural \(M_{23}\)-extension, the 253 sums are in fact automatically distinct, so no genericity hypothesis is needed.
+
+\begin{lemma}[Distinct heptad sums]\label{lem:sums}
+Assume characteristic zero and the full natural \(M_{23}\) Galois action on distinct \(\alpha_i\). If \(H\ne H'\) are heptads, then \(s_H\ne s_{H'}\).
+\end{lemma}
+\begin{proof}
+Consider the \(M_{23}\)-equivariant linear map \(\phi:k^{23}\to E\) defined by \(\phi(c_1,\ldots,c_{23})=\sum_i c_i\alpha_i\). Since \(M_{23}\) is 2-transitive, its characteristic-zero permutation module decomposes into the trivial line and an irreducible 22-dimensional augmentation submodule \(V_0=\{c:\sum_i c_i=0\}\). The kernel of \(\phi\) is \(M_{23}\)-stable. It cannot contain all of \(V_0\), since that would force \(\alpha_i-\alpha_j=0\) for all \(i,j\). Hence \(\ker\phi\cap V_0=0\). The difference of the two incidence vectors \(1_H-1_{H'}\) is nonzero and lies in \(V_0\), so \(s_H-s_{H'}=\phi(1_H-1_{H'})\ne0\).
+\end{proof}
+
+\begin{proposition}\label{prop:res}
+The polynomial \(R_{253}(t,Z)\) is irreducible of degree 253 over \(k\), and its splitting field is \(E\).
+\end{proposition}
+\begin{proof}
+The group \(M_{23}\) acts transitively on the 253 heptads and, by Lemma~\ref{lem:sums}, acts on their sums with the same stabilizers. Thus \(R_{253}\) is an irreducible orbit polynomial of degree 253. The action on heptads is faithful because \(M_{23}\) is simple and acts nontrivially. Hence the splitting field has kernel trivial in \(\Gal(E/k)\), and must equal \(E\).
+\end{proof}
+
+Write \(Y\to\PP^1\) for the Galois closure. The point quotient \(Y/M_{22}\) is a genus-four degree-23 cover, whereas the heptad quotient \(Y/\Stab(H)\) has degree 253 and genus 46; the heptad stabilizer is the index-253 subgroup \(2^4\!:\!A_7\), appearing in the maximal-subgroup table of \cite[Table 2]{HJLPPZ26}. The underlying Galois closure is the same \(Y\).
+
+The 23-point and 253-heptad sets admit an incidence correspondence with
+\[
+23\cdot77=253\cdot7=1771
+\]
+incident pairs. This correspondence can be represented by intermediate quotient curves and may be exploited for explicit trace, norm and resolvent computations. \emph{It is not itself a new regular \(M_{23}\)-extension.}
+
+\section{The invariant-field route to independent arithmetic realizations}
+There is a universal construction that requires no prior polynomial with Galois group \(M_{23}\). Take independent variables \(x_1,\ldots,x_{23}\) and let
+\[
+K=\QQ(x_1,\ldots,x_{23})^{M_{23}}.
+\]
+Then
+\[
+\prod_{i=1}^{23}(Y-x_i)\in K[Y],\qquad
+\Gal\bigl(\QQ(x_1,\ldots,x_{23})/K\bigr)=M_{23}.
+\]
+This is a bona fide invariant-theoretic construction, but \(K\) has transcendence degree 23 over \(\QQ\), not one. The subtle task is to find arithmetic specializations that restrict this universal family to a regular extension over \(\QQ(t)\).
+
+In geometric terms, one seeks appropriate rational curves or rational maps into the quotient \(\mathbb A^{23}/M_{23}\), with generic pullback retaining full monodromy \(M_{23}\). Neither the existence of \(J_5\) nor of \(J_7\) guarantees such a specialization. The real Nielsen-class analysis supplies an efficient combinatorial \emph{filter} for candidate Hurwitz points, but cannot by itself solve descent from \(\mathbb R\) to \(\QQ\).
+
+\section{Computational program and proposed milestones}
+\begin{enumerate}[label=\textbf{Phase \arabic*:},leftmargin=*]
+\item \textbf{Establish the combinatorial model.} Generate the \([23,12,7]\) code, all 253 heptads, the 5,313 five-subsets in heptads, and the 23 sparse derivative expressions \(D_i\). Verify the Steiner property exactly. The included Appendix~\ref{app:code} is a reference implementation of this phase.
+\item \textbf{Align the 23-point permutation actions.} Construct an explicit conjugating permutation between the \(M_{23}\) root action from \cite{HJLPPZ26} and the Golay-code coordinate action. Without this step, the code-based substitution can fail to be Galois-equivariant.
+\item \textbf{Compute a concrete transformed equation.} Work in the degree-23 point-stabilizer field, recover \(P(t,X)\) from the heptad covariant and calculate the resultant \eqref{eq:resultant}. This avoids explicit arithmetic in the full splitting field of degree \(10\,200\,960\).
+\item \textbf{Certify polynomial properties.} Verify coefficients lie in \(\QQ(t,u)\); test separability and irreducibility; establish the same splitting field as the input; optionally compute specializations \(u=c\in\QQ\) and optimize coefficient height.
+\item \textbf{Compute the heptad quotient.} Construct \(R_{253}\), confirm its irreducibility and derive the incidence correspondence to the degree-23 quotient. Investigate whether it gives practical new resolvent or descent coordinates.
+\item \textbf{Search beyond the fixed passport.} Enumerate other rationally admissible \(M_{23}\) branch-cycle passports, use braid-orbit and real-involution data to shortlist candidates, then impose low-degree Golay invariants as algebraic constraints in a Hurwitz-space computation. Use numerical or modular reconstruction, rational descent and independent monodromy certification before claiming a new regular cover.
+\end{enumerate}
+
+\subsection{What is already verified computationally}
+The accompanying Python script was executed using the cyclic generator polynomial
+\[
+g(z)=z^{11}+z^9+z^7+z^6+z^5+z+1.
+\]
+It verified the weight distribution in Section 2, counted 253 heptads, checked that all \(\binom{23}{4}=8\,855\) four-subsets occur exactly once, counted \(5\,313\) distinguished five-subsets and 77 monomials in each component of \(D\). These computations validate the code data; they do not constitute a numeric construction of a new regular extension.
+
+\section{Conclusions and research claims ledger}
+\begin{center}
+\small
+\begin{tabularx}{\linewidth}{@{}p{0.45\linewidth}p{0.2\linewidth}X@{}}\toprule
+Claim & Status & Basis\\\midrule
+A regular \(M_{23}\)-extension over \(\QQ(t)\) exists & Published theorem & \cite{HJLPPZ26}\\
+Seven geometric covers, three real fixed points & Published results & \cite{HJLPPZ26,Janik26}\\
+Exactly one rational point in the fixed three-point passport & Published theorem & \cite[\S3.7]{HJLPPZ26}\\
+\(\Stab_{S_{23}}(J_5)=M_{23}\) & Deduction proved here & Steiner-system reconstruction\\
+Golay-gradient family has Galois group \(M_{23}\) & Deduction proved here & Theorem~\ref{thm:transform}\\
+Degree-253 heptad resolvent is irreducible & Deduction proved here & Proposition~\ref{prop:res}\\
+Constructing an independent regular cover from invariants & Open research target & Requires new arithmetic/descent\\\bottomrule
+\end{tabularx}
+\end{center}
+
+The strongest immediate program is to use \(J_7\) to compute an explicit, exact Tschirnhaus transform, thereby demonstrating an effective code-to-equation mechanism. The higher-value, nontrivial objective is then to use \(J_5\) and related invariants as coordinates or constraints on \emph{other} Hurwitz spaces, where new rational points could yield genuinely independent regular \(M_{23}\)-realizations.
+
+\appendix
+\section{An explicit degree-23 arithmetic example}\label{app:example}
+Example 1.2 of \cite{HJLPPZ26} gives the following polynomial with Galois group \(M_{23}\) over \(\QQ\), unramified outside \(\{2,3,23\}\):
+{\small
+\begin{align*}
+p(X)={}&X^{23}-184X^{21}-1150X^{20}+26151X^{19}+18400X^{18}\\
+&-1808490X^{17}+1545462X^{16}+67672923X^{15}\\
+&-42732528X^{14}-1333395744X^{13}+290615166X^{12}\\
+&+10550424369X^{11}+3700476348X^{10}+35123826654X^9\\
+&-194398310718X^8-1023887308293X^7+3961650395556X^6\\
+&+1949980486716X^5-28142323927002X^4+53599151839311X^3\\
+&-46185312415788X^2+19169943578802X-3150159884154.
+\end{align*}}
+This example is a \emph{number-field specialization}; it should not be confused with the bivariate regular cover \(F(t,X)\). For the code-derived transformation in Section 6, the bivariate equation is the correct input if the goal is to retain a regular \(\QQ(t)\)-extension. Either input requires identifying the correct compatible root labeling before applying \(D\).
+
+\section{Companion computational script}\label{app:code}
+This self-contained script constructs the \([23,12,7]\) code and all sparse invariant supports. The root transformation routine requires correctly labeled roots in an arithmetic field; it does not perform the labeling or splitting-field computation for the user. The generated JSON file is auxiliary data, not necessary to compile this document.
+
+\begin{lstlisting}[style=compactpy]
+#!/usr/bin/env python3
+"""Exact Golay/Steiner invariant data for a proposed M23 inverse-Galois experiment.
+
+This script constructs the cyclic perfect binary Golay [23,12,7] code from
+  g(x) = x^11 + x^9 + x^7 + x^6 + x^5 + x + 1 (0xAE3).
+It then constructs its 253 weight-seven supports (heptads), the first
+non-symmetric invariant J5 (supported on 5313 five-subsets), the heptad
+invariant J7, and the 23 coordinates of the gradient of J7.
+
+The abstract code data is *not* a new number-field realization. To use the
+covariant root transform, one must supply roots already labelled so that
+Galois action preserves these heptads (i.e. the action is the specific
+coordinate copy of M23 chosen here).
+
+Usage:
+  python3 m23_golay_covariants.py [--json m23_golay_covariants.json]
+
+The function derived_roots(alpha, u) performs the exact code-based root
+transformation beta_i=alpha_i+u*d(J7)/d(x_i)(alpha).
+The caller may use arithmetic elements in a suitably computed splitting
+field to obtain polynomial coefficients via monic_coefficients(beta).
+"""
+from __future__ import annotations
+
+import argparse
+import itertools
+import json
+from collections import Counter
+from math import comb
+from pathlib import Path
+
+N = 23
+GOLAY_G = 0xAE3
+
+
+def golay_codeword(message: int) -> int:
+    assert 0 <= message < (1 << 12)
+    result = 0
+    for i in range(12):
+        if message & (1 << i):
+            result ^= GOLAY_G << i
+    return result
+
+
+def heptads() -> list[tuple[int, ...]]:
+    blocks = [tuple(i for i in range(N) if word & (1 << i))
+              for message in range(1 << 12)
+              if (word := golay_codeword(message)).bit_count() == 7]
+    return sorted(blocks)
+
+
+def five_subsets(blocks: list[tuple[int, ...]]) -> list[tuple[int, ...]]:
+    return sorted({s for h in blocks for s in itertools.combinations(h, 5)})
+
+
+def gradient_monomials(blocks: list[tuple[int, ...]]) -> list[list[tuple[int, ...]]]:
+    return [[tuple(j for j in h if j != i) for h in blocks if i in h]
+            for i in range(N)]
+
+
+def eval_monomial_sums(alpha, monomial_lists):
+    """Evaluate a list of sparse monomial sums on elements of a commutative ring."""
+    return [sum((prod_of(alpha[i] for i in monomial) for monomial in monomials), 0)
+            for monomials in monomial_lists]
+
+
+def prod_of(values):
+    out = 1
+    for x in values:
+        out *= x
+    return out
+
+
+def derived_roots(alpha, u, blocks=None):
+    """Return beta_i = alpha_i + u * dJ7/dx_i evaluated at alpha.
+
+    Input alpha must be a list of exactly 23 correctly labelled root elements.
+    The return values are algebraic elements, not yet rational coefficients.
+    """
+    if len(alpha) != N:
+        raise ValueError('Expected exactly 23 labelled roots')
+    if blocks is None:
+        blocks = heptads()
+    derivatives = eval_monomial_sums(alpha, gradient_monomials(blocks))
+    return [alpha[i] + u * derivatives[i] for i in range(N)]
+
+
+def monic_coefficients(roots):
+    """Return ascending coefficients of prod(Y-root) in the input ring."""
+    result = [1]
+    for root in roots:
+        next_coeffs = [0] * (len(result) + 1)
+        for degree, coefficient in enumerate(result):
+            next_coeffs[degree] -= root * coefficient
+            next_coeffs[degree + 1] += coefficient
+        result = next_coeffs
+    return result
+
+
+def verify(blocks):
+    assert len(blocks) == 253 and len(set(blocks)) == 253
+    wt = Counter(golay_codeword(i).bit_count() for i in range(1 << 12))
+    assert wt == {0: 1, 7: 253, 8: 506, 11: 1288, 12: 1288,
+                  15: 506, 16: 253, 23: 1}
+    four_counts = Counter(s for h in blocks for s in itertools.combinations(h, 4))
+    assert len(four_counts) == comb(23, 4) == 8855
+    assert set(four_counts.values()) == {1}  # S(4,7,23)
+    B5 = five_subsets(blocks)
+    assert len(B5) == 253 * comb(7, 5) == 5313
+    assert len(B5) < comb(23, 5) == 33649
+    monomials = gradient_monomials(blocks)
+    assert len(monomials) == 23 and all(len(row) == 77 for row in monomials)
+    assert sum(0 in h for h in blocks) == 77
+    assert sum(0 in h and 1 in h for h in blocks) == 21
+    assert sum(0 in h and 1 in h and 2 in h for h in blocks) == 5
+    return wt, B5, monomials
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--json', type=Path, help='Write machine-readable heptads and invariant support')
+    args = parser.parse_args()
+    blocks = heptads()
+    weights, B5, dJ7 = verify(blocks)
+    print('Golay code G23: [23,12,7]')
+    print('Weight enumerator:', dict(sorted(weights.items())))
+    print('Steiner heptads:', len(blocks))
+    print('Every 4-subset in exactly one heptad: verified')
+    print('Distinguished 5-subsets (J5 terms):', len(B5))
+    print('Heptad invariant J7 terms:', len(blocks))
+    print('Gradient J7 monomials per coordinate:', len(dJ7[0]))
+    if args.json:
+        obj = {
+            'coordinate_index_base': 0,
+            'generator_polynomial_hex': hex(GOLAY_G),
+            'heptads': blocks,
+            'five_subsets_in_heptads': B5,
+            'gradient_J7_monomials': dJ7,
+            'interpretation': {
+                'J5': 'sum of product(X_i) over five_subsets_in_heptads',
+                'J7': 'sum of product(X_i) over heptads',
+                'D_i': 'sum of product(X_j) over gradient_J7_monomials[i]',
+                'beta_i': 'alpha_i + u*D_i(alpha)',
+                'caveat': 'alpha must be labelled with the same M23 action; this does not compute a new rational splitting field by itself',
+            },
+        }
+        args.json.write_text(json.dumps(obj, separators=(',', ':'))+'\n', encoding='utf-8')
+        print('Wrote', args.json)
+
+
+if __name__ == '__main__':
+    main()
+\end{lstlisting}
+
+\section{Bibliography and source data}
+\begin{thebibliography}{99}
+\bibitem{HJLPPZ26} X. Huang, B. Jackson, K.-H. Lee, B. Poonen, R. Pries, and S. Zhang, \emph{The Mathieu group \(M_{23}\) is a Galois group over \(\QQ\)}, arXiv:2608.08538v2 (7 October 2026). \url{https://arxiv.org/abs/2608.08538}. Source files and computations: \url{https://github.com/shaowuz/m23isgalois}.
+\bibitem{Janik26} J. A. Janik, \emph{Real Structure and the Galois Fixed Point in the Nielsen Class \((2,23A,23B)\) of \(M_{23}\)}, 7 October 2026 (supplied manuscript). Project archive: \url{https://codeberg.org/johnjanik/inverse_galois}.
+\bibitem{MM18} G. Malle and B. H. Matzat, \emph{Inverse Galois Theory}, 2nd ed., Springer, 2018.
+\bibitem{FV91} M. D. Fried and H. V\"olklein, \emph{The inverse Galois problem and rational points on moduli spaces}, Math. Ann. \textbf{290} (1991), 771--800.
+\bibitem{Conway85} J. H. Conway et al., \emph{Atlas of Finite Groups}, Oxford University Press, 1985.
+\end{thebibliography}
+\end{document}
