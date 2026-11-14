@@ -19,6 +19,7 @@ The manuscript is `paper/golay_m23.tex` (PDF: `paper/golay_m23.pdf`).
 | C | Roots in Frobenius order at a prime of irreducibility carry one of exactly two Steiner systems (the two cyclic Golay codes). Certified p-adic labelling. J5(f1) = 524492, J5(f2) = 61916; degree 253 heptad resolvents; J5 of the regular family is n(t)/c23(t) with n an explicit integer quartic. | proved + computed, checked at independent primes |
 | D | Duad and heptad stabilizers are Gassmann equivalent: arithmetically equivalent non-isomorphic fields of degree 253, and two genus 46 curves over Q with isogenous Jacobians, one with a rational point above t = 0 and one without. 253 is the smallest such index in M23. | proved (group theory) + verified on f1, f2 |
 | E | The real roots of an M23-polynomial form a heptad. Of the three real covers in the Nielsen class, the rational one is the only one with disconnected real locus (2 ovals vs 1). | group theory + numerical check on F(T,V) |
+| F | All 57 rational three-point class vectors of M23: exact Nielsen class sizes and real points. Every vector containing 8A has no real point; (2A,14A,14B) has 17 covers of genus 2, 3 real. | enumeration, checked against the character table |
 
 What is not claimed: no new regular M23-extension of Q(t), and no explanation of
 why the Hurwitz scheme has a rational point.
@@ -78,10 +79,28 @@ redistributed here). Then:
 | `python3 scripts/verify_resolvents.py` | Gassmann patterns, irreducibility, real heptad for f1, f2 | 5 s |
 | `python3 scripts/real_locus.py` | counts the ovals of X(R) from the equation | 15 s |
 | `python3 scripts/golay_invariant_family.py` | J5 of the regular family; writes `data/J5_family.json` | 2 min |
+| `python3 scripts/passports_23.py` | the six class vectors (C,23A,23B): sizes, real covers, ovals; writes `data/passports_C_23A_23B.json` | 2.5 min |
+| `python3 scripts/passports_all.py` | all 57 rational three-point class vectors of M23: exact Nielsen class sizes and real points; writes `data/m23_three_point_nielsen.json` | 6 min |
+| `python3 scripts/lifts_2_11_M23.py` | the fifteen lifts of the triple to 2^11:M23 in S_46; writes `data/lifts_2_11_M23.json` | 1 s |
+| `python3 scripts/pg32_a8_model.py` | PG(3,2) spreads and the 8 letters of GL_4(2) = A_8; writes `data/pg32_a8_model.json` | 5 s |
 | `python3 scripts/make_tables.py` | regenerates `paper/tables/*.tex` | instant |
 
 The degree 253 resolvents in `data/golay_resolvents.json` are produced by
 `m23golay.arith.heptad_resolvent` and `duad_resolvent` (about 15 s each).
+
+## Handoff to RustMath
+
+`docs/RUSTMATH_HANDOFF.md` specifies three work packages for the RustMath project, with
+reference values: the Frobenius table, the three-point class vectors of M23 (Phase 6 of the
+research note), and a pipeline for the explicit A8 field through tritangent planes.
+
+## Sources checked
+
+The manuscript's attributions were checked against Le Lay, *Arithmetic and geometry of an M23
+Hurwitz scheme* (2026), and Zarhin's two papers on hyperelliptic Jacobians. Overlaps with Le Lay
+(the two cyclic Steiner systems, the Fano plane of the fibre above 0, the real points of that
+fibre) are now attributed in the paper, and his numbering of the seven covers is in the class
+table. `scripts/gap/` holds the GAP cross-checks.
 
 ## Conventions
 

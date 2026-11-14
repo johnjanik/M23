@@ -119,6 +119,40 @@ check("G0^{g1} restricted to Fix(g1) is the simplex code [7,3,4]; complements of
       len(restr) == 8 and all(x.bit_count() == 4 for x in restr if x) and len(set(lines)) == 7
       and all(sum(1 for l in lines if a in l and b in l) == 1 for a, b in itertools.combinations(sorted(fix_g1), 2)))
 
+# --- theta characteristics and a Lagrangian (general symplectic lemma, genus 4) --------
+# Theta characteristics = quadratic forms q on V = F_2^8 with polar form e; parity = Arf.
+def _theta_lagrangian_check(g=4):
+    n = 2 * g
+    def e(x, y):
+        return sum(((x >> i) & (y >> (i + g)) ^ (x >> (i + g)) & (y >> i)) & 1 for i in range(g)) & 1
+    def q0(x):
+        return sum((x >> i) & (x >> (i + g)) & 1 for i in range(g)) & 1
+    forms = {c: [q0(x) ^ e(c, x) for x in range(1 << n)] for c in range(1 << n)}     # q_c = q0 + e(c, .)
+    arf = {c: int(sum(1 for v in f if v == 0) != (1 << (n - 1)) + (1 << (g - 1))) for c, f in forms.items()}
+    assert sum(arf.values()) == (1 << (g - 1)) * ((1 << g) - 1)                      # 120 odd
+    # a Lagrangian on which q0 does not vanish: the graph {(x, Ax)} of a symmetric matrix A
+    A = [0b0011, 0b0101, 0b1110, 0b0100]          # rows of a symmetric 4x4 matrix with diagonal (1,0,1,0)
+    assert all((A[i] >> j & 1) == (A[j] >> i & 1) for i in range(g) for j in range(g))
+    W = set()
+    for x in range(1 << g):
+        y = 0
+        for i in range(g):
+            if bin(A[i] & x).count("1") & 1:
+                y |= 1 << i
+        W.add(x | (y << g))
+    assert len(W) == 1 << g and all(e(a, b) == 0 for a in W for b in W)
+    cosets = {}
+    for c, f in forms.items():
+        key = tuple(f[w] for w in sorted(W))          # the restriction q_c | W (linear on W)
+        cosets.setdefault(key, []).append(arf[c])
+    profile = sorted((len(v), sum(v)) for v in cosets.values())
+    special = [v for k, v in cosets.items() if not any(k)]
+    return profile, special
+profile, special = _theta_lagrangian_check()
+check("theta characteristics modulo a Lagrangian W (g = 4): 16 cosets of 16; the forms vanishing on W "
+      "are 16 even characteristics; each other coset has 8 odd and 8 even",
+      profile == [(16, 0)] + [(16, 8)] * 15 and len(special) == 1 and sum(special[0]) == 0)
+
 # --- class table ---------------------------------------------------------------
 system = list(S)
 duads = [frozenset(x) for x in itertools.combinations(range(23), 2)]
@@ -193,11 +227,17 @@ hj = nielsen.hjlppz_file_indices()
 jk = [i for i, _ in nielsen.janik_table_indices()]
 check("the seven triples of the HJLPPZ data file represent the seven classes", sorted(hj) == list(range(7)))
 check("the seven rows of [Janik26, Table 1] represent the seven classes", sorted(jk) == list(range(7)))
+ll = nielsen.lelay_indices()
+check("the seven classes of [LeLay26] represent the seven classes; his real classes 3, 6, 7 are ours, "
+      "and his distinguished class 6 is the rational one",
+      sorted(ll) == list(range(7)) and {ll[2], ll[5], ll[6]} == {i for i, j in enumerate(conj) if i == j}
+      and ll[5] == hj[0])
 rows = []
 for i, t in enumerate(ni):
     c0 = nielsen.real_structure(t)
     rep = coh.lagrangian_report(t, c0)
     row = {"index": i, "hjlppz_file_row": hj.index(i) + 1, "janik_orbit": jk.index(i),
+           "lelay_id": ll.index(i) + 1,
            "conjugate": conj[i], "real": c0 is not None,
            "dim_W": rep["G0"]["parabolic"], "dim_Wdual": rep["Q"]["parabolic"],
            "dim_J2": rep["P0"]["parabolic"], "dim_H1_orbifold_G0": rep["G0"]["orbifold"]}

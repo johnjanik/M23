@@ -227,3 +227,154 @@ def janik_table_indices() -> list[tuple[int, str]]:
                 t = (a, mul_many(inv(a), c, a), mul_many(inv(a), b, a))
             out.append((index_of(t), "inverted"))
     return out
+
+
+# ---------------------------------------------------------------------------
+# The passports (C, 23A, 23B) for an arbitrary class C (same branch locus)
+# ---------------------------------------------------------------------------
+
+def nielsen_class_of(first_class: str) -> list[tuple]:
+    """Canonical representatives of Ni(C, 23A, 23B), C given by its cycle-type label
+    ("2A", "3A", "4A", "5A", "6A", "8A", ...).  Every such triple generates M23:
+    the only maximal subgroups of order divisible by 23 are the groups 23:11."""
+    import numpy as np
+    target = next(sig for sig, name in m23.SIGNATURES.items() if name == first_class)
+    E = m23.enumerate_elements()
+    idx = np.arange(N, dtype=np.uint8)[None, :]
+    sq = np.take_along_axis(E, E, axis=1)
+    cu = np.take_along_axis(sq, E, axis=1)
+    sel = (((E == idx).sum(axis=1) == target[0]) & ((sq == idx).sum(axis=1) == target[1])
+           & ((cu == idx).sum(axis=1) == target[2]))
+    A = E[sel]
+    g2 = np.array(m23.G2, dtype=np.uint8)
+    P = g2[A]                                   # (a g2)[x] = g2[a[x]]
+    P2 = np.take_along_axis(P, P, axis=1)
+    P3 = np.take_along_axis(P2, P, axis=1)
+    ok = ((P == idx).sum(axis=1) == 0) & ((P2 == idx).sum(axis=1) == 0) & ((P3 == idx).sum(axis=1) == 0)
+    sign_a = m23.sign_of_23_element(m23.G2)
+    good = []
+    for a, prod in zip(A[ok], P[ok]):
+        if m23.sign_of_23_element(tuple(int(x) for x in prod)) == sign_a:
+            good.append(tuple(int(x) for x in a))
+    assert len(good) % N == 0
+    reps = sorted({_canonical(a) for a in good})
+    assert len(reps) * N == len(good)
+    return [(a, m23.G2, inv(mul(a, m23.G2))) for a in reps]
+
+
+def real_components_general(triple, c0) -> int:
+    """Number of components of X(R) for a real cover with arbitrary first class.
+
+    Real points over t in (0, sqrt 23) are A = Fix(c0); over t < 0 they are
+    B = Fix(c0 g1).  Through t = infinity, x in A continues to x^(g2^-1) in B
+    (the pair (g3, Fix(c0 g1^-1)) is the other consistent normalisation).  At
+    t = 0 a real point of ramification index e lies on a g1-cycle C with
+    (|A n C|, |B n C|) = (1, 1) for e odd and (2, 0) or (0, 2) for e even.
+    """
+    from .perm import cycles_of
+    g1, g2, g3 = triple
+    a_pts = fixed_points(c0)
+    b_pts = fixed_points(mul(c0, g1))
+    adj: dict = {("A", x): [] for x in a_pts}
+    adj.update({("B", x): [] for x in b_pts})
+
+    def edge(u, v):
+        adj[u].append(v)
+        adj[v].append(u)
+
+    m = inv(g2)
+    for x in a_pts:
+        assert m[x] in b_pts
+        edge(("A", x), ("B", m[x]))
+    for cyc in cycles_of(g1):
+        ca = [x for x in cyc if x in a_pts]
+        cb = [x for x in cyc if x in b_pts]
+        if (len(ca), len(cb)) == (1, 1):
+            assert len(cyc) % 2 == 1
+            edge(("A", ca[0]), ("B", cb[0]))
+        elif (len(ca), len(cb)) == (2, 0):
+            assert len(cyc) % 2 == 0
+            edge(("A", ca[0]), ("A", ca[1]))
+        elif (len(ca), len(cb)) == (0, 2):
+            assert len(cyc) % 2 == 0
+            edge(("B", cb[0]), ("B", cb[1]))
+        else:
+            assert (len(ca), len(cb)) == (0, 0), (len(cyc), len(ca), len(cb))
+    assert all(len(v) == 2 for v in adj.values())
+    seen, comps = set(), 0
+    for start in adj:
+        if start in seen:
+            continue
+        comps += 1
+        stack = [start]
+        while stack:
+            u = stack.pop()
+            if u not in seen:
+                seen.add(u)
+                stack.extend(adj[u])
+    return comps
+
+
+def passport_report(first_class: str) -> dict:
+    """Size, genus, real structure and Golay Lagrangian data of Ni(C, 23A, 23B)."""
+    from . import cohomology as coh
+    from .perm import cycles_of
+    classes = nielsen_class_of(first_class)
+
+    def index(t):
+        return classes.index(normalise(t))
+
+    conj = [index(complex_conjugate(t)) for t in classes]
+    assert all(conj[conj[i]] == i for i in range(len(classes)))
+    genus = (N - len(cycles_of(classes[0][0]))) // 2
+    real = []
+    for i, t in enumerate(classes):
+        rep = coh.lagrangian_report(t)
+        assert rep["G0"]["parabolic"] == genus and rep["P0"]["parabolic"] == 2 * genus
+        if conj[i] != i:
+            continue
+        c0 = real_structure(t)
+        assert c0 is not None
+        r = real_components_general(t, c0)
+        rep = coh.lagrangian_report(t, c0)
+        assert rep["P0"]["real_part"] == genus + r - 1, (rep["P0"]["real_part"], genus, r)
+        real.append({"index": i, "components": r, "dim_J2_real": rep["P0"]["real_part"],
+                     "dim_W_real": rep["G0"]["real_part"],
+                     "real_points_above_0": len(fixed_points(c0) & fixed_points(t[0]))})
+    return {"class": first_class, "genus": genus, "size": len(classes),
+            "real_classes": len(real), "real": real,
+            "representatives_g1": [to_cycle_string_1(t[0]) for t in classes]}
+
+
+def to_cycle_string_1(p) -> str:
+    from .perm import to_cycle_string
+    return to_cycle_string(p)
+
+
+# [LeLay26, Section 8.2.1 and the certificate certify_geometric_reflection_obstruction.g
+# of the accompanying repository]: involutions x_1..x_7 with fixed y (= HJLPPZ_FILE_Y) and
+# z = (x y)^-1; class IDs 1..7, real classes 3, 6, 7, distinguished class 6.
+LELAY_X = [
+    [(4, 16), (5, 10), (6, 21), (8, 19), (9, 18), (11, 23), (13, 14), (17, 22)],
+    [(4, 19), (5, 9), (6, 17), (8, 16), (10, 18), (11, 14), (13, 23), (21, 22)],
+    [(4, 6), (5, 9), (7, 21), (8, 15), (11, 19), (12, 18), (13, 20), (14, 17)],
+    [(3, 17), (5, 11), (7, 18), (8, 16), (9, 21), (12, 19), (14, 22), (15, 23)],
+    [(3, 11), (5, 17), (6, 20), (7, 18), (8, 19), (10, 13), (12, 16), (14, 22)],
+    [(3, 21), (4, 16), (9, 22), (10, 15), (11, 20), (12, 19), (13, 18), (14, 17)],
+    [(3, 8), (5, 12), (6, 15), (9, 10), (11, 16), (13, 21), (17, 19), (20, 23)],
+]
+
+
+def lelay_indices() -> list[int]:
+    """Our class index of Le Lay's classes 1..7.
+
+    His triples (x, y, z), x y z = 1, have y in our class 23B; the braid
+    (x, y, z) -> (x, y z y^-1, y) moves them to Ni(2A, 23A, 23B).
+    """
+    out = []
+    for cyc in LELAY_X:
+        x, y = from_cycles(cyc), HJLPPZ_FILE_Y
+        assert x in m23.chain() and y in m23.chain()
+        z = inv(mul(x, y))
+        out.append(index_of((x, mul_many(y, z, inv(y)), y)))
+    return out

@@ -124,8 +124,9 @@ The stabilizers $L_3(4){:}2_2$ of a duad and $2^4{:}A_7$ of a heptad are Gassman
 \begin{maintheorem}[Real structure; Section~\ref{sec:real}]\label{thmE}
 \begin{enumerate}[label=\textup{(\roman*)}]
 \item If $f\in\QQ[x]$ has Galois group $\M$ and is not totally real, it has exactly seven real roots, and they form a heptad.
-\item For each of the three real covers of \cite{Janik26}, complex conjugation fixes exactly $3$ of the $7$ unramified points above $t=0$ and $4$ of the $8$ ramified ones.
+\item \textup{(Le~Lay \cite[Thm.~8.20]{LeLay26})} For each of the three real covers of \cite{Janik26}, complex conjugation fixes exactly $3$ of the $7$ unramified points above $t=0$ and $4$ of the $8$ ramified ones.
 \item The real locus $X(\RR)$ has two connected components for the rational cover and one for each of the two real covers defined over $L$. Accordingly $\dim_{\FF_2}\Jac(X)(\RR)[2]$ is $5,4,4$ and $\dim W_\cG^{\,c}$ is $3,2,2$.
+\item The class vectors $(C,23A,23B)$ with $C=3A,4A,5A,6A,8A$ have $134$, $660$, $1422$, $1632$, $2272$ covers, of which $16$, $42$, $32$, $72$, $0$ are real; in particular $(8A,23A,23B)$ carries no cover defined over $\QQ$.
 \end{enumerate}
 \end{maintheorem}
 
@@ -137,7 +138,11 @@ Theorem~\ref{thmA} is a theorem with a complete proof. The group-theoretic asser
 What is \emph{not} done here: we do not construct a new regular $\M$-extension of $\QQ(t)$, and we do not explain why $\cH$ has a rational point. The paper grew out of the question whether Golay invariants can produce $\M$-polynomials; Section~\ref{sec:invariants} records the precise sense in which they cannot (a covariant restricted to a fibre is a Tschirnhaus transformation) and what they give instead.
 
 \subsection{Related work}
-The second version of \cite{HJLPPZ26} cites a preprint of Le~Lay \cite{LeLay26} on a minimal-degree projection of $X$, the arithmetic of the fibre above $t=0$ and the finite Hurwitz scheme. We have not had access to it. Our only statements about that fibre are Proposition~\ref{prop:fibre0} and Theorem~\ref{thmE}(ii), and they may overlap with it. For hyperelliptic curves $y^2=f(x)$ the $2$-torsion is the heart of the permutation module on the roots of $f$, and the reducibility of that module for the Mathieu groups in degrees $23$ and $24$ is the reason they are excluded from Zarhin's theorems on such Jacobians \cite{Zarhin00,Zarhin02}; Theorem~\ref{thmA} is the analogue for the cover itself rather than for a hyperelliptic curve built from a polynomial. Gassmann equivalence of the two index $253$ subgroups is classical \cite{ATLAS}; the explicit fields are new because no $\M$-extension of $\QQ$ was known before \cite{HJLPPZ26}. General methods for identifying Frobenius classes, which subsume Proposition~\ref{prop:labelling}, are in \cite{DD13}.
+\emph{Le Lay.} After a first version of this paper was written we obtained Le~Lay's preprint \cite{LeLay26}, which the second version of \cite{HJLPPZ26} cites under an earlier title. It reconstructs all seven covers exactly, characterizes the rational one by an incidence of osculating planes of the canonical curve (equivalently by $3[b'-c']\in X-X$ in the Jacobian), studies the reduction at $23$, constructs the bidegree $(4,23)$ equation used in \cite{HJLPPZ26}, and determines the arithmetic of the fibre above $t=0$. The overlap with the present paper is the following. Lemma~\ref{lem:twocodes} and the rule $\varepsilon(\sigma^k)=\left(\frac{k}{23}\right)\varepsilon(\sigma)$ are in \cite[\S5.4, Prop.~8.4]{LeLay26}, with the same generator polynomial, and Le~Lay uses the constancy of the heptad invariant $J_7$ to decide which of the two designs a wild tail cover in characteristic $23$ preserves; Proposition~\ref{prop:labelling} is the analogue of that test over number fields. That $D_7$ is a heptad, its Fano plane, the affine structure on $D_8$ and the number fields they generate are in \cite[\S8]{LeLay26}, which goes much further than Proposition~\ref{prop:fibre0} and Remark~\ref{rem:orbifold}. Theorem~\ref{thmE}(ii) is \cite[Thm.~8.20]{LeLay26} together with the discussion after \cite[Thm.~8.12]{LeLay26}, and the fact that the three pairs $(g_1,c_0)$ are conjugate is \cite[Prop.~8.21]{LeLay26}. As far as we can tell, the Golay Lagrangian, the group $A_8$, the invariant $J_5$, the degree $253$ fields and the counts of ovals do not appear there. Table~\ref{tab:nielsen} includes Le~Lay's numbering of the seven classes.
+
+\emph{Zarhin.} For a hyperelliptic curve $C_f\colon y^2=f(x)$ with $n=\deg f$ odd, $\Jac(C_f)[2]$ is the Galois module of even subsets of the roots of $f$ \cite[\S4]{Zarhin00}, that is, the module $P_0$ of Section~\ref{ssec:modules}. Zarhin proved $\End(\Jac C_f)=\ZZ$ when $\Gal(f)$ is $S_n$ or $A_n$ \cite[Thm.~2.1]{Zarhin00}, and later when $n=11$ and $\Gal(f)=M_{11}$, when $n=12$ and $\Gal(f)$ is $M_{11}$ or $M_{12}$, and when $\Gal(f)$ contains $L_m(q)$ acting on a projective space \cite[Thm.~2.4]{Zarhin02}. The method requires this module to be very simple, in particular absolutely simple \cite[Remarks~4.2]{Zarhin02}. For $n=23$ and $\Gal(f)=\M$ it is not simple: it contains the even Golay code, which is then a rational Lagrangian subgroup of $\Jac(C_f)[2]$ for the genus $11$ curve $C_f$. Theorem~\ref{thmA} is the same phenomenon for the cover $X\to\PP^1$ itself, where the $2$-torsion has no description by subsets of a fibre.
+
+\emph{Other.} The equality of the two permutation characters of degree $253$ can be read off from \cite{ATLAS}; the explicit fields are new because no $\M$-extension of $\QQ$ was known before \cite{HJLPPZ26}. General methods for identifying Frobenius classes, which subsume Proposition~\ref{prop:labelling}, are in \cite{DD13}.
 
 \subsection{Conventions}
 Permutations act on the right, as in \cite{HJLPPZ26}: $x^{gh}=(x^g)^h$. The generators $g_1,g_2,g_3$ are those printed in \cite[\S3.1]{HJLPPZ26}, with $g_1g_2g_3=1$, and $23A$, $23B$ denote the classes of $g_2$, $g_3$. A \emph{heptad} is a block of $S(4,7,23)$, a \emph{duad} a $2$-subset. For a polynomial $Q$ of degree $d$, $Q^{\rev}(x)=x^dQ(1/x)$.
@@ -152,7 +157,7 @@ g_+(z)&=z^{11}+z^9+z^7+z^6+z^5+z+1,\qquad g_-(z)=z^{11}+z^{10}+z^6+z^5+z^4+z^2+1
 \end{align*}
 Let $\cG^{\pm}\subset\FF_2[z]/(z^{23}-1)=\FF_2^{\ZZ/23}$ be the cyclic code generated by $g_\pm$. Each is a perfect $[23,12,7]$ code with weight distribution $1,253,506,1288,1288,506,253,1$ in weights $0,7,8,11,12,15,16,23$; the supports of its $253$ words of weight $7$ form a Steiner system $\cS^{\pm}=S(4,7,23)$ on $\ZZ/23$, invariant under the shift $i\mapsto i+1$ and under $i\mapsto ai$ for $a$ a square modulo $23$. The map $i\mapsto-i$ exchanges $\cS^+$ and $\cS^-$. In a Steiner system $S(4,7,23)$ a point lies in $77$ blocks, a pair in $21$, a triple in $5$, and two distinct blocks meet in $1$ or $3$ points. By Witt \cite{Witt38a,Witt38b} the system is unique up to isomorphism and its automorphism group is $\M$, of order $10\,200\,960$, which is $4$-transitive on the $23$ points and equal to its normalizer in $S_{23}$.
 
-\begin{lemma}[Two cyclic codes]\label{lem:twocodes}
+\begin{lemma}[Two cyclic codes; see also {\cite[\S5.4]{LeLay26}}]\label{lem:twocodes}
 A $23$-cycle $\sigma\in\Sym(\Omega)$, $|\Omega|=23$, preserves exactly two Steiner systems $S(4,7,23)$ on $\Omega$. If $\Omega=\ZZ/23$ and $\sigma$ is the shift, they are $\cS^+$ and $\cS^-$.
 \end{lemma}
 \begin{proof}
@@ -207,7 +212,7 @@ By \cite[\S3.7]{HJLPPZ26}, $\cH\simeq\operatorname{Spec}\QQ\sqcup\operatorname{S
 
 For the rational class let $t\colon X\to\PP^1_\QQ$ be the degree $23$ map, $Y\to\PP^1_\QQ$ its Galois closure, and $F(T,V)\in\ZZ[T,V]$ the equation of bidegree $(4,23)$ of \cite[\S3.4]{HJLPPZ26}, where $v$ is a function of degree $4$ on $X$. The closure $X_0$ of $F=0$ in $\PP^1\times\PP^1$ has $62$ nodes and no other singularity \cite[Prop.~3.10]{HJLPPZ26}. We write $b',c'$ for the points of $X$ above $\pm\sqrt{-23}$, and $D_7$, $D_8$ for the reduced divisors of unramified and ramified points above $0$, so that $t^*(0)=D_7+2D_8$.
 
-\begin{proposition}[The fibre above $0$]\label{prop:fibre0}
+\begin{proposition}[The fibre above $0$; cf.\ {\cite[\S8.2]{LeLay26}}]\label{prop:fibre0}
 The seven points of $D_7$ form a heptad of the Steiner system on the fibres of $t$. The decomposition group $C(g_1)$ of order $2688$ at $t=0$ has orbits of lengths $1,28,112,112$ on heptads and $8,21,112,112$ on duads. In particular it fixes exactly one heptad, namely $D_7$, and no duad.
 \end{proposition}
 \begin{proof}
@@ -264,12 +269,25 @@ Assume the geometric monodromy group is $\M$, with monodromy representation $\rh
 $H^1(U_{\kbar},\cG_0)=H^1(\pi_1(U_{\kbar}),\cG_0)$ classifies lifts up to $\cG_0$-conjugacy, and the subgroup $H^1(\PP^1_{\kbar},j_*\cG_0)$ consists of the classes whose restriction to each inertia group is trivial. The image of a lift meets $\cG_0$ in a submodule, hence in $0$ or $\cG_0$. In the first case the image is a complement to $\cG_0$; complements are classified by $H^1(\M,\cG_0)$, which vanishes because $H^0(\M,\cQ)=0$ and $H^1(\M,P_0)\subset H^1(\M,P)=H^1(M_{22},\FF_2)=0$. So a lift with non-surjective image is conjugate to the trivial lift.
 \end{proof}
 
+\begin{proposition}[Theta characteristics]\label{prop:theta}
+In the situation of Theorem~\ref{thm:lagrangian}, let $\Theta$ be the set of theta characteristics of $X_{\kbar}$, a torsor under $\Jac(X)[2]$, and for $\vartheta\in\Theta$ let $q_\vartheta(a)=h^0(\vartheta+a)-h^0(\vartheta)\bmod2$.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item The set $\Theta_0=\{\vartheta\in\Theta: q_\vartheta|_{W_\cG}=0\}$ is a coset of $W_\cG$. It consists of $2^g$ even theta characteristics and is stable under $\Gal(\kbar/k)$.
+\item Every other coset of $W_\cG$ in $\Theta$ contains $2^{g-1}$ odd and $2^{g-1}$ even theta characteristics, and $\vartheta\mapsto q_\vartheta|_{W_\cG}$ is a Galois-equivariant bijection from the set of these $2^g-1$ cosets to the set of nonzero linear forms on $W_\cG$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+By \cite{Mumford71}, $q_\vartheta$ is a quadratic form on $\Jac(X)[2]$ whose polar form is the Weil pairing, $q_{\vartheta+b}=q_\vartheta+e_2(b,\cdot)$, and $\vartheta$ is even exactly when the Arf invariant of $q_\vartheta$ is $0$. As $W_\cG$ is isotropic, $q_\vartheta|_{W_\cG}$ is linear, and $q_{\vartheta+b}|_{W_\cG}=q_\vartheta|_{W_\cG}+e_2(b,\cdot)|_{W_\cG}$. The map $b\mapsto e_2(b,\cdot)|_{W_\cG}$ is onto the dual of $W_\cG$ with kernel $W_\cG^\perp=W_\cG$, so $\vartheta\mapsto q_\vartheta|_{W_\cG}$ induces a bijection from $\Theta/W_\cG$ to the dual of $W_\cG$. A quadratic form vanishing on a Lagrangian subspace has Arf invariant $0$, which gives (a). If $\lambda=q_\vartheta|_{W_\cG}\ne0$, then $\vartheta+w$ has the parity of $\vartheta$ when $\lambda(w)=0$ and the other parity when $\lambda(w)=1$, which gives (b).
+\end{proof}
+
+For the curve of \cite{HJLPPZ26} the canonical model lies on a smooth quadric \cite[Prop.~8.22]{LeLay26}, so every odd theta characteristic is cut out by a unique tritangent plane. Hence the $120$ tritangent planes fall into $15$ sets of $8$, which $\GQ$ permutes as it permutes the hyperplanes of $W$, and there is a distinguished $\GQ$-stable set of $16$ even theta characteristics. By Theorem~\ref{thm:image} below, the action on the $15$ sets is the action of $A_8$ of degree $15$; this is the most direct route we know to an equation for the field $K_W$ (Question~\ref{q:A8}).
+
 \begin{remark}\label{rem:hamming}
 The proof uses only that the monodromy group preserves a binary code $C$ of odd length with $C=C^\perp\oplus\langle\one\rangle$ that is perfect. Besides the Golay code this covers the Hamming code $[7,4,3]$: a degree $7$ cover of $\PP^1$ with monodromy in $\GL_3(\FF_2)$ has a rational Lagrangian in $\Jac[2]$, cut out by the simplex code. For three-point covers the parabolic cohomology can also be computed directly from a triple (Section~\ref{sec:computations}); for all seven triples of $\Ni$ one finds $\dim H^1(\PP^1,j_*\cG_0)=\dim H^1(\PP^1,j_*\cQ)=4$ and $\dim H^1(\PP^1,j_*\cP_0)=8$, as the theorem predicts.
 \end{remark}
 
 \begin{remark}\label{rem:orbifold}
-If one only asks that a lift preserve the orders of the inertia generators, one obtains the cohomology of the triangle group $\Delta(2,23,23)$ with coefficients in $\cG_0$, of dimension $7$ for each of our seven triples. The quotient by $W_\cG$ injects into $H^1(\langle g_1\rangle,\cG_0)\simeq\FF_2^3$. Every nonzero class again gives a cover $\widetilde Y\to Y$ that is unramified with group $2^{11}$ and Galois over $\PP^1$ with group $2^{11}{:}\M$. The classes outside $W_\cG$ are those for which the induced double cover of $X$ is ramified, and it is then ramified exactly at four points of $D_7$, the complement of a line for a Fano plane structure on $D_7$: the restriction of $\cG_0^{\,g_1}$ to the heptad $\Fix(g_1)$ is the simplex code $[7,3,4]$. So the cohomology of the triangle group is an extension of this simplex code, on which $\GQ$ acts through the group $L_3(2)$ of the degree $7$ factor of $F(0,V)$ \cite[Prop.~3.18]{HJLPPZ26}, by $W_\cG$. Thus $2^{11}{:}\M$ is a quotient of $\Delta(2,23,23)$ in $7\cdot127$ ways up to conjugacy, of which $7\cdot15$ have the first generator in the class of $(g_1,0)$. The space $(1+g_1)\cG_0$ of dimension $4$ that parametrizes the latter is the extended Hamming code $[8,4,4]$ on the eight transpositions of $g_1$, that is, on the points of $D_8$.
+If one only asks that a lift preserve the orders of the inertia generators, one obtains the cohomology of the triangle group $\Delta(2,23,23)$ with coefficients in $\cG_0$, of dimension $7$ for each of our seven triples. The quotient by $W_\cG$ injects into $H^1(\langle g_1\rangle,\cG_0)\simeq\FF_2^3$. Every nonzero class again gives a cover $\widetilde Y\to Y$ that is unramified with group $2^{11}$ and Galois over $\PP^1$ with group $2^{11}{:}\M$. The classes outside $W_\cG$ are those for which the induced double cover of $X$ is ramified, and it is then ramified exactly at four points of $D_7$, the complement of a line for a Fano plane structure on $D_7$: the restriction of $\cG_0^{\,g_1}$ to the heptad $\Fix(g_1)$ is the simplex code $[7,3,4]$. This is the Fano plane of \cite[Thm.~8.5, Prop.~8.8]{LeLay26}, and $\GQ$ acts on the simplex code through the Galois group $L_3(2)$ of the degree $7$ factor of $F(0,V)$. So the cohomology of the triangle group is an extension of this simplex code by $W_\cG$. Thus $2^{11}{:}\M$ is a quotient of $\Delta(2,23,23)$ in $7\cdot127$ ways up to conjugacy, of which $7\cdot15$ have the first generator in the class of $(g_1,0)$. The space $(1+g_1)\cG_0$ of dimension $4$ that parametrizes the latter is the extended Hamming code $[8,4,4]$ on the eight transpositions of $g_1$, that is, on the points of $D_8$.
 \end{remark}
 
 \subsection{The curve of Huang et al.}
@@ -439,7 +457,7 @@ then $c_0$ is unique, it is an involution commuting with $g_1$, and $g_1=c_0\cdo
 \begin{theorem}\label{thm:real}
 For each of the three real classes:
 \begin{enumerate}[label=\textup{(\roman*)}]
-\item $|\Fix(c_0)\cap\Fix(g_1)|=3$. Hence the fibre above $0$ has $3$ real unramified points and $4$ real ramified points, two of which are limits of pairs of real points with $t>0$ and two with $t<0$.
+\item \textup{(\cite[Thm.~8.20]{LeLay26})} $|\Fix(c_0)\cap\Fix(g_1)|=3$. Hence the fibre above $0$ has $3$ real unramified points and $4$ real ramified points, two of which are limits of pairs of real points with $t>0$ and two with $t<0$.
 \item The number $r$ of connected components of $X(\RR)$ is $2$ for the rational class and $1$ for the two others.
 \item The fixed space of complex conjugation on $\Jac(X)[2]$ has dimension $g+r-1$, that is $5,4,4$; on $W_\cG$ it has dimension $3,2,2$.
 \end{enumerate}
@@ -451,8 +469,24 @@ For each of the three real classes:
 Two checks support these computations. First, the dimension of $\Jac(X)(\RR)[2]$ is $g+r-1$ for a real curve with $r\ge1$ ovals \cite{GH81}; this relation between the outputs of (ii) and (iii), which are computed by unrelated procedures, holds for all three classes. Second, for the rational cover everything can be tested on the equation: $F(0,V)=c\,g_7g_8^2$ where $g_7$ has $3$ real roots and $g_8$ has $4$; $F(t,V)$ has $7$ real roots for real $t\neq0$; and following the real roots of $F(t,\cdot)$ around the circle $\PP^1(\RR)$, through the $12$ real nodes of the plane model (all with real branches) and the $2$ real poles of $v$, one finds $2$ ovals.
 
 \begin{remark}
-Theorem~\ref{thm:real}(ii) singles out the rational point of $\cH$ among the three real points by an invariant computable from the triple. We do not know whether this is a coincidence. It cannot by itself explain the rationality, for the reason given in \cite[\S6]{Janik26}: a real invariant constrains each real place separately. The Klein four-groups $\langle c_0,g_1\rangle$ are of the same type in the three cases by (i).
+Theorem~\ref{thm:real}(ii) singles out the rational point of $\cH$ among the three real points by an invariant computable from the triple. We do not know whether this is a coincidence. It cannot by itself explain the rationality, for the reason given in \cite[\S6]{Janik26}: a real invariant constrains each real place separately. The pairs $(g_1,c_0)$ do not distinguish the three cases: they are conjugate in $\M$ \cite[Prop.~8.21]{LeLay26}. The count of ovals also uses $g_3$. Le~Lay's characterization of the rational cover by osculating planes \cite[Thm.~1.1]{LeLay26} is of a different nature, and we do not know how the two are related.
 \end{remark}
+
+\subsection{Other class vectors with the same branch locus}\label{ssec:passports}
+For each rational class $C$ of $\M$, the class vector $(C,23A,23B)$ with branch points $0,\sqrt{-23},-\sqrt{-23}$ satisfies the rationality condition of the branch cycle lemma, every triple in it generates $\M$, and its Hurwitz scheme is finite \'etale over $\QQ$. Theorems~\ref{thm:lagrangian} and~\ref{thm:real} apply to it with the same proofs; in the count of ovals a real point above $0$ of ramification index $e$ lies on one real arc from each side when $e$ is odd, and on two real arcs from the same side when $e$ is even.
+
+\input{tables/passports.tex}
+
+\begin{proposition}\label{prop:passports}
+The sizes of the Nielsen classes $\Ni(C,23A,23B)$, the numbers of classes fixed by complex conjugation and the numbers of ovals of the real covers are as in Table~\ref{tab:passports}. In particular no cover with class vector $(8A,23A,23B)$ is defined over $\RR$, so that Hurwitz scheme has no rational point.
+\end{proposition}
+\begin{proof}
+The classes are enumerated as in Section~\ref{sec:covers}; the sizes agree with the values $7$, $134$, $660$, $1422$, $1632$, $2272$ of the structure constants computed from the character table. For every real cover the relation $\dim\Jac(X)(\RR)[2]=g+r-1$ between the two independent computations holds. For $C=8A$ there is a structural reason: a real structure requires an involution $c_0$ with $c_0g_1c_0=g_1^{-1}$, and the eight elements of $\M$ that invert an element of order $8$ all have order $4$.
+\end{proof}
+
+The same enumeration was carried out for all $57$ three-point class vectors of $\M$ that satisfy the rationality condition and have a degree $23$ cover of nonnegative genus: three rational classes at rational points, or a rational class and a pair $D,D^{-1}$ of irrational classes at conjugate quadratic points. The sizes of the Nielsen classes of generating triples and the numbers of real points are in the accompanying data; in every case the number of solutions agrees with the structure constant of the character table. One class vector, $(2A,7A,7B)$, has no generating triple; $22$ have covers but no real point, among them every class vector containing $8A$ and the genus $0$ vectors $(2A,8A,8A)$, $(3A,4A,8A)$, $(3A,5A,5A)$; and $34$ have real points. The smallest of the latter, after $(2A,23A,23B)$, is $(2A,14A,14B)$ with branch points $0,\pm\sqrt{-7}$: $17$ covers of genus $2$, three of them real.
+
+We do not know whether the Hurwitz schemes for $C=3A,4A,5A,6A$, or any of the others, have rational points. Those of odd degree would have real points for parity reasons \cite{Janik26}; here the degrees are even and the real points are found by computation.
 
 \section{Invariants and covariants}\label{sec:invariants}
 
@@ -506,7 +540,7 @@ Arithmetic in $(\ZZ/p^N)[x]/(f)$; the Frobenius image of $x$ is obtained from $x
 \section{Questions}\label{sec:questions}
 
 \begin{question}\label{q:A8}
-Find a polynomial of degree $8$ (or $15$) for the $A_8$-field $K_W$ of Theorem~\ref{thm:image}. It is unramified outside $\{2,3,5,23\}$, totally complex in degree $8$, with the Frobenius data of Table~\ref{tab:frobenius}. Equivalently, compute the fifteen genus $7$ covers of degree $46$ and type $(1^{14}2^{16},23^2,23^2)$ with monodromy group $2^{11}{:}\M$ lying above $X$.
+Find a polynomial of degree $8$ (or $15$) for the $A_8$-field $K_W$ of Theorem~\ref{thm:image}. It is unramified outside $\{2,3,5,23\}$, totally complex in degree $8$, with the Frobenius data of Table~\ref{tab:frobenius}. Equivalently, compute the fifteen genus $7$ covers of degree $46$ and type $(1^{14}2^{16},23^2,23^2)$ with monodromy group $2^{11}{:}\M$ lying above $X$ (the fifteen triples of permutations are in the accompanying data), or the fifteen octads of tritangent planes of Proposition~\ref{prop:theta}. Is $X$ of good reduction at $3$ and $5$? If so, $K_W$ is unramified outside $\{2,23\}$ or $\{2,3,23\}$, like the fields attached to the fibre above $0$ in \cite[Thm.~8.14]{LeLay26}.
 \end{question}
 
 \begin{question}
@@ -514,11 +548,15 @@ Is the principally polarized abelian fourfold $\Jac(X)/W_\cG$ a Jacobian?
 \end{question}
 
 \begin{question}
-The rational point of $\cH$ is the unique real point whose cover has disconnected real locus (Theorem~\ref{thm:real}). Is there a $p$-adic or global counterpart of this distinction, and does the Golay Lagrangian of the six conjugate covers over $L$ behave differently from that of $X$?
+The rational point of $\cH$ is the unique real point whose cover has disconnected real locus (Theorem~\ref{thm:real}). Is this related to the characterization of the rational cover by osculating planes in \cite{LeLay26}, and does the Golay Lagrangian of the six conjugate covers over $L$ behave differently from that of $X$?
 \end{question}
 
 \begin{question}
 Do the curves $C_2$ and $C_7$ of Corollary~\ref{cor:curves} have rational points other than the one found in \cite{HJLPPZ26}? By \cite[Conjecture 3.23]{HJLPPZ26} they should not.
+\end{question}
+
+\begin{question}
+Do the Hurwitz schemes of the class vectors $(C,23A,23B)$ for $C=3A$, $4A$, $5A$, $6A$, which have degrees $134$, $660$, $1422$, $1632$ over $\QQ$ (Section~\ref{ssec:passports}), have rational points? A rational point would give a regular $\M$-extension of $\QQ(t)$ different from that of \cite{HJLPPZ26}.
 \end{question}
 
 \begin{question}
@@ -541,15 +579,16 @@ The author and Claude, an AI model developed by Anthropic, worked together on th
 \bibitem[Jam73]{James73} G. D. James, \emph{The modular characters of the Mathieu groups}, J. Algebra \textbf{27} (1973), 57--111.
 \bibitem[Jan26]{Janik26} J. A. Janik, \emph{Real structure and the Galois fixed point in the Nielsen class $(2,23A,23B)$ of $M_{23}$}, preprint, 7 October 2026.
 \bibitem[KR89]{KR89} E. Kani, M. Rosen, \emph{Idempotent relations and factors of Jacobians}, Math. Ann. \textbf{284} (1989), 307--327.
-\bibitem[LL26]{LeLay26} F. Le Lay, \emph{Minimal-degree projection, Fano-plane arithmetic, and the finite Hurwitz scheme of a regular Mathieu $M_{23}$-cover}, preprint, 2026 (cited from \cite{HJLPPZ26}).
+\bibitem[LL26]{LeLay26} F. Le Lay, \emph{Arithmetic and geometry of an $M_{23}$ Hurwitz scheme}, preprint, 2026 (cited in \cite{HJLPPZ26} under the title \emph{Minimal-degree projection, Fano-plane arithmetic, and the finite Hurwitz scheme of a regular Mathieu $M_{23}$-cover}); data at \url{https://github.com/research-reflexivity/frontier-math-m23-cover-investigation}.
 \bibitem[MS77]{MS77} F. J. MacWilliams, N. J. A. Sloane, \emph{The theory of error-correcting codes}, North-Holland, 1977.
 \bibitem[Mum70]{Mumford} D. Mumford, \emph{Abelian varieties}, Oxford Univ. Press, 1970.
+\bibitem[Mum71]{Mumford71} D. Mumford, \emph{Theta characteristics of an algebraic curve}, Ann. Sci. \'Ecole Norm. Sup. (4) \textbf{4} (1971), 181--192.
 \bibitem[PARI]{PARI} The PARI Group, \emph{PARI/GP version 2.15}, Univ. Bordeaux, \url{https://pari.math.u-bordeaux.fr}.
 \bibitem[Per77]{Perlis77} R. Perlis, \emph{On the equation $\zeta_K(s)=\zeta_{K'}(s)$}, J. Number Theory \textbf{9} (1977), 342--360.
 \bibitem[Wit38a]{Witt38a} E. Witt, \emph{Die $5$-fach transitiven Gruppen von Mathieu}, Abh. Math. Sem. Univ. Hamburg \textbf{12} (1938), 256--264.
 \bibitem[Wit38b]{Witt38b} E. Witt, \emph{\"Uber Steinersche Systeme}, Abh. Math. Sem. Univ. Hamburg \textbf{12} (1938), 265--275.
 \bibitem[Zar00]{Zarhin00} Yu. G. Zarhin, \emph{Hyperelliptic Jacobians without complex multiplication}, Math. Res. Lett. \textbf{7} (2000), 123--132.
-\bibitem[Zar02]{Zarhin02} Yu. G. Zarhin, \emph{Very simple $2$-adic representations and hyperelliptic Jacobians}, Mosc. Math. J. \textbf{2} (2002), 403--431.
+\bibitem[Zar02]{Zarhin02} Yu. G. Zarhin, \emph{Very simple $2$-adic representations and hyperelliptic Jacobians}, Mosc. Math. J. \textbf{2} (2002), 403--431; arXiv:math/0109014.
 \end{thebibliography}
 
 \end{document}

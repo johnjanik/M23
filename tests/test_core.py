@@ -80,3 +80,30 @@ def test_point_counts_match_published_values_at_53():
     counts = sorted(curve.count_points(53, 1, coeffs=data.calF_mod(53, s0), fibre="V", strict=False)
                     for s0 in roots)
     assert counts == [45, 52, 57]
+
+
+def test_three_point_table_anchor_rows():
+    rows = {tuple(r["classes"]): r for r in
+            json.loads((ROOT / "data" / "m23_three_point_nielsen.json").read_text())["passports"]}
+    assert len(rows) == 57
+    assert (rows[("2A", "23A", "23B")]["size"], rows[("2A", "23A", "23B")]["real"]) == (7, 3)
+    assert (rows[("2A", "14A", "14B")]["size"], rows[("2A", "14A", "14B")]["real"]) == (17, 3)
+    assert rows[("2A", "7A", "7B")]["size"] == 0
+    assert all(r["real"] == 0 for k, r in rows.items() if "8A" in k)
+
+
+def test_real_covers_from_involutions():
+    """Real classes of (2A,23A,23B) are the involutions c with c g2 c g2^-1 in 2A, modulo <g2>."""
+    from m23golay.perm import inv, mul_many
+    good = [c for c in m23.involutions()
+            if m23.label(mul_many(c, m23.G2, c, inv(m23.G2))) == "2A"]
+    assert len(good) == 3 * 23
+
+
+def test_lifts_and_pg32_data():
+    lifts = json.loads((ROOT / "data" / "lifts_2_11_M23.json").read_text())
+    assert len(lifts["lifts"]) == 15 and lifts["group_order"] == 2**11 * 10_200_960
+    pg = json.loads((ROOT / "data" / "pg32_a8_model.json").read_text())
+    for model in pg.values():
+        assert len(model["lines"]) == 35 and len(model["spreads"]) == 56
+        assert len(model["letter_families"]) == 8 and model["group_order_on_letters"] == 20160

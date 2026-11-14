@@ -2,6 +2,7 @@
 """Generate the LaTeX tables of the paper from the JSON files in data/."""
 import json
 import re
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -48,18 +49,18 @@ for r in facts["nielsen"]:
     field = "$\\QQ$" if r["index"] == facts["rational_class"] else "$L$"
     extra = (f"${r['real_components']}$ & ${r['dim_J2_real']}$ & ${r['dim_W_real']}$" if r["real"]
              else "-- & -- & --")
-    rows.append(f"${r['index']}$ & ${r['hjlppz_file_row']}$ & ${r['janik_orbit']}$ & {real} & {field} & "
+    rows.append(f"${r['index']}$ & ${r['hjlppz_file_row']}$ & ${r['janik_orbit']}$ & ${r['lelay_id']}$ & {real} & {field} & "
                 f"${r['dim_W']}$ & {extra}\\\\")
 (OUT / "nielsen.tex").write_text(r"""\begin{table}[ht]
 \centering\small
-\begin{tabular}{@{}cccllcccc@{}}
+\begin{tabular}{@{}ccccllcccc@{}}
 \toprule
-class & \cite{HJLPPZ26} file & \cite{Janik26} orbit & conjugation & moduli & $\dim W_\cG$ & $r$ & $\dim\Jac[2]^{c}$ & $\dim W_\cG^{\,c}$\\
+class & \cite{HJLPPZ26} & \cite{Janik26} & \cite{LeLay26} & conjugation & moduli & $\dim W_\cG$ & $r$ & $\dim\Jac[2]^{c}$ & $\dim W_\cG^{\,c}$\\
 \midrule
 """ + "\n".join(rows) + r"""
 \bottomrule
 \end{tabular}
-\caption{The seven classes of $\Ni(2A,23A,23B)$. Columns 2 and 3 give the position in the data file of \cite{HJLPPZ26} and the orbit label of \cite[Table~1]{Janik26}. For real covers, $r$ is the number of components of $X(\RR)$ and the last two columns are the dimensions of the fixed spaces of complex conjugation (Theorem~\ref{thm:real}).}
+\caption{The seven classes of $\Ni(2A,23A,23B)$. Columns 2 to 4 give the position in the data file of \cite{HJLPPZ26}, the orbit label of \cite[Table~1]{Janik26} and the class number of \cite{LeLay26}. For real covers, $r$ is the number of components of $X(\RR)$ and the last two columns are the dimensions of the fixed spaces of complex conjugation (Theorem~\ref{thm:real}).}
 \label{tab:nielsen}
 \end{table}
 """)
@@ -138,6 +139,29 @@ $p$ & $s_0$ & $(a_1,a_2,a_3,a_4)$ & $P_{\mathfrak p} \bmod 2$ & order\\
 \end{tabular}
 \caption{Frobenius polynomials of the covers defined over $L=\QQ(s)$ at the primes $\mathfrak p=(p,s-s_0)$ of degree one, with the notation of Table~\ref{tab:frobenius}. In every case $P_{\mathfrak p}\equiv QQ^{\rev}\pmod 2$.}
 \label{tab:lcovers}
+\end{table}
+""")
+
+# --- passports (C, 23A, 23B) --------------------------------------------------
+pp_path = DATA / "passports_C_23A_23B.json"
+if pp_path.exists():
+    pp = json.loads(pp_path.read_text())
+    rows = []
+    for cls, r in pp.items():
+        ov = Counter(x["components"] for x in r["real"])
+        ovals = ",\\ ".join(f"{k}^{{{v}}}" for k, v in sorted(ov.items())) if ov else "\\text{--}"
+        rows.append(f"${cls}$ & ${r['genus']}$ & ${r['size']}$ & ${r['real_classes']}$ & ${ovals}$\\\\")
+    (OUT / "passports.tex").write_text(r"""\begin{table}[ht]
+\centering\small
+\begin{tabular}{@{}crrrl@{}}
+\toprule
+$C$ & genus & $|\Ni(C,23A,23B)|$ & real points & numbers of ovals of the real covers\\
+\midrule
+""" + "\n".join(rows) + r"""
+\bottomrule
+\end{tabular}
+\caption{The six class vectors $(C,23A,23B)$ with $C$ a rational class. The Hurwitz scheme is finite \'etale over $\QQ$ of the degree in the third column; $k^{m}$ means that $m$ real covers have $k$ ovals.}
+\label{tab:passports}
 \end{table}
 """)
 
