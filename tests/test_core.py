@@ -154,3 +154,14 @@ def test_exact_counts_at_the_non_nodal_primes():
     # models that must be refused
     assert not curve.reduction_certificate(3)["certified"]
     assert not curve.reduction_certificate(11, data.calF_mod(11, 2))["certified"]
+
+
+def test_irreducibility_is_not_claimed_for_a_product_of_conjugates():
+    """N(TV - alpha), alpha in F_169 \\ F_13, is irreducible over F_13 with irreducible
+    fibres, and splits over F_169.  The certificate must not call it absolutely irreducible."""
+    from m23golay.curve import resultant_T, singular_locus
+    p = 13
+    # alpha a root of x^2 - 2 (2 is a nonsquare mod 13): trace 0, norm -2
+    coeffs = [[(-2) % p, 0, 0], [0, 0, 0], [0, 0, 1]]          # T^2 V^2 - 2
+    loc = singular_locus(p, coeffs, [resultant_T(p, coeffs)])
+    assert loc["irreducible"] is False

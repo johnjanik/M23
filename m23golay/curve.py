@@ -295,7 +295,9 @@ def singular_locus(p: int, coeffs, t_polys) -> dict:
     (a-1)(b-1) - delta for a model of bidegree (a, b), provided it is absolutely
     irreducible; `irreducible` is True when a fibre certifies that (a fibre polynomial
     of full degree that is irreducible over F_p; absolute irreducibility follows
-    because the two degrees 4 and 23 are coprime).
+    because the two degrees 4 and 23 are coprime; for a bidegree with a common factor the
+    criterion applies only in special cases and `irreducible` is then False, meaning
+    "not shown").
     """
     from collections import Counter
     types, delta = Counter(), 0
@@ -369,12 +371,21 @@ def singular_locus(p: int, coeffs, t_polys) -> dict:
     # and the coefficients of F as a polynomial in T have no common factor in V, then F is
     # irreducible over F_{p^k}, hence over F_p; it is then absolutely irreducible because its
     # conjugate factors over the algebraic closure would have equal bidegrees dividing (4, 23).
+    # The last step needs more than irreducibility over F_{p^k}: the conjugate factors number
+    # m with m | gcd(a, b) and gcd(m, k) = 1, so m = 1 only when every prime factor of
+    # gcd(a, b) divides k.  (Without this a form such as N(TV - alpha), alpha of degree 2,
+    # would pass.)  When the criterion does not apply the answer is "not shown".
+    from math import gcd
     content = nmod_poly([0], p)
     for i in range(len(coeffs)):
         content = content.gcd(nmod_poly([c % p for c in coeffs[i]], p))
+    common = gcd(len(coeffs) - 1, len(coeffs[0]) - 1)
+    prime_factors = [d for d in range(2, common + 1) if common % d == 0 and all(d % e for e in range(2, d))]
     irreducible = False
     if content.degree() == 0:
         for k in (1, 3, 5, 7):
+            if any(k % d for d in prime_factors):
+                continue
             A, ctx, R, cols, charts = _fibre_tools(p, k, coeffs, "V")
             for n in range(min(p**k, 400)):
                 v = _element(ctx, p, k, n)
