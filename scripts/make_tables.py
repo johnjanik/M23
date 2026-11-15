@@ -96,7 +96,8 @@ for r in zeta:
     key = frozenset(r["Q candidates"])
     order, cyc = TYPES[key]
     counts[order] = counts.get(order, 0) + 1
-    star = "" if r["model"].startswith("nodal") else "$^*$"
+    star = "" if set(r["certificate"]["singular_points"]) == {"A_1"} else "$^\\dagger$"
+    assert r["certificate"]["certified"] and r["certificate"]["delta"] == 62
     if star:
         starred.append(r["p"])
     a = r["P"][1:5]
@@ -111,7 +112,7 @@ $p$ & $(a_1,a_2,a_3,a_4)$ & $P_p \bmod 2$ & $Q_p$ & order & type in $A_8$\\
 """ + "\n".join(rows) + r"""
 \bottomrule
 \end{tabular}
-\caption{Frobenius on $\Jac(X)$ and on the Golay Lagrangian $W$. Here $P_p(T)=T^8+a_1T^7+a_2T^6+a_3T^5+a_4T^4+pa_3T^3+p^2a_2T^2+p^3a_1T+p^4$, $Q_p$ is given up to reversal, ``order'' is the order of the semisimple part of $\rho_W(\Frob_p)$, and the last column lists the possible cycle types on $8$ letters. An asterisk marks primes at which the plane model has a non-nodal singularity (Section~\ref{sec:computations}).}
+\caption{Frobenius on $\Jac(X)$ and on the Golay Lagrangian $W$. Here $P_p(T)=T^8+a_1T^7+a_2T^6+a_3T^5+a_4T^4+pa_3T^3+p^2a_2T^2+p^3a_1T+p^4$, $Q_p$ is given up to reversal, ``order'' is the order of the semisimple part of $\rho_W(\Frob_p)$, and the last column lists the possible cycle types on $8$ letters. A dagger marks the primes at which the reduction of the plane model is not nodal: $60$ nodes and a tacnode at $5$, and $61$ nodes and a cusp at $13$, $31$, $41$, $73$. Every row is certified by Lemma~\ref{lem:reduction}.}
 \label{tab:frobenius}
 \end{table}
 """)
@@ -124,10 +125,12 @@ if zl_path.exists():
     for r in zl["results"]:
         if r["status"] != "ok":
             continue
-        assert r["golay_split"]
+        assert r["golay_split"] and r["P(chi) mod 23"] == 0 and r["P(chi p) mod 23"] == 0
+        assert r["certificate"]["delta"] == 62
         order, cyc = TYPES[frozenset(r["Q candidates"])]
         a_ = r["P"][1:5]
-        rows.append(f"${r['p']}$ & ${r['s0']}$ & $({', '.join(str(x) for x in a_)})$ & {factored(r['P mod 2'])} & ${order}$\\\\")
+        dag = "" if set(r["certificate"]["singular_points"]) == {"A_1"} else "$^\\dagger$"
+        rows.append(f"${r['p']}${dag} & ${r['s0']}$ & $({', '.join(str(x) for x in a_)})$ & {factored(r['P mod 2'])} & ${order}$\\\\")
     (OUT / "lcovers.tex").write_text(r"""\begin{table}[ht]
 \centering\footnotesize
 \begin{tabular}{@{}rrllc@{}}
@@ -137,7 +140,7 @@ $p$ & $s_0$ & $(a_1,a_2,a_3,a_4)$ & $P_{\mathfrak p} \bmod 2$ & order\\
 """ + "\n".join(rows) + r"""
 \bottomrule
 \end{tabular}
-\caption{Frobenius polynomials of the covers defined over $L=\QQ(s)$ at the primes $\mathfrak p=(p,s-s_0)$ of degree one, with the notation of Table~\ref{tab:frobenius}. In every case $P_{\mathfrak p}\equiv QQ^{\rev}\pmod 2$.}
+\caption{Frobenius polynomials of the covers defined over $L=\QQ(s)$ at the primes $\mathfrak p=(p,s-s_0)$ of degree one, with the notation of Table~\ref{tab:frobenius}. In every case $P_{\mathfrak p}\equiv QQ^{\rev}\pmod 2$ and the congruences of Proposition~\ref{prop:23} hold. At the prime marked with a dagger the model has $57$ nodes, a tacnode and an ordinary triple point.}
 \label{tab:lcovers}
 \end{table}
 """)

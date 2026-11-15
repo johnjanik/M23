@@ -1,9 +1,16 @@
 # RustMath handoff: the M23 Golay computations
 
-Date: 2026-11-14. Source repository: `johnjanik/M23`, branch `main` (the reference data is as of
-commit `d05475b`).
-Target: `johnjanik/RustMath` (pure-Rust MAGMA port). This file is written for a RustMath
-session that starts cold. Copy it to `docs/workstreams/m23_golay/HANDOFF.md` there.
+Date: 2026-11-14, tables corrected 2026-11-15. Source repository: `johnjanik/M23`, branch `main`.
+
+Status: WP-F is implemented in RustMath (branch `claude/m23-wpf`). It reproduced the tables below,
+found the exact counts at p = 5 and corrected the row (31, s - 12) of the covers over L; both
+were then confirmed here with an independent method, and the tables below are the corrected
+ones. The working copy of this document is `docs/workstreams/m23_golay/HANDOFF.md` in RustMath;
+RustMath's extended tables (X to p = 131, covers to p = 127) are in
+`data/rustmath_wpf_tables.json`.
+
+Target: `johnjanik/RustMath` (pure-Rust MAGMA port). This file was written for a RustMath
+session that starts cold.
 
 Three things are wanted from RustMath. Each has reference values computed independently
 (Python/FLINT, cross-checked with PARI and GAP), so each is a test of RustMath as much as a
@@ -33,7 +40,7 @@ Read `paper/golay_m23.pdf` Sections 1, 2 and 4 for the full statements. The mini
   (paper, Theorem 4.1).
 - **What is known about W.** Galois acts on `W = F_2^4` through all of `GL_4(F_2) = A_8`
   (paper, Theorem 4.8). The kernel field `K_W` is an A8 extension of Q unramified outside
-  `{2,3,5,23}`. Complex conjugation acts as a transvection. No polynomial for `K_W` is known.
+  `{2,3,23}`. Complex conjugation acts as a transvection. No polynomial for `K_W` is known.
 - **Conventions.** Permutations act on the right: `x^(gh) = (x^g)^h`. Products are read left
   to right, as in MAGMA and GAP. Published cycles are 1-based; the Python library is 0-based.
   `23A`, `23B` are the classes of the published `g2`, `g3`. Class names of other split pairs
@@ -122,7 +129,8 @@ Algorithm (reference: `m23golay/curve.py`, `count_points` with `fibre="V"`):
    and counts once. If it is singular, compute the Hessian discriminant
    `F_TV^2 - F_TT F_VV`: nonzero square means a node with two rational branches (count 2),
    nonzero nonsquare means a node with conjugate branches (count 0), zero means the singular
-   point is not a node (see 3.3).
+   point is not a node: resolve it by blowing up and count the rational places above it
+   (`m23golay/curve.py`, `resolve_point`).
 3. Use Frobenius orbits of the base point: process only the orbit representative with the
    smallest code and weight by the orbit length. The reference implementation is stateless per
    chunk so that it parallelizes and bounds memory.
@@ -140,30 +148,31 @@ Algorithm (reference: `m23golay/curve.py`, `count_points` with `fibre="V"`):
 
 ### 3.2 Reference values
 
-`T` = model stays nodal mod p; `D` = the plane model has a non-nodal singular point mod p and the
-count treats it as unibranch (accepted because it passes the Weil test, not proved).
+Every row is certified: the model mod p is absolutely irreducible and the delta invariants of
+its singular points add up to 62, so X has good reduction and the count is the count on the
+normalization (paper, Lemma 9.1). The last column lists the singular points.
 
-| p | N1 | N2 | N3 | N4 | (a1, a2, a3, a4) | P_p mod 2 | model |
+| p | N1 | N2 | N3 | N4 | (a1, a2, a3, a4) | P_p mod 2 | singular points of the model mod p |
 |---:|---:|---:|---:|---:|---|---|---|
-| 5 | | | | | not obtained: not a Weil polynomial | | |
-| 7 | 11 | 69 | 383 | 2433 | (3, 14, 46, 138) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | T |
-| 11 | 15 | 133 | 1368 | 14905 | (3, 10, 33, 145) | `(x^4+x+1) (x^4+x^3+1)` | T |
-| 13 | 11 | 161 | 2135 | 29089 | (-3, 0, -12, 188) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | D |
-| 17 | 21 | 285 | 4923 | 82985 | (3, 2, 0, -130) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | T |
-| 19 | 17 | 405 | 7265 | 130913 | (-3, 26, 66, 74) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | T |
-| 29 | 35 | 789 | 24773 | 708785 | (5, -14, 16, 1060) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | T |
-| 31 | 33 | 993 | 29640 | 926713 | (1, 16, -35, 875) | `(x^4+x+1) (x^4+x^3+1)` | D |
-| 37 | 43 | 1433 | 50881 | 1881609 | (5, 44, 254, 3156) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | T |
-| 41 | 42 | 1780 | 69408 | 2827728 | (0, 49, 162, 1692) | `(x+1)^4 (x^2+x+1)^2` | D |
-| 43 | 44 | 1996 | 80192 | 3422024 | (0, 73, 228, 3470) | `(x+1)^4 (x^2+x+1)^2` | T |
-| 47 | 47 | 2349 | 104321 | 4882281 | (-1, 70, 96, 2934) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | T |
-| 53 | 54 | 2804 | 148704 | 7881808 | (0, -3, -58, -2164) | `(x+1)^4 (x^2+x+1)^2` | T |
-| 59 | 72 | 3560 | 205056 | 12120780 | (12, 111, 648, 3991) | `(x^4+x^3+x^2+x+1)^2` | T |
-| 61 | 64 | 3740 | 226852 | 13855856 | (2, 11, -24, 2476) | `(x+1)^4 (x^2+x+1)^2` | T |
-| 67 | 80 | 4460 | 302192 | 20163724 | (12, 57, 584, 8759) | `(x^4+x^3+x^2+x+1)^2` | T |
-| 71 | 68 | 5048 | 358256 | 25432076 | (-4, 11, 92, 4679) | `(x^4+x^3+x^2+x+1)^2` | T |
-| 73 | 83 | 5541 | 390089 | 28393065 | (9, 146, 1428, 12030) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | D |
-| 79 | 77 | 6369 | 491636 | 38964585 | (-3, 68, -663, 7335) | `(x^4+x+1) (x^4+x^3+1)` | T |
+| 5 | 7 | 37 | 169 | 561 | (1, 6, 20, 16) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | 60 nodes, 1 tacnode |
+| 7 | 11 | 69 | 383 | 2433 | (3, 14, 46, 138) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | 62 nodes |
+| 11 | 15 | 133 | 1368 | 14905 | (3, 10, 33, 145) | `(x^4+x+1) (x^4+x^3+1)` | 62 nodes |
+| 13 | 11 | 161 | 2135 | 29089 | (-3, 0, -12, 188) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | 61 nodes, 1 cusp |
+| 17 | 21 | 285 | 4923 | 82985 | (3, 2, 0, -130) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | 62 nodes |
+| 19 | 17 | 405 | 7265 | 130913 | (-3, 26, 66, 74) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | 62 nodes |
+| 29 | 35 | 789 | 24773 | 708785 | (5, -14, 16, 1060) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | 62 nodes |
+| 31 | 33 | 993 | 29640 | 926713 | (1, 16, -35, 875) | `(x^4+x+1) (x^4+x^3+1)` | 61 nodes, 1 cusp |
+| 37 | 43 | 1433 | 50881 | 1881609 | (5, 44, 254, 3156) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | 62 nodes |
+| 41 | 42 | 1780 | 69408 | 2827728 | (0, 49, 162, 1692) | `(x+1)^4 (x^2+x+1)^2` | 61 nodes, 1 cusp |
+| 43 | 44 | 1996 | 80192 | 3422024 | (0, 73, 228, 3470) | `(x+1)^4 (x^2+x+1)^2` | 62 nodes |
+| 47 | 47 | 2349 | 104321 | 4882281 | (-1, 70, 96, 2934) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | 62 nodes |
+| 53 | 54 | 2804 | 148704 | 7881808 | (0, -3, -58, -2164) | `(x+1)^4 (x^2+x+1)^2` | 62 nodes |
+| 59 | 72 | 3560 | 205056 | 12120780 | (12, 111, 648, 3991) | `(x^4+x^3+x^2+x+1)^2` | 62 nodes |
+| 61 | 64 | 3740 | 226852 | 13855856 | (2, 11, -24, 2476) | `(x+1)^4 (x^2+x+1)^2` | 62 nodes |
+| 67 | 80 | 4460 | 302192 | 20163724 | (12, 57, 584, 8759) | `(x^4+x^3+x^2+x+1)^2` | 62 nodes |
+| 71 | 68 | 5048 | 358256 | 25432076 | (-4, 11, 92, 4679) | `(x^4+x^3+x^2+x+1)^2` | 62 nodes |
+| 73 | 83 | 5541 | 390089 | 28393065 | (9, 146, 1428, 12030) | `(x+1)^2 (x^3+x+1) (x^3+x^2+1)` | 61 nodes, 1 cusp |
+| 79 | 77 | 6369 | 491636 | 38964585 | (-3, 68, -663, 7335) | `(x^4+x+1) (x^4+x^3+1)` | 62 nodes |
 
 Certificate for good reduction at 7 and 11 (the two primes the proof uses):
 `scripts/verify_curve_model.py` checks the discriminant identity over Z at 190 integers, that
@@ -173,27 +182,32 @@ above each of its 62 roots.
 Covers over the sextic field `L = Q[s]/(s^6 - s^5 - 3s^4 - 3s^3 + s^2 + 5s + 4)`, model
 `polynomial_calF.m`, reduced at the degree-one prime `(p, s - s0)`:
 
-| p | s0 | N1 | N2 | N3 | N4 | (a1, a2, a3, a4) | Q up to reversal |
-|---:|---:|---:|---:|---:|---:|---|---|
-| 5 | 3 | | | | | model degenerate at this prime | |
-| 7 | 5 | 7 | 45 | 343 | 2545 | (-1, -2, 2, 38) | `x^4+x^3+x^2+1` |
-| 11 | 2 | | | | | model degenerate at this prime | |
-| 19 | 3 | 15 | 413 | 6849 | 130169 | (-5, 38, -152, 650) | `x^4+x^3+x^2+1` |
-| 31 | 12 | 44 | 1014 | 30266 | 923726 | (12, 98, 758, 5021) | `x^4+x^2+1` |
-| 41 | 8 | 40 | 1790 | 68866 | 2828954 | (-2, 56, -128, 2402) | `x^4+1` |
-| 43 | 15 | 43 | 1829 | 78799 | 3422769 | (-1, -10, -226, 1278) | `x^4+x^3+x^2+1` |
+| p | s0 | N1 | N2 | N3 | N4 | (a1, a2, a3, a4) | Q up to reversal | singular points |
+|---:|---:|---:|---:|---:|---:|---|---|---|
+| 5 | 3 | | | | | refused: the degree in V drops mod p | | |
+| 7 | 5 | 7 | 45 | 343 | 2545 | (-1, -2, 2, 38) | `x^4+x^2+x+1` | 62 nodes |
+| 11 | 2 | | | | | refused: the discriminant vanishes identically mod p | | |
+| 19 | 3 | 15 | 413 | 6849 | 130169 | (-5, 38, -152, 650) | `x^4+x^2+x+1` | 62 nodes |
+| 23 | 5 | | | | | refused: the characteristic divides the degree in V | | |
+| 23 | 15 | | | | | refused: the characteristic divides the degree in V | | |
+| 31 | 12 | 43 | 1017 | 30265 | 923729 | (11, 88, 682, 4438) | `x^4+x^2+x+1` | 57 nodes, 1 tacnode, 1 ordinary triple point |
+| 41 | 8 | 40 | 1790 | 68866 | 2828954 | (-2, 56, -128, 2402) | `x^4+1` | 62 nodes |
+| 43 | 15 | 43 | 1829 | 78799 | 3422769 | (-1, -10, -226, 1278) | `x^4+x^2+x+1` | 62 nodes |
 
 Published anchor: at 53 the three degree-one primes give 45, 57, 52 points over F_53; the values
 45 and 52 are in HJLPPZ Proposition 3.14. This is in `tests/test_core.py`.
 
 ### 3.3 Extensions wanted
 
-1. **Remove the D flags.** At p = 13, 31, 41, 73 recount on a second model with different
+1. **Remove the D flags.** Done: at p = 13, 31, 41, 73 the model has 61 nodes and one cusp above
+   T = 0, and the counts are exact. Original item: at p = 13, 31, 41, 73 recount on a second model with different
    singular points and reconcile. Candidates: Le Lay's bidegree (8,23) model
    (`data/Fint_coefficients_Z.json` in his repository, 84 nodes) or a plane projection of the
    canonical model. Expected: the same `N_k`.
-2. **Decide p = 3 and p = 5.** The reference count at 5 fails the Weil test, which says only that
-   this plane model is too degenerate there. Find a model that is nodal mod p with the right
+2. **Decide p = 3 and p = 5.** p = 5 is done: 60 nodes and a tacnode, good reduction, counts
+   7, 37, 169, 561. p = 3 is open: every plane model at hand is degenerate there. Original item:
+   the reference count at 5 failed the Weil test, which said only that
+   the unibranch count was wrong there. Find a model that is nodal mod p with the right
    number of nodes, or show that the canonical model has singular reduction. This matters for
    WP-A: if X has good reduction at 3 and 5, the A8 field is unramified outside `{2,23}`
    or `{2,3,23}`.
@@ -445,7 +459,7 @@ such that:
    primes, together with the square discriminant, prove that the group is A8 (the only maximal
    subgroup of A8 containing an element of order 15 is `(A5 x 3):2`, of order 360).
 2. `g8` has no real root (complex conjugation is a transvection, cycle type `2^4`).
-3. The field discriminant of `g8` is divisible only by primes in `{2, 3, 5, 23}`.
+3. The field discriminant of `g8` is divisible only by primes in `{2, 3, 23}`.
 4. `g15 mod p` has the factorization type of the matching element of `GL_4(2)` on the 15
    hyperplanes of `F_2^4`.
 
@@ -453,6 +467,7 @@ Frobenius on `W`: characteristic polynomial `Q_p` up to reversal, and cycle type
 
 | p | Q_p (one of the two) | order of the semisimple part | cycle type on 8 letters |
 |---:|---|---:|---|
+| 5 | `x^4+x^2+x+1` | 7 | `1 7` |
 | 7 | `x^4+x^2+x+1` | 7 | `1 7` |
 | 11 | `x^4+x+1` | 15 | `3 5` |
 | 13 | `x^4+x^2+x+1` | 7 | `1 7` |
