@@ -102,6 +102,11 @@ Hurwitz scheme* (2026), and Zarhin's two papers on hyperelliptic Jacobians. Over
 fibre) are now attributed in the paper, and his numbering of the seven covers is in the class
 table. `scripts/gap/` holds the GAP cross-checks.
 
+## Branches
+
+`main` is the stable branch, and the one other repositories should reference. Work in progress is
+on `claude/blissful-knuth-qla7ym` and reaches `main` by pull request.
+
 ## Conventions
 
 Permutations act on the right, as in HJLPPZ (`x^(gh) = (x^g)^h`), with their
