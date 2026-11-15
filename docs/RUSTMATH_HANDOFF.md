@@ -1,6 +1,7 @@
 # RustMath handoff: the M23 Golay computations
 
-Date: 2026-11-14. Source repository: `johnjanik/M23`, branch `claude/blissful-knuth-qla7ym`.
+Date: 2026-11-14. Source repository: `johnjanik/M23`, branch `main` (the reference data is as of
+commit `d05475b`).
 Target: `johnjanik/RustMath` (pure-Rust MAGMA port). This file is written for a RustMath
 session that starts cold. Copy it to `docs/workstreams/m23_golay/HANDOFF.md` there.
 
