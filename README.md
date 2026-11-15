@@ -15,7 +15,7 @@ The manuscript is `paper/golay_m23.tex` (PDF: `paper/golay_m23.pdf`).
 | | statement | status |
 |---|---|---|
 | A | For any degree 23 cover X -> P^1 with monodromy in M23, the even Golay code cuts out a Galois-stable Lagrangian W in Jac(X)[2]. The proof uses that the Golay code is perfect (unique coset leaders). | proved |
-| B | For the HJLPPZ curve (genus 4), Galois acts on W = F_2^4 through all of GL_4(F_2) = A_8; End(Jac X) = Z; complex conjugation is a transvection on W; the cover has 15 lifts to 2^11:M23 with the same inertia classes, conjugate over Q. | computed, with certificates |
+| B | For the HJLPPZ curve (genus 4), Galois acts on W = F_2^4 through all of GL_4(F_2) = A_8; End(Jac X) = Z; complex conjugation is a transvection on W; the cover has 15 lifts to 2^11:M23 with the same inertia classes, conjugate over Q. X has good reduction at 5, 7, 11 and every other prime of the table, so the A_8 field is unramified outside {2, 3, 23}. | computed, with a reduction certificate at each prime; reproduced independently in RustMath |
 | C | Roots in Frobenius order at a prime of irreducibility carry one of exactly two Steiner systems (the two cyclic Golay codes). Certified p-adic labelling. J5(f1) = 524492, J5(f2) = 61916; degree 253 heptad resolvents; J5 of the regular family is n(t)/c23(t) with n an explicit integer quartic. | proved + computed, checked at independent primes |
 | D | Duad and heptad stabilizers are Gassmann equivalent: arithmetically equivalent non-isomorphic fields of degree 253, and two genus 46 curves over Q with isogenous Jacobians, one with a rational point above t = 0 and one without. 253 is the smallest such index in M23. | proved (group theory) + verified on f1, f2 |
 | E | The real roots of an M23-polynomial form a heptad. Of the three real covers in the Nielsen class, the rational one is the only one with disconnected real locus (2 ovals vs 1). | group theory + numerical check on F(T,V) |
@@ -73,8 +73,9 @@ redistributed here). Then:
 |---|---|---|
 | `python3 -m pytest -q` | regression tests | 1 s |
 | `python3 scripts/verify_group_theory.py` | all group-theoretic statements; writes `data/group_facts.json` | 10 s |
-| `python3 scripts/verify_curve_model.py 7 11` | discriminant identity over Z, 62 nodes mod p, both fibrations | 10 s |
-| `python3 scripts/zeta_X.py 79 4` | L-polynomials for p <= 79, mod 2 and mod 23 tests; writes `data/zeta_X.json` | about 30 min on 4 cores |
+| `python3 scripts/verify_curve_model.py` | discriminant identity over Z; reduction certificate (singular points, delta sum 62, irreducibility) and both fibrations for p <= 31 | 1 min |
+| `python3 scripts/zeta_X.py 79 4` | reduction certificate, exact counts and L-polynomials for p <= 79, mod 2 and mod 23 tests; writes `data/zeta_X.json` | about 30 min on 4 cores |
+| `python3 scripts/crosscheck_rustmath.py 4 83 97 107` | recounts rows of RustMath's extended table (`data/rustmath_wpf_tables.json`) | about 40 min |
 | `python3 scripts/zeta_L.py 43 2` | the same for the six covers over L at primes of degree one; reproduces the published counts 45 and 52 at 53; writes `data/zeta_L.json` | 15 min |
 | `python3 scripts/verify_resolvents.py` | Gassmann patterns, irreducibility, real heptad for f1, f2 | 5 s |
 | `python3 scripts/real_locus.py` | counts the ovals of X(R) from the equation | 15 s |

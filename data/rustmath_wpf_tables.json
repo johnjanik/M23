@@ -1,0 +1,1112 @@
+{
+ "source": "johnjanik/RustMath, branch claude/m23-wpf, commit acea928, docs/workstreams/m23_golay/wpf/impl/WPF.md Section 3",
+ "note": "Computed by the RustMath implementation (rustmath-curves) on Le Lay's model G for X and on calF for the covers over L; not recomputed here except where data/rustmath_crosscheck.json says so.",
+ "X": [
+  {
+   "p": 5,
+   "model": "G",
+   "counts": [
+    7,
+    37,
+    169,
+    561
+   ],
+   "a": [
+    1,
+    6,
+    20,
+    16
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Unresolved: DeltaSumCertified (A3 conjugate branches)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 7,
+   "model": "G7",
+   "counts": [
+    11,
+    69,
+    383,
+    2433
+   ],
+   "a": [
+    3,
+    14,
+    46,
+    138
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 11,
+   "model": "G",
+   "counts": [
+    15,
+    133,
+    1368,
+    14905
+   ],
+   "a": [
+    3,
+    10,
+    33,
+    145
+   ],
+   "P_mod_2": "(x^4+x+1)(x^4+x^3+1)",
+   "Q": "x^4+x^3+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "15 (Decided)"
+  },
+  {
+   "p": 13,
+   "model": "G13",
+   "counts": [
+    11,
+    161,
+    2135,
+    29089
+   ],
+   "a": [
+    -3,
+    0,
+    -12,
+    188
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Unresolved: DeltaSumCertified (A2)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 17,
+   "model": "G",
+   "counts": [
+    21,
+    285,
+    4923,
+    82985
+   ],
+   "a": [
+    3,
+    2,
+    0,
+    -130
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 19,
+   "model": "G",
+   "counts": [
+    17,
+    405,
+    7265,
+    130913
+   ],
+   "a": [
+    -3,
+    26,
+    66,
+    74
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 23,
+   "status": "refused: model degenerate at this prime: the discriminant vanishes identically mod p"
+  },
+  {
+   "p": 29,
+   "model": "G",
+   "counts": [
+    35,
+    789,
+    24773,
+    708785
+   ],
+   "a": [
+    5,
+    -14,
+    16,
+    1060
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 31,
+   "model": "G",
+   "counts": [
+    33,
+    993,
+    29640,
+    926713
+   ],
+   "a": [
+    1,
+    16,
+    -35,
+    875
+   ],
+   "P_mod_2": "(x^4+x+1)(x^4+x^3+1)",
+   "Q": "x^4+x^3+1",
+   "status": "Unresolved: DeltaSumCertified (A2)",
+   "two_torsion_order": "15 (conditional on the counts)"
+  },
+  {
+   "p": 37,
+   "model": "G",
+   "counts": [
+    43,
+    1433,
+    50881,
+    1881609
+   ],
+   "a": [
+    5,
+    44,
+    254,
+    3156
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 41,
+   "model": "G",
+   "counts": [
+    42,
+    1780,
+    69408,
+    2827728
+   ],
+   "a": [
+    0,
+    49,
+    162,
+    1692
+   ],
+   "P_mod_2": "(x+1)^4(x^2+x+1)^2",
+   "Q": "x^4+x^3+x+1",
+   "status": "Unresolved: DeltaSumCertified (A2)",
+   "two_torsion_order": "Unresolved (multiple of 3, divides 12)"
+  },
+  {
+   "p": 43,
+   "model": "G",
+   "counts": [
+    44,
+    1996,
+    80192,
+    3422024
+   ],
+   "a": [
+    0,
+    73,
+    228,
+    3470
+   ],
+   "P_mod_2": "(x+1)^4(x^2+x+1)^2",
+   "Q": "x^4+x^3+x+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 3, divides 12)"
+  },
+  {
+   "p": 47,
+   "model": "G",
+   "counts": [
+    47,
+    2349,
+    104321,
+    4882281
+   ],
+   "a": [
+    -1,
+    70,
+    96,
+    2934
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 53,
+   "model": "G",
+   "counts": [
+    54,
+    2804,
+    148704,
+    7881808
+   ],
+   "a": [
+    0,
+    -3,
+    -58,
+    -2164
+   ],
+   "P_mod_2": "(x+1)^4(x^2+x+1)^2",
+   "Q": "x^4+x^3+x+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 3, divides 12)"
+  },
+  {
+   "p": 59,
+   "model": "G",
+   "counts": [
+    72,
+    3560,
+    205056,
+    12120780
+   ],
+   "a": [
+    12,
+    111,
+    648,
+    3991
+   ],
+   "P_mod_2": "(x^4+x^3+x^2+x+1)^2",
+   "Q": "x^4+x^3+x^2+x+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 5, divides 10)"
+  },
+  {
+   "p": 61,
+   "model": "G",
+   "counts": [
+    64,
+    3740,
+    226852,
+    13855856
+   ],
+   "a": [
+    2,
+    11,
+    -24,
+    2476
+   ],
+   "P_mod_2": "(x+1)^4(x^2+x+1)^2",
+   "Q": "x^4+x^3+x+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 3, divides 12)"
+  },
+  {
+   "p": 67,
+   "model": "G",
+   "counts": [
+    80,
+    4460,
+    302192,
+    20163724
+   ],
+   "a": [
+    12,
+    57,
+    584,
+    8759
+   ],
+   "P_mod_2": "(x^4+x^3+x^2+x+1)^2",
+   "Q": "x^4+x^3+x^2+x+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 5, divides 10)"
+  },
+  {
+   "p": 71,
+   "model": "G",
+   "counts": [
+    68,
+    5048,
+    358256,
+    25432076
+   ],
+   "a": [
+    -4,
+    11,
+    92,
+    4679
+   ],
+   "P_mod_2": "(x^4+x^3+x^2+x+1)^2",
+   "Q": "x^4+x^3+x^2+x+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 5, divides 10)"
+  },
+  {
+   "p": 73,
+   "model": "G",
+   "counts": [
+    83,
+    5541,
+    390089,
+    28393065
+   ],
+   "a": [
+    9,
+    146,
+    1428,
+    12030
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Unresolved: DeltaSumCertified (A2)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 79,
+   "model": "G",
+   "counts": [
+    77,
+    6369,
+    491636,
+    38964585
+   ],
+   "a": [
+    -3,
+    68,
+    -663,
+    7335
+   ],
+   "P_mod_2": "(x^4+x+1)(x^4+x^3+1)",
+   "Q": "x^4+x^3+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "15 (Decided)"
+  },
+  {
+   "p": 83,
+   "model": "G",
+   "counts": [
+    91,
+    6885,
+    574375,
+    47483041
+   ],
+   "a": [
+    7,
+    22,
+    902,
+    12258
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 89,
+   "model": "G",
+   "counts": [
+    104,
+    7942,
+    707906,
+    62766210
+   ],
+   "a": [
+    14,
+    108,
+    1576,
+    22324
+   ],
+   "P_mod_2": "(x+1)^8",
+   "Q": "x^4+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 1, divides 8)"
+  },
+  {
+   "p": 97,
+   "model": "G",
+   "counts": [
+    101,
+    9385,
+    910820,
+    88546849
+   ],
+   "a": [
+    3,
+    -8,
+    -651,
+    2563
+   ],
+   "P_mod_2": "(x^4+x+1)(x^4+x^3+1)",
+   "Q": "x^4+x^3+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "15 (Decided)"
+  },
+  {
+   "p": 101,
+   "model": "G",
+   "counts": [
+    114,
+    10456,
+    1030926,
+    104090928
+   ],
+   "a": [
+    12,
+    199,
+    2020,
+    28200
+   ],
+   "P_mod_2": "(x+1)^4(x^2+x+1)^2",
+   "Q": "x^4+x^3+x+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 3, divides 12)"
+  },
+  {
+   "p": 103,
+   "model": "G",
+   "counts": [
+    96,
+    10648,
+    1092594,
+    112536824
+   ],
+   "a": [
+    -8,
+    51,
+    -282,
+    -2198
+   ],
+   "P_mod_2": "(x+1)^4(x^2+x+1)^2",
+   "Q": "x^4+x^3+x+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 3, divides 12)"
+  },
+  {
+   "p": 107,
+   "model": "G",
+   "counts": [
+    116,
+    11482,
+    1226360,
+    131139882
+   ],
+   "a": [
+    8,
+    48,
+    652,
+    19390
+   ],
+   "P_mod_2": "(x+1)^8",
+   "Q": "x^4+1",
+   "status": "Unresolved: DeltaSumCertified (A3 rational branches)",
+   "two_torsion_order": "Unresolved (multiple of 1, divides 8)"
+  },
+  {
+   "p": 109,
+   "model": "G",
+   "counts": [
+    104,
+    11986,
+    1294118,
+    141216370
+   ],
+   "a": [
+    -6,
+    70,
+    -652,
+    18718
+   ],
+   "P_mod_2": "(x+1)^8",
+   "Q": "x^4+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 1, divides 8)"
+  },
+  {
+   "p": 113,
+   "model": "G",
+   "counts": [
+    128,
+    13016,
+    1444142,
+    163058328
+   ],
+   "a": [
+    14,
+    221,
+    2594,
+    29766
+   ],
+   "P_mod_2": "(x+1)^4(x^2+x+1)^2",
+   "Q": "x^4+x^3+x+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 3, divides 12)"
+  },
+  {
+   "p": 127,
+   "model": "G",
+   "counts": [
+    127,
+    16501,
+    2047933,
+    260199313
+   ],
+   "a": [
+    -1,
+    186,
+    -336,
+    31116
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 131,
+   "model": "G",
+   "counts": [
+    144,
+    17064,
+    2246976,
+    294472176
+   ],
+   "a": [
+    12,
+    23,
+    -672,
+    -12864
+   ],
+   "P_mod_2": "(x+1)^4(x^2+x+1)^2",
+   "Q": "x^4+x^3+x+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 3, divides 12)"
+  }
+ ],
+ "L": [
+  {
+   "p": 5,
+   "s0": 3,
+   "status": "refused: model degenerate at this prime: the discriminant vanishes identically mod p"
+  },
+  {
+   "p": 7,
+   "s0": 5,
+   "counts": [
+    7,
+    45,
+    343,
+    2545
+   ],
+   "a": [
+    -1,
+    -2,
+    2,
+    38
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 11,
+   "s0": 2,
+   "status": "refused: model degenerate at this prime: the discriminant vanishes identically mod p"
+  },
+  {
+   "p": 19,
+   "s0": 3,
+   "counts": [
+    15,
+    413,
+    6849,
+    130169
+   ],
+   "a": [
+    -5,
+    38,
+    -152,
+    650
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 23,
+   "s0": 5,
+   "status": "refused: model degenerate at this prime: the discriminant vanishes identically mod p"
+  },
+  {
+   "p": 23,
+   "s0": 15,
+   "status": "refused: model degenerate at this prime: the discriminant vanishes identically mod p"
+  },
+  {
+   "p": 31,
+   "s0": 12,
+   "counts": [
+    43,
+    1017,
+    30265,
+    923729
+   ],
+   "a": [
+    11,
+    88,
+    682,
+    4438
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Unresolved: DeltaSumCertified (ordinary 3-fold point [1, 2]; A3 conjugate branches)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 41,
+   "s0": 8,
+   "counts": [
+    40,
+    1790,
+    68866,
+    2828954
+   ],
+   "a": [
+    -2,
+    56,
+    -128,
+    2402
+   ],
+   "P_mod_2": "(x+1)^8",
+   "Q": "x^4+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 1, divides 8)"
+  },
+  {
+   "p": 43,
+   "s0": 15,
+   "counts": [
+    43,
+    1829,
+    78799,
+    3422769
+   ],
+   "a": [
+    -1,
+    -10,
+    -226,
+    1278
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 47,
+   "s0": 13,
+   "counts": [
+    54,
+    2316,
+    104076,
+    4889096
+   ],
+   "a": [
+    6,
+    71,
+    438,
+    5270
+   ],
+   "P_mod_2": "(x+1)^4(x^2+x+1)^2",
+   "Q": "x^4+x^3+x+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 3, divides 12)"
+  },
+  {
+   "p": 53,
+   "s0": 21,
+   "counts": [
+    52,
+    2862,
+    150562,
+    7889314
+   ],
+   "a": [
+    -2,
+    28,
+    508,
+    -1024
+   ],
+   "P_mod_2": "(x+1)^8",
+   "Q": "x^4+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 1, divides 8)"
+  },
+  {
+   "p": 53,
+   "s0": 36,
+   "counts": [
+    57,
+    2925,
+    147507,
+    7890353
+   ],
+   "a": [
+    3,
+    62,
+    -280,
+    512
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 53,
+   "s0": 41,
+   "counts": [
+    45,
+    2885,
+    147972,
+    7888001
+   ],
+   "a": [
+    -9,
+    78,
+    -761,
+    4593
+   ],
+   "P_mod_2": "(x^4+x+1)(x^4+x^3+1)",
+   "Q": "x^4+x^3+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "15 (Decided)"
+  },
+  {
+   "p": 61,
+   "s0": 52,
+   "counts": [
+    51,
+    3909,
+    226185,
+    13840033
+   ],
+   "a": [
+    -11,
+    154,
+    -1516,
+    12108
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 67,
+   "s0": 15,
+   "counts": [
+    71,
+    4661,
+    302150,
+    20149585
+   ],
+   "a": [
+    3,
+    90,
+    723,
+    5045
+   ],
+   "P_mod_2": "(x^4+x+1)(x^4+x^3+1)",
+   "Q": "x^4+x^3+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "15 (Decided)"
+  },
+  {
+   "p": 67,
+   "s0": 42,
+   "counts": [
+    62,
+    4614,
+    301154,
+    20166970
+   ],
+   "a": [
+    -6,
+    80,
+    -278,
+    6274
+   ],
+   "P_mod_2": "(x+1)^8",
+   "Q": "x^4+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 1, divides 8)"
+  },
+  {
+   "p": 71,
+   "s0": 37,
+   "counts": [
+    56,
+    5114,
+    358256,
+    25415418
+   ],
+   "a": [
+    -16,
+    164,
+    -1144,
+    7086
+   ],
+   "P_mod_2": "(x+1)^8",
+   "Q": "x^4+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 1, divides 8)"
+  },
+  {
+   "p": 71,
+   "s0": 67,
+   "counts": [
+    78,
+    5210,
+    358566,
+    25433810
+   ],
+   "a": [
+    6,
+    102,
+    758,
+    11934
+   ],
+   "P_mod_2": "(x+1)^8",
+   "Q": "x^4+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 1, divides 8)"
+  },
+  {
+   "p": 79,
+   "s0": 15,
+   "counts": [
+    94,
+    6510,
+    493546,
+    38940122
+   ],
+   "a": [
+    14,
+    232,
+    2502,
+    23582
+   ],
+   "P_mod_2": "(x+1)^8",
+   "Q": "x^4+1",
+   "status": "Unresolved: DeltaSumCertified (A3 rational branches)",
+   "two_torsion_order": "Unresolved (multiple of 1, divides 8)"
+  },
+  {
+   "p": 79,
+   "s0": 40,
+   "counts": [
+    82,
+    6316,
+    494788,
+    38952656
+   ],
+   "a": [
+    2,
+    39,
+    658,
+    2568
+   ],
+   "P_mod_2": "(x+1)^4(x^2+x+1)^2",
+   "Q": "x^4+x^3+x+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 3, divides 12)"
+  },
+  {
+   "p": 79,
+   "s0": 46,
+   "counts": [
+    70,
+    6334,
+    492232,
+    38966242
+   ],
+   "a": [
+    -10,
+    96,
+    -896,
+    10508
+   ],
+   "P_mod_2": "(x+1)^8",
+   "Q": "x^4+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 1, divides 8)"
+  },
+  {
+   "p": 89,
+   "s0": 57,
+   "counts": [
+    94,
+    8088,
+    707974,
+    62746864
+   ],
+   "a": [
+    4,
+    91,
+    1344,
+    9280
+   ],
+   "P_mod_2": "(x+1)^4(x^2+x+1)^2",
+   "Q": "x^4+x^3+x+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 3, divides 12)"
+  },
+  {
+   "p": 89,
+   "s0": 69,
+   "counts": [
+    94,
+    8090,
+    705808,
+    62734682
+   ],
+   "a": [
+    4,
+    92,
+    626,
+    3438
+   ],
+   "P_mod_2": "(x+1)^8",
+   "Q": "x^4+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 1, divides 8)"
+  },
+  {
+   "p": 97,
+   "s0": 76,
+   "counts": [
+    103,
+    9497,
+    913861,
+    88569977
+   ],
+   "a": [
+    5,
+    56,
+    634,
+    13668
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 101,
+   "s0": 74,
+   "counts": [
+    109,
+    10305,
+    1024111,
+    104049033
+   ],
+   "a": [
+    7,
+    76,
+    -1646,
+    -14600
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 101,
+   "s0": 98,
+   "counts": [
+    115,
+    10117,
+    1027081,
+    104049377
+   ],
+   "a": [
+    13,
+    42,
+    -1260,
+    -18212
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 103,
+   "s0": 93,
+   "counts": [
+    117,
+    10897,
+    1091211,
+    112578169
+   ],
+   "a": [
+    13,
+    228,
+    1726,
+    23860
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Unresolved: DeltaSumCertified (A3 rational branches)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 127,
+   "s0": 63,
+   "counts": [
+    135,
+    16457,
+    2050377,
+    260132721
+   ],
+   "a": [
+    7,
+    188,
+    1866,
+    19142
+   ],
+   "P_mod_2": "(x+1)^2(x^3+x+1)(x^3+x^2+1)",
+   "Q": "x^4+x^3+x^2+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 7, divides 14)"
+  },
+  {
+   "p": 127,
+   "s0": 74,
+   "counts": [
+    130,
+    16210,
+    2047378,
+    260120418
+   ],
+   "a": [
+    2,
+    42,
+    -254,
+    -5846
+   ],
+   "P_mod_2": "(x+1)^8",
+   "Q": "x^4+1",
+   "status": "Decided: Nodal (62 nodes)",
+   "two_torsion_order": "Unresolved (multiple of 1, divides 8)"
+  }
+ ]
+}

@@ -77,7 +77,7 @@ def test_point_counts_match_published_values_at_53():
     from flint import nmod_poly
     from m23golay import curve
     roots = [int(r) for r, _ in nmod_poly([c % 53 for c in data.L_POLY], 53).roots()]
-    counts = sorted(curve.count_points(53, 1, coeffs=data.calF_mod(53, s0), fibre="V", strict=False)
+    counts = sorted(curve.count_points(53, 1, coeffs=data.calF_mod(53, s0), fibre="V")
                     for s0 in roots)
     assert counts == [45, 52, 57]
 
@@ -107,3 +107,50 @@ def test_lifts_and_pg32_data():
     for model in pg.values():
         assert len(model["lines"]) == 35 and len(model["spreads"]) == 56
         assert len(model["letter_families"]) == 8 and model["group_order_on_letters"] == 20160
+
+
+def _germ(terms, p=31, k=1):
+    from flint import fq_default_ctx, fq_default_poly_ctx
+    ctx = fq_default_ctx(p, k, var="a")
+    return {key: ctx(c) for key, c in terms.items()}, fq_default_poly_ctx(ctx)
+
+
+def test_resolution_of_plane_curve_germs():
+    """(places, delta, label) for standard singularities over F_31 (3 is a nonsquare mod 31)."""
+    from m23golay.curve import resolve_point
+    cases = [
+        ({(0, 2): 1, (2, 0): -1}, (2, 1, "A_1")),                # y^2 = x^2
+        ({(0, 2): 1, (2, 0): -3}, (0, 1, "A_1")),                # y^2 = 3 x^2
+        ({(0, 2): 1, (3, 0): -1}, (1, 1, "A_2")),                # y^2 = x^3
+        ({(0, 2): 1, (4, 0): -1}, (2, 2, "A_3")),                # y^2 = x^4
+        ({(0, 2): 1, (4, 0): -3}, (0, 2, "A_3")),                # y^2 = 3 x^4
+        ({(0, 2): 1, (5, 0): -1}, (1, 2, "A_4")),                # y^2 = x^5
+        ({(2, 0): 1, (0, 4): -1}, (2, 2, "A_3")),                # x^2 = y^4 (tangent x = 0)
+        ({(2, 1): 1, (1, 2): -1, (0, 4): 1}, (3, 3, "ordinary 3-fold")),      # xy(x - y) + y^4
+        ({(3, 0): 1, (1, 2): -3, (0, 4): 1}, (1, 3, "ordinary 3-fold")),      # x(x^2 - 3y^2) + y^4
+    ]
+    for terms, expected in cases:
+        f, R = _germ(terms)
+        assert resolve_point(f, R) == expected, (terms, resolve_point(f, R))
+
+
+def test_exact_counts_at_the_non_nodal_primes():
+    import pytest
+    if not _external_available():
+        pytest.skip("HJLPPZ data not fetched")
+    from m23golay import curve
+    # p = 5: 60 nodes and one tacnode; both fibrations
+    assert [curve.count_points(5, k, fibre="V") for k in (1, 2, 3, 4)] == [7, 37, 169, 561]
+    assert [curve.count_points(5, k, fibre="T") for k in (1, 2, 3)] == [7, 37, 169]
+    cert = curve.reduction_certificate(5)
+    assert cert["certified"] and cert["types"] == {"A_1": 60, "A_3": 1}
+    # p = 13: 61 nodes and one cusp
+    assert curve.reduction_certificate(13)["types"] == {"A_1": 61, "A_2": 1}
+    assert [curve.count_points(13, k, fibre="V") for k in (1, 2, 3)] == [11, 161, 2135]
+    # the cover over L at (31, s - 12): a tacnode and an ordinary triple point
+    A = data.calF_mod(31, 12)
+    assert [curve.count_points(31, k, coeffs=A, fibre="V") for k in (1, 2)] == [43, 1017]
+    assert curve.reduction_certificate(31, A)["types"] == {"A_1": 57, "A_3": 1, "ordinary 3-fold": 1}
+    # models that must be refused
+    assert not curve.reduction_certificate(3)["certified"]
+    assert not curve.reduction_certificate(11, data.calF_mod(11, 2))["certified"]
