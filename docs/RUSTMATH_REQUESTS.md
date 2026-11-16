@@ -11,7 +11,8 @@ the three work packages (WP-F, WP-P, WP-A). It holds three things the handoff do
 
 Written against RustMath `main` at `28c4b69` and the M23 repository (`johnjanik/M23`) at `main`
 `2d11038`. Two new scripts and one data file in the M23 repository back Section 1; they are on
-its work branch `claude/blissful-knuth-qla7ym` and reach `main` when the owner merges. Every
+its work branch `claude/blissful-knuth-qla7ym` (commit `2750a56`) and reach `main` when the owner
+merges. Every
 table they produce is copied into this file, so nothing here needs a fetch.
 
 In this file a path that does not start with `rustmath-`, `docs/` or `PROJECT_TRACKER.md` is
