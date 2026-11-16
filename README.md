@@ -84,6 +84,8 @@ redistributed here). Then:
 | `python3 scripts/passports_all.py` | all 57 rational three-point class vectors of M23: exact Nielsen class sizes and real points; writes `data/m23_three_point_nielsen.json` | 6 min |
 | `python3 scripts/lifts_2_11_M23.py` | the fifteen lifts of the triple to 2^11:M23 in S_46; writes `data/lifts_2_11_M23.json` | 1 s |
 | `python3 scripts/pg32_a8_model.py` | PG(3,2) spreads and the 8 letters of GL_4(2) = A_8; writes `data/pg32_a8_model.json` | 5 s |
+| `python3 scripts/a8_frobenius_predictions.py` | the 14 classes of GL_4(2) = A_8 and, for every counted prime, the cycle types allowed for Frobenius in the A8 field and the order of Frobenius on Jac(X)[2] where it is decided; writes `data/a8_frobenius_predictions.json` | 5 s |
+| `python3 scripts/jac2_frobenius_orbits.py` | linear algebra over F_2 for the image of Galois on Jac(X)[2] and the Frobenius orbits on the 120 tritangent planes | 5 s |
 | `python3 scripts/make_tables.py` | regenerates `paper/tables/*.tex` | instant |
 
 The degree 253 resolvents in `data/golay_resolvents.json` are produced by
@@ -94,6 +96,10 @@ The degree 253 resolvents in `data/golay_resolvents.json` are produced by
 `docs/RUSTMATH_HANDOFF.md` specifies three work packages for the RustMath project, with
 reference values: the Frobenius table, the three-point class vectors of M23 (Phase 6 of the
 research note), and a pipeline for the explicit A8 field through tritangent planes.
+`docs/RUSTMATH_REQUESTS.md` (2026-11-16) is the follow-up: changes wanted in what RustMath has
+built, what the exploratory work still needs, and facts found since the handoff. One of them is
+not in the manuscript yet: the point counts at 17 and 73 show that the image of Galois on
+Jac(X)[2] is the full stabilizer of W in Sp_8(F_2), a group 2^10:A_8.
 
 ## Sources checked
 
